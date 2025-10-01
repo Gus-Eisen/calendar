@@ -1,0 +1,141 @@
+use pelican_ui::drawable::{Align, Component, Drawable};
+use pelican_ui::events::OnEvent;
+use pelican_ui::layout::{Area, Layout, SizeRequest};
+use pelican_ui::runtime::{ServiceList, Services};
+use pelican_ui::{
+    Application, Component, Context, MaverickOS, PelicanEngine, Plugin, Plugins, maverick_start,
+    start,
+};
+use std::collections::BTreeMap;
+
+use pelican_ui_std::{
+    AppPage, Content, ExpandableText, Header, Icon, Interface, Offset, Page, Stack, Text, TextStyle,
+};
+
+// Define the main application struct. This is our entry point type.
+pub struct MyApp;
+
+// Implement the Services trait for MyApp
+impl Services for MyApp {
+    // Provide a list of services used by the app. Here, it's empty.
+    fn services() -> ServiceList {
+        ServiceList(BTreeMap::new())
+    }
+}
+
+// Implement the Plugins trait for MyApp
+impl Plugins for MyApp {
+    // Provide a list of plugins used by the app. Currently, there are none.
+    fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
+        vec![]
+    }
+}
+
+// Implement the Application trait for MyApp
+impl Application for MyApp {
+    // Asynchronously create the main drawable UI component
+    async fn new(ctx: &mut Context) -> Box<dyn Drawable> {
+        // Create the first screen
+        let home = FirstScreen::new(ctx);
+        // Create the main interface with the first screen as the starting page
+        let interface = Interface::new(ctx, Box::new(home), None, None);
+        // Return the interface wrapped in a Box
+        Box::new(interface)
+    }
+}
+
+// Macro to start the application
+start!(MyApp);
+
+// Define the first screen of the app
+#[derive(Debug, Component)]
+pub struct FirstScreen(Stack, Page);
+
+// Implement event handling for FirstScreen (empty for now)
+impl OnEvent for FirstScreen {}
+
+// Implement the AppPage trait for navigation and UI behavior
+impl AppPage for FirstScreen {
+    // This screen does not have a navigation bar
+    fn has_nav(&self) -> bool {
+        false
+    }
+
+    // Handle page navigation. Always returns Err(self) because this page cannot navigate.
+    fn navigate(
+        self: Box<Self>,
+        _ctx: &mut Context,
+        _index: usize,
+    ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+        Err(self)
+    }
+}
+
+impl FirstScreen {
+    pub fn new(ctx: &mut Context) -> Self {
+        // Create a header for the page
+        let header = Header::home(
+            // The majority of UI components will require the app context.
+            ctx,
+            // The text on this header will say "My Screen"
+            "My Screen",
+            // There will not be an icon button on this header
+            None,
+        );
+
+        let font_size = ctx.theme.fonts.size;
+        let color = ctx.theme.colors.text.heading;
+
+        // Create an icon element
+        let icon = Icon::new(
+            // This element requires the app context
+            ctx,
+            // We choose the "pelican_ui" icon
+            "pelican_ui",
+            // The color of the icon
+            color,
+            // The size of the icon. Icons are always square.
+            128.0,
+        );
+
+        // Create the main heading text
+        let text = Text::new(
+            ctx,
+            // This text will say "Hello World!"
+            "Hello World!",
+            // The style of this text will be heading
+            TextStyle::Heading,
+            // The size will be h2
+            font_size.h2,
+            // The text alignment
+            Align::Center,
+        );
+
+        // Create subtext.
+        let subtext = ExpandableText::new(
+            ctx,
+            "First project loaded successfully.",
+            // This text will have primary text style.
+            TextStyle::Primary,
+            // Medium font size
+            font_size.md,
+            // Center the text
+            Align::Center,
+            // No max lines
+            None,
+        );
+
+        // Combine icon, heading, and subtext into page content
+        let content = Content::new(
+            ctx,
+            // Vertically center items
+            Offset::Center,
+            // All items must be boxed as Box<dyn Drawable>
+            vec![Box::new(icon), Box::new(text), Box::new(subtext)],
+        );
+
+        // Return the FirstScreen with a default Stack and a
+        // new Page containinhg our header, content, and no bumper.
+        FirstScreen(Stack::default(), Page::new(Some(header), content, None))
+    }
+}
