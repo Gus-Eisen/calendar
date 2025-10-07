@@ -36,7 +36,7 @@ impl Application for MyApp {
     // Asynchronously create the main drawable UI component
     async fn new(ctx: &mut Context) -> Box<dyn Drawable> {
         // Create the first screen
-        let home = FirstScreen::new(ctx);
+        let home = MonthScreen::new(ctx);
         // Create the main interface with the first screen as the starting page
         let interface = Interface::new(ctx, Box::new(home), None, None);
         // Return the interface wrapped in a Box
@@ -49,13 +49,13 @@ start!(MyApp);
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
-pub struct FirstScreen(Stack, Page);
+pub struct MonthScreen(Stack, Page);
 
 // Implement event handling for FirstScreen (empty for now)
-impl OnEvent for FirstScreen {}
+impl OnEvent for MonthScreen {}
 
 // Implement the AppPage trait for navigation and UI behavior
-impl AppPage for FirstScreen {
+impl AppPage for MonthScreen {
     // This screen does not have a navigation bar
     fn has_nav(&self) -> bool {
         false
@@ -71,7 +71,7 @@ impl AppPage for FirstScreen {
     }
 }
 
-impl FirstScreen {
+impl MonthScreen {
     pub fn new(ctx: &mut Context) -> Self {
         // Create a header for the page
         let header = Header::home(
@@ -136,6 +136,6 @@ impl FirstScreen {
 
         // Return the FirstScreen with a default Stack and a
         // new Page containinhg our header, content, and no bumper.
-        FirstScreen(Stack::default(), Page::new(Some(header), content, None))
+        MonthScreen(Stack::default(), Page::new(Some(header), content, None))
     }
 }
