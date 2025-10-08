@@ -9,7 +9,8 @@ use pelican_ui::{
 use std::collections::BTreeMap;
 
 use pelican_ui_std::{
-    AppPage, Content, ExpandableText, Header, Icon, Interface, Offset, Page, Stack, Text, TextStyle,
+    AppPage, Column, Content, ExpandableText, Header, Icon, Interface, Offset, Padding, Page,
+    Stack, Text, TextStyle,
 };
 
 // Define the main application struct. This is our entry point type.
@@ -49,7 +50,7 @@ start!(MyApp);
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
-pub struct MonthScreen(Stack, Page);
+pub struct MonthScreen(Column, Page);
 
 // Implement event handling for FirstScreen (empty for now)
 impl OnEvent for MonthScreen {}
@@ -76,10 +77,8 @@ impl MonthScreen {
         // Create a header for the page
         let header = Header::home(
             // The majority of UI components will require the app context.
-            ctx,
-            // The text on this header will say "My Screen"
-            "My Screen",
-            // There will not be an icon button on this header
+            ctx, // The text on this header will say "My Screen"
+            "Calendar", // There will not be an icon button on this header
             None,
         );
 
@@ -136,6 +135,14 @@ impl MonthScreen {
 
         // Return the FirstScreen with a default Stack and a
         // new Page containinhg our header, content, and no bumper.
-        MonthScreen(Stack::default(), Page::new(Some(header), content, None))
+        MonthScreen(
+            Column::new(
+                1.0,
+                Offset::Center,
+                pelican_ui_std::Size::Fit,
+                Padding::new(1.0),
+            ),
+            Page::new(Some(header), content, None),
+        )
     }
 }
