@@ -1,3 +1,5 @@
+mod objects;
+
 use pelican_ui::drawable::{Align, Component, Drawable};
 use pelican_ui::events::OnEvent;
 use pelican_ui::layout::{Area, Layout, SizeRequest};
@@ -77,7 +79,7 @@ impl MonthScreen {
         // Create a header for the page
         let header = Header::home(
             // The majority of UI components will require the app context.
-            ctx, // The text on this header will say "My Screen"
+            ctx,        // The text on this header will say "Calendar"
             "Calendar", // There will not be an icon button on this header
             None,
         );
