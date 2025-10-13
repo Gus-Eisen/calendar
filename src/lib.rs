@@ -13,8 +13,8 @@ use pelican_ui::{
 use std::collections::BTreeMap;
 
 use pelican_ui_std::{
-    AppPage, Button, Column, Content, ExpandableText, Header, Icon, Interface, Offset, Padding,
-    Page, Stack, Text, TextStyle,
+    AppPage, Button, Column, Content, ExpandableText, Header, Icon, Interface, NavigateEvent,
+    Offset, Padding, Page, Stack, Text, TextStyle,
 };
 
 // Define the main application struct. This is our entry point type.
@@ -129,6 +129,7 @@ impl MonthScreen {
         );
 
         let button = Button::primary(ctx, "test", |ctx: &mut Context| {
+            ctx.trigger_event(NavigateEvent(0));
             println!("Test button has been clicked.")
         });
 
@@ -138,7 +139,12 @@ impl MonthScreen {
             // Vertically center items
             Offset::Center,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(icon), Box::new(text), Box::new(subtext), Box::new(button)],
+            vec![
+                Box::new(icon),
+                Box::new(text),
+                Box::new(subtext),
+                Box::new(button),
+            ],
         );
 
         // Return the FirstScreen with a default Stack and a

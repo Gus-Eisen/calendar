@@ -31,3 +31,27 @@ impl AppPage for EventEditorScreen {
         }
     }
 }
+
+impl EventEditorScreen {
+    pub fn new(ctx: &mut Context) -> Self {
+        let return_to_monthscreen_icon = IconButton::new(
+            ctx,
+            "backspace",
+            ButtonSize::Medium,
+            ButtonStyle::Secondary,
+            ButtonState::Default,
+            Box::new(|ctx: &mut Context| {
+                println!("return_to_monthscreen_icon clicked.");
+            }),
+            None,
+        );
+
+        let content = Content::new(
+            ctx,
+            Offset::Start,
+            vec![Box::new(return_to_monthscreen_icon)],
+        );
+
+        EventEditorScreen(Stack::default(), Page::new(None, content, None))
+    }
+}
