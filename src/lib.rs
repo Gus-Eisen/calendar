@@ -1,6 +1,6 @@
 mod day_view_screen;
 mod event_editor_screen;
-mod primitive_objects;
+mod objects;
 
 use pelican_ui::drawable::{Align, Component, Drawable};
 use pelican_ui::events::OnEvent;
