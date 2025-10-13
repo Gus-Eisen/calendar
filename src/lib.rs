@@ -17,6 +17,8 @@ use pelican_ui_std::{
     Offset, Padding, Page, Stack, Text, TextStyle,
 };
 
+use crate::event_editor_screen::EventEditorScreen;
+
 // Define the main application struct. This is our entry point type.
 pub struct MyApp;
 
@@ -69,10 +71,13 @@ impl AppPage for MonthScreen {
     // Handle page navigation. Always returns Err(self) because this page cannot navigate.
     fn navigate(
         self: Box<Self>,
-        _ctx: &mut Context,
-        _index: usize,
+        ctx: &mut Context,
+        index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
-        Err(self)
+        match index {
+            0 => return Ok(Box::new(EventEditorScreen::new(ctx))),
+            _ => Err(self),
+        }
     }
 }
 
@@ -130,7 +135,7 @@ impl MonthScreen {
 
         let button = Button::primary(ctx, "test", |ctx: &mut Context| {
             ctx.trigger_event(NavigateEvent(0));
-            println!("Test button has been clicked.")
+            println!("Test button clicked.")
         });
 
         // Combine icon, heading, and subtext into page content
