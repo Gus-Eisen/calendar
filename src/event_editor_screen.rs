@@ -7,12 +7,14 @@ use pelican_ui_std::{
     InputEditedEvent, NavigateEvent, Offset, Page, Stack, TextInput,
 };
 
+use crate::MonthScreen;
+
 #[derive(Debug, Component)]
 pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
     fn on_event(&mut self, _ctx: &mut Context, event: &mut dyn Event) -> bool {
-        false
+        true
     }
 }
 
@@ -27,6 +29,7 @@ impl AppPage for EventEditorScreen {
         index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
+            0 => return Ok(Box::new(MonthScreen::new(ctx))),
             _ => Err(self),
         }
     }
@@ -41,7 +44,8 @@ impl EventEditorScreen {
             ButtonStyle::Secondary,
             ButtonState::Default,
             Box::new(|ctx: &mut Context| {
-                println!("return_to_monthscreen_icon clicked.");
+                ctx.trigger_event(NavigateEvent(0));
+                println!("return_to_monthscreen_icon clicked.")
             }),
             None,
         );
