@@ -34,7 +34,9 @@ impl AppPage for EventEditorScreen {
         }
     }
 }
-
+/*This UX is atrocious, but we don't yet have a Date Picker in pelican_ui_std.
+ * TODO: refactor when Date Picker is created.
+ */
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
         let return_to_monthscreen_icon = IconButton::new(
@@ -70,6 +72,36 @@ impl EventEditorScreen {
             true,
         );
 
+        let month = TextInput::new(
+            ctx,
+            None,
+            Some("Month"),
+            "Enter month of event",
+            Some("Ex.: June"),
+            TextInput::NO_ICON,
+            true,
+        );
+
+        let day = TextInput::new(
+            ctx,
+            None,
+            Some("Day"),
+            "Enter day of event",
+            Some("Ex. 15"),
+            TextInput::NO_ICON,
+            true,
+        );
+
+        let time = TextInput::new(
+            ctx,
+            None,
+            Some("Time"),
+            "Enter time of event",
+            Some("Ex.: 1430"),
+            TextInput::NO_ICON,
+            true,
+        );
+
         let content = Content::new(
             ctx,
             Offset::Start,
@@ -77,6 +109,9 @@ impl EventEditorScreen {
                 Box::new(return_to_monthscreen_icon),
                 Box::new(event_title),
                 Box::new(year),
+                Box::new(month),
+                Box::new(day),
+                Box::new(time),
             ],
         );
 
