@@ -50,10 +50,34 @@ impl EventEditorScreen {
             None,
         );
 
+        let event_title = TextInput::new(
+            ctx,
+            None,
+            Some("Event Title"),
+            "Enter Event Title",
+            Some("Ex.: Strategy meeting with Satoshi"),
+            TextInput::NO_ICON,
+            true,
+        );
+
+        let year = TextInput::new(
+            ctx,
+            None,
+            Some("Year"),
+            "Enter year of event",
+            Some("Ex.: 2026"),
+            TextInput::NO_ICON,
+            true,
+        );
+
         let content = Content::new(
             ctx,
             Offset::Start,
-            vec![Box::new(return_to_monthscreen_icon)],
+            vec![
+                Box::new(return_to_monthscreen_icon),
+                Box::new(event_title),
+                Box::new(year),
+            ],
         );
 
         EventEditorScreen(Stack::default(), Page::new(None, content, None))
