@@ -3,8 +3,8 @@ use pelican_ui::events::{Event, OnEvent};
 use pelican_ui::layout::{Area, Layout, SizeRequest};
 use pelican_ui::{Component, Context};
 use pelican_ui_std::{
-    AppPage, ButtonSize, ButtonState, ButtonStyle, ClearActiveInput, Content, Header, IconButton,
-    InputEditedEvent, NavigateEvent, Offset, Page, Stack, TextInput,
+    AppPage, Bumper, Button, ButtonSize, ButtonState, ButtonStyle, ClearActiveInput, Content,
+    Header, IconButton, InputEditedEvent, NavigateEvent, Offset, Page, Stack, TextInput,
 };
 
 use crate::MonthScreen;
@@ -115,6 +115,12 @@ impl EventEditorScreen {
             ],
         );
 
-        EventEditorScreen(Stack::default(), Page::new(None, content, None))
+        let button = Button::primary(ctx, "Save Event", |ctx: &mut Context| {
+            println!("Save Event button clicked.")
+        });
+
+        let bumper = Bumper::single_button(ctx, button);
+
+        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 }
