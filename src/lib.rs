@@ -9,26 +9,19 @@ use pelican_ui::{Application, Component, Context, Plugin, Plugins, start};
 use std::collections::BTreeMap;
 
 use pelican_ui_std::AppPage;
-use pelican_ui_std::components::ExpandableText;
-use pelican_ui_std::components::Text;
-use pelican_ui_std::components::TextStyle;
 use pelican_ui_std::components::button::Button;
 use pelican_ui_std::components::button::ButtonSize;
 use pelican_ui_std::components::button::ButtonState;
 use pelican_ui_std::components::button::ButtonStyle;
 use pelican_ui_std::components::button::IconButton;
 use pelican_ui_std::components::interface::general::Bumper;
-use pelican_ui_std::components::interface::general::Content;
-use pelican_ui_std::components::interface::general::Header;
-use pelican_ui_std::components::interface::general::Interface;
-use pelican_ui_std::components::interface::general::Page;
+use pelican_ui_std::components::interface::general::{Content, Header, Interface, Page};
+use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
 use pelican_ui_std::events::ClearActiveInput;
 use pelican_ui_std::events::InputEditedEvent;
 use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::Column;
-use pelican_ui_std::layout::Offset;
-use pelican_ui_std::layout::Padding;
 use pelican_ui_std::layout::Size;
+use pelican_ui_std::layout::{Column, Offset, Padding};
 
 use crate::event_editor_screen::EventEditorScreen;
 
@@ -151,12 +144,7 @@ impl MonthScreen {
         // Return the FirstScreen with a default Stack and a
         // new Page containinhg our header, content, and no bumper.
         MonthScreen(
-            Column::new(
-                1.0,
-                Offset::Center,
-                pelican_ui_std::Size::Fit,
-                Padding::new(1.0),
-            ),
+            Column::new(1.0, Offset::Center, Size::Fit, Padding::new(1.0)),
             Page::new(Some(header), content, None),
         )
     }
