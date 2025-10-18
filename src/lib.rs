@@ -13,8 +13,7 @@ use pelican_ui_std::components::button::Button;
 use pelican_ui_std::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
 use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::Size;
-use pelican_ui_std::layout::{Column, Offset, Padding};
+use pelican_ui_std::layout::{Column, Offset, Padding, Size};
 
 use crate::event_editor_screen::EventEditorScreen;
 
