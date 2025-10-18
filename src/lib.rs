@@ -5,17 +5,30 @@ mod objects;
 use pelican_ui::drawable::{Align, Component, Drawable};
 use pelican_ui::events::OnEvent;
 use pelican_ui::layout::{Area, Layout, SizeRequest};
-use pelican_ui::runtime::{ServiceList, Services};
-use pelican_ui::{
-    Application, Component, Context, MaverickOS, PelicanEngine, Plugin, Plugins, maverick_start,
-    start,
-};
+use pelican_ui::{Application, Component, Context, Plugin, Plugins, start};
 use std::collections::BTreeMap;
 
-use pelican_ui_std::{
-    AppPage, Button, Column, Content, ExpandableText, Header, Icon, Interface, NavigateEvent,
-    Offset, Padding, Page, Stack, Text, TextStyle,
-};
+use pelican_ui_std::AppPage;
+use pelican_ui_std::components::ExpandableText;
+use pelican_ui_std::components::Text;
+use pelican_ui_std::components::TextStyle;
+use pelican_ui_std::components::button::Button;
+use pelican_ui_std::components::button::ButtonSize;
+use pelican_ui_std::components::button::ButtonState;
+use pelican_ui_std::components::button::ButtonStyle;
+use pelican_ui_std::components::button::IconButton;
+use pelican_ui_std::components::interface::general::Bumper;
+use pelican_ui_std::components::interface::general::Content;
+use pelican_ui_std::components::interface::general::Header;
+use pelican_ui_std::components::interface::general::Interface;
+use pelican_ui_std::components::interface::general::Page;
+use pelican_ui_std::events::ClearActiveInput;
+use pelican_ui_std::events::InputEditedEvent;
+use pelican_ui_std::events::NavigateEvent;
+use pelican_ui_std::layout::Column;
+use pelican_ui_std::layout::Offset;
+use pelican_ui_std::layout::Padding;
+use pelican_ui_std::layout::Size;
 
 use crate::event_editor_screen::EventEditorScreen;
 
