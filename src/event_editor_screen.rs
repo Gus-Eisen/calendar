@@ -4,19 +4,16 @@ use pelican_ui::layout::{Area, Layout, SizeRequest};
 use pelican_ui::{Component, Context};
 
 use pelican_ui_std::AppPage;
+use pelican_ui_std::components::TextInput;
 use pelican_ui_std::components::button::Button;
 use pelican_ui_std::components::button::ButtonSize;
 use pelican_ui_std::components::button::ButtonState;
 use pelican_ui_std::components::button::ButtonStyle;
 use pelican_ui_std::components::button::IconButton;
 use pelican_ui_std::components::interface::general::Bumper;
-use pelican_ui_std::components::interface::general::{Content, Header, Interface, Page};
-use pelican_ui_std::components::{ExpandableText, Text, TextInput, TextStyle};
-use pelican_ui_std::events::ClearActiveInput;
-use pelican_ui_std::events::InputEditedEvent;
+use pelican_ui_std::components::interface::general::{Content, Page};
 use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::Size;
-use pelican_ui_std::layout::{Column, Offset, Padding, Stack};
+use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
 
