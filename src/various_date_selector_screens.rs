@@ -5,16 +5,16 @@ use pelican_ui::{Application, Component, Context, Plugin, Plugins, start};
 use std::collections::BTreeMap;
 
 use pelican_ui_std::AppPage;
-use pelican_ui_std::components::button::Button;
-use pelican_ui_std::components::interface::general::{Content, Header, Interface, Page};
+use pelican_ui_std::components::button::{Button, ButtonSize, ButtonState, ButtonStyle, IconButton};
+use pelican_ui_std::components::interface::general::{Bumper, Content, Header, Interface, Page};
 use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
 use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::{Column, Offset, Padding, Size};
+use pelican_ui_std::layout::{Column, Offset, Padding, Size, Stack};
 
 use crate::event_editor_screen::EventEditorScreen;
 
 #[derive(Debug, Component)]
-pub struct YearSelectorScreen(Column, Page, #[skip] String);
+pub struct YearSelectorScreen(Stack, Page, #[skip] String);
 
 impl OnEvent for YearSelectorScreen {}
 
@@ -34,5 +34,16 @@ impl AppPage for YearSelectorScreen {
             0 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
+    }
+}
+
+impl YearSelectorScreen {
+    pub fn new(ctx: &mut Context) -> Self {
+        let return_to_eventeditorscreen_icon = IconButton::new(ctx, "backspace", ButtonSize::Medium, ButtonStyle::Secondary, ButtonState::Default, Box::new(|ctx: &mut Context) {ctx.trigger_event(NavigateEvent(0)); println!("return_to_eventeditorscreen_icon clicked.")}, None,);
+        let content = Content::new(ctx, Offset::Start, vec![Box::new(return_to_eventeditorscreen_icon)]);
+        let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {ctx.trigger_event(NavigateEvent(0)); println!("Save Year button clicked.")});
+        let bumper = Bumper::single_button(ctx, button);
+
+        YearSelectorScreen(Stack::default(), Page::new(None, content, Some(bumper)), String::default())
     }
 }
