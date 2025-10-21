@@ -1,6 +1,7 @@
 mod day_view_screen;
 mod event_editor_screen;
 mod objects;
+mod various_date_selector_screens;
 
 use pelican_ui::drawable::{Align, Component, Drawable};
 use pelican_ui::events::OnEvent;

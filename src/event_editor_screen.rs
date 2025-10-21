@@ -34,7 +34,7 @@ impl AppPage for EventEditorScreen {
         index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
-            0 => return Ok(Box::new(MonthScreen::new(ctx))),
+            0 => Ok(Box::new(MonthScreen::new(ctx))),
             _ => Err(self),
         }
     }

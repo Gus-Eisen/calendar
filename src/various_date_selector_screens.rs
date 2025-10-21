@@ -1,7 +1,3 @@
-mod day_view_screen;
-mod event_editor_screen;
-mod objects;
-
 use pelican_ui::drawable::{Align, Component, Drawable};
 use pelican_ui::events::OnEvent;
 use pelican_ui::layout::{Area, Layout, SizeRequest};
@@ -22,7 +18,7 @@ pub struct YearSelectorScreen(Column, Page, #[skip] String);
 
 impl OnEvent for YearSelectorScreen {}
 
-impl AppPage for MonthScreen {
+impl AppPage for YearSelectorScreen {
     // This screen does not have a navigation bar
     fn has_nav(&self) -> bool {
         false
@@ -35,7 +31,7 @@ impl AppPage for MonthScreen {
         index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
-            0 => return Ok(Box::new(EventEditorScreen::new(ctx))),
+            0 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
     }
