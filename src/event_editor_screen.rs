@@ -9,7 +9,7 @@ use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
-use pelican_ui_std::events::NavigateEvent;
+use pelican_ui_std::events::{InputEditedEvent, NavigateEvent, TextInputSelect};
 use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
@@ -19,6 +19,7 @@ pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
     fn on_event(&mut self, _ctx: &mut Context, event: &mut dyn Event) -> bool {
+        // if event.downcast_ref()::<TextInputSelect>.is_some() &&
         true
     }
 }
@@ -67,45 +68,19 @@ impl EventEditorScreen {
             true,
         );
 
-        let year = TextInput::new(
-            ctx,
-            None,
-            Some("Year"),
-            "Enter year of event",
-            Some("Ex.: 2026"),
-            TextInput::NO_ICON,
-            true,
-        );
+        let year = Button::primary(ctx, "Select year here", |ctx: &mut Context| {
+            println!("Year")
+        });
 
-        let month = TextInput::new(
-            ctx,
-            None,
-            Some("Month"),
-            "Enter month of event",
-            Some("Ex.: June"),
-            TextInput::NO_ICON,
-            true,
-        );
+        let month = Button::primary(ctx, "Select month here", |ctx: &mut Context| {
+            println!("Month")
+        });
 
-        let day = TextInput::new(
-            ctx,
-            None,
-            Some("Day"),
-            "Enter day of event",
-            Some("Ex. 15"),
-            TextInput::NO_ICON,
-            true,
-        );
+        let day = Button::primary(ctx, "Select day here", |ctx: &mut Context| println!("Day"));
 
-        let time = TextInput::new(
-            ctx,
-            None,
-            Some("Time"),
-            "Enter time of event",
-            Some("Ex.: 1430"),
-            TextInput::NO_ICON,
-            true,
-        );
+        let time = Button::primary(ctx, "Select time here", |ctx: &mut Context| {
+            println!("Time")
+        });
 
         let content = Content::new(
             ctx,
