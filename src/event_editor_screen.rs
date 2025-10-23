@@ -9,6 +9,7 @@ use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
+use pelican_ui_std::components::list_item::ListItemSelector;
 use pelican_ui_std::events::{InputEditedEvent, NavigateEvent, TextInputSelect};
 use pelican_ui_std::layout::{Offset, Stack};
 
@@ -124,6 +125,22 @@ impl EventEditorScreen {
 
         let bumper = Bumper::single_button(ctx, button);
 
+        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+    }
+
+    pub fn year(ctx: &mut Context) -> Self {
+        let year = ListItemSelector::new(
+            ctx,
+            ("2025", "2025", None),
+            ("2026", "2026", None),
+            None,
+            None,
+        );
+        let content = Content::new(ctx, Offset::Start, vec![Box::new(year)]);
+        let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
+            println!("Save Year clicked.")
+        });
+        let bumper = Bumper::single_button(ctx, button);
         EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 }
