@@ -38,6 +38,7 @@ impl AppPage for EventEditorScreen {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
             1 => Ok(Box::new(EventEditorScreen::year(ctx))),
+            2 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
     }
@@ -49,7 +50,7 @@ impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
         let return_to_monthscreen_icon = IconButton::new(
             ctx,
-            "backspace",
+            "back",
             ButtonSize::Medium,
             ButtonStyle::Secondary,
             ButtonState::Default,
@@ -133,9 +134,26 @@ impl EventEditorScreen {
     }
 
     pub fn year(ctx: &mut Context) -> Self {
+        let return_to_eventeditorscreen_new = IconButton::new(
+            ctx,
+            "back",
+            ButtonSize::Medium,
+            ButtonStyle::Secondary,
+            ButtonState::Default,
+            Box::new(|ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(2));
+                println!("return_to_eventeditorscreen_new button clicked.");
+            }),
+            None,
+        );
         let year = ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
-        let content = Content::new(ctx, Offset::Start, vec![Box::new(year)]);
+        let content = Content::new(
+            ctx,
+            Offset::Start,
+            vec![Box::new(return_to_eventeditorscreen_new), Box::new(year)],
+        );
         let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
+            ctx.trigger_event(NavigateEvent(2));
             println!("Save Year clicked.")
         });
         let bumper = Bumper::single_button(ctx, button);
