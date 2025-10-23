@@ -68,19 +68,41 @@ impl EventEditorScreen {
             true,
         );
 
-        let year = Button::primary(ctx, "Select year here", |ctx: &mut Context| {
-            println!("Year")
-        });
+        let year = Button::secondary(
+            ctx,
+            Some("right"),
+            "Select year here",
+            None,
+            |ctx: &mut Context| println!("Year"),
+            None,
+        );
 
-        let month = Button::primary(ctx, "Select month here", |ctx: &mut Context| {
-            println!("Month")
-        });
+        let month = Button::secondary(
+            ctx,
+            Some("right"),
+            "Select month here",
+            None,
+            |ctx: &mut Context| println!("Month"),
+            None,
+        );
 
-        let day = Button::primary(ctx, "Select day here", |ctx: &mut Context| println!("Day"));
+        let day = Button::secondary(
+            ctx,
+            Some("right"),
+            "Select day here",
+            None,
+            |ctx: &mut Context| println!("Day"),
+            None,
+        );
 
-        let time = Button::primary(ctx, "Select time here", |ctx: &mut Context| {
-            println!("Time")
-        });
+        let time = Button::secondary(
+            ctx,
+            Some("right"),
+            "Select time here",
+            None,
+            |ctx: &mut Context| println!("Time"),
+            None,
+        );
 
         let content = Content::new(
             ctx,
