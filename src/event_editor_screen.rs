@@ -10,16 +10,17 @@ use pelican_ui_std::components::button::{
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
 use pelican_ui_std::components::list_item::ListItemSelector;
-use pelican_ui_std::events::{InputEditedEvent, NavigateEvent, TextInputSelect};
+use pelican_ui_std::events::NavigateEvent;
 use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
+use crate::objects::EventForEES;
 
 #[derive(Debug, Component)]
-pub struct EventEditorScreen(Stack, Page);
+pub struct EventEditorScreen(Stack, Page, #[skip] EventForEES);
 
 impl OnEvent for EventEditorScreen {
-    fn on_event(&mut self, _ctx: &mut Context, event: &mut dyn Event) -> bool {
+    fn on_event(&mut self, _ctx: &mut Context, _event: &mut dyn Event) -> bool {
         // if event.downcast_ref()::<TextInputSelect>.is_some() &&
         true
     }
@@ -31,7 +32,7 @@ impl AppPage for EventEditorScreen {
     }
 
     fn navigate(
-        mut self: Box<Self>,
+        self: Box<Self>,
         ctx: &mut Context,
         index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
@@ -88,7 +89,7 @@ impl EventEditorScreen {
             Some("right"),
             "Select month here",
             None,
-            |ctx: &mut Context| println!("Month"),
+            |_ctx: &mut Context| println!("Month"),
             None,
         );
 
@@ -97,7 +98,7 @@ impl EventEditorScreen {
             Some("right"),
             "Select day here",
             None,
-            |ctx: &mut Context| println!("Day"),
+            |_ctx: &mut Context| println!("Day"),
             None,
         );
 
@@ -106,7 +107,7 @@ impl EventEditorScreen {
             Some("right"),
             "Select time here",
             None,
-            |ctx: &mut Context| println!("Time"),
+            |_ctx: &mut Context| println!("Time"),
             None,
         );
 
@@ -130,7 +131,11 @@ impl EventEditorScreen {
 
         let bumper = Bumper::single_button(ctx, button);
 
-        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+        EventEditorScreen(
+            Stack::default(),
+            Page::new(None, content, Some(bumper)),
+            EventForEES::new(None, None, None, None),
+        )
     }
 
     pub fn year(ctx: &mut Context) -> Self {
@@ -157,6 +162,10 @@ impl EventEditorScreen {
             println!("Save Year clicked.")
         });
         let bumper = Bumper::single_button(ctx, button);
-        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+        EventEditorScreen(
+            Stack::default(),
+            Page::new(None, content, Some(bumper)),
+            EventForEES::new(None, None, None, None),
+        )
     }
 }

@@ -37,3 +37,27 @@ pub struct Event {
 pub struct EventRegistry {
     vec_of_events: Vec<Event>,
 }
+
+#[derive(Debug)]
+pub struct EventForEES {
+    year: Option<String>,
+    month: Option<String>,
+    day: Option<String>,
+    time: Option<String>,
+}
+
+impl EventForEES {
+    pub fn new(
+        year: Option<String>,
+        month: Option<String>,
+        day: Option<String>,
+        time: Option<String>,
+    ) -> Self {
+        Self {
+            year,
+            month,
+            day,
+            time,
+        }
+    }
+}
