@@ -37,6 +37,7 @@ impl AppPage for EventEditorScreen {
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
+            1 => Ok(Box::new(EventEditorScreen::year(ctx))),
             _ => Err(self),
         }
     }
@@ -74,7 +75,10 @@ impl EventEditorScreen {
             Some("right"),
             "Select year here",
             None,
-            |ctx: &mut Context| println!("Year"),
+            |ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(1));
+                println!("Year button clicked.")
+            },
             None,
         );
 
@@ -129,13 +133,7 @@ impl EventEditorScreen {
     }
 
     pub fn year(ctx: &mut Context) -> Self {
-        let year = ListItemSelector::new(
-            ctx,
-            ("2025", "2025", None),
-            ("2026", "2026", None),
-            None,
-            None,
-        );
+        let year = ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
         let content = Content::new(ctx, Offset::Start, vec![Box::new(year)]);
         let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
             println!("Save Year clicked.")
