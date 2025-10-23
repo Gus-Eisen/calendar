@@ -17,7 +17,7 @@ use crate::MonthScreen;
 use crate::objects::EventForEES;
 
 #[derive(Debug, Component)]
-pub struct EventEditorScreen(Stack, Page, #[skip] EventForEES);
+pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
     fn on_event(&mut self, _ctx: &mut Context, _event: &mut dyn Event) -> bool {
@@ -44,9 +44,7 @@ impl AppPage for EventEditorScreen {
         }
     }
 }
-/*This UX is atrocious, but we don't yet have a Date Picker in pelican_ui_std.
- * TODO: refactor when Date Picker is created.
- */
+
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
         let return_to_monthscreen_icon = IconButton::new(
@@ -131,11 +129,7 @@ impl EventEditorScreen {
 
         let bumper = Bumper::single_button(ctx, button);
 
-        EventEditorScreen(
-            Stack::default(),
-            Page::new(None, content, Some(bumper)),
-            EventForEES::new(None, None, None, None),
-        )
+        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 
     pub fn year(ctx: &mut Context) -> Self {
@@ -162,10 +156,6 @@ impl EventEditorScreen {
             println!("Save Year clicked.")
         });
         let bumper = Bumper::single_button(ctx, button);
-        EventEditorScreen(
-            Stack::default(),
-            Page::new(None, content, Some(bumper)),
-            EventForEES::new(None, None, None, None),
-        )
+        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 }

@@ -17,6 +17,7 @@ use pelican_ui_std::events::NavigateEvent;
 use pelican_ui_std::layout::{Column, Offset, Padding, Size};
 
 use crate::event_editor_screen::EventEditorScreen;
+use crate::objects::EventForEES;
 
 // Define the main application struct. This is our entry point type.
 pub struct MyApp;
@@ -74,7 +75,7 @@ impl AppPage for MonthScreen {
         index: usize,
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
-            0 => return Ok(Box::new(EventEditorScreen::new(ctx))),
+            0 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
     }
@@ -82,6 +83,16 @@ impl AppPage for MonthScreen {
 
 impl MonthScreen {
     pub fn new(ctx: &mut Context) -> Self {
+        if ctx
+            .state()
+            .get_named::<EventForEES>("event_for_ees")
+            .is_none()
+        {
+            let event_for_ees = EventForEES::new(None, None, None, None);
+            ctx.state()
+                .set_named(String::from("event_for_ees"), event_for_ees);
+        }
+
         // Create a header for the page
         let header = Header::home(
             // The majority of UI components will require the app context.
@@ -91,7 +102,6 @@ impl MonthScreen {
         );
 
         let font_size = ctx.theme.fonts.size;
-        let color = ctx.theme.colors.text.heading;
 
         // Create the main heading text
         let text = Text::new(
