@@ -15,13 +15,16 @@ use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
 use crate::objects::EventForEES;
+use crate::various_date_selector_screens::YearSelectorScreen;
 
 #[derive(Debug, Component)]
 pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
     fn on_event(&mut self, _ctx: &mut Context, _event: &mut dyn Event) -> bool {
-        // if event.downcast_ref()::<TextInputSelect>.is_some() &&
+        // if event.downcast_ref()::<TextInputSelect>.is_some() {
+        //
+        // }
         true
     }
 }
@@ -38,7 +41,7 @@ impl AppPage for EventEditorScreen {
     ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
-            1 => Ok(Box::new(EventEditorScreen::year(ctx))),
+            1 => Ok(Box::new(YearSelectorScreen::new(ctx))),
             2 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
@@ -132,6 +135,7 @@ impl EventEditorScreen {
         EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 
+    //deprecated. Review and delete.
     pub fn year(ctx: &mut Context) -> Self {
         let return_to_eventeditorscreen_new = IconButton::new(
             ctx,
@@ -146,12 +150,19 @@ impl EventEditorScreen {
             None,
         );
         let year = ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
+
         let content = Content::new(
             ctx,
             Offset::Start,
             vec![Box::new(return_to_eventeditorscreen_new), Box::new(year)],
         );
         let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
+            let event_for_ees = ctx
+                .state()
+                .get_named::<EventForEES>("event_for_ees")
+                .unwrap();
+            // println!("{}", year.index().unwrap());
+
             ctx.trigger_event(NavigateEvent(2));
             println!("Save Year clicked.")
         });

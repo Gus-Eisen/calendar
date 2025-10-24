@@ -1,17 +1,16 @@
-use pelican_ui::drawable::{Align, Component, Drawable};
+use pelican_ui::drawable::{Component, Drawable};
 use pelican_ui::events::OnEvent;
 use pelican_ui::layout::{Area, Layout, SizeRequest};
-use pelican_ui::{Application, Component, Context, Plugin, Plugins, start};
-use std::collections::BTreeMap;
+use pelican_ui::{Component, Context};
 
 use pelican_ui_std::AppPage;
 use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
 };
-use pelican_ui_std::components::interface::general::{Bumper, Content, Header, Interface, Page};
-use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
+use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
+use pelican_ui_std::components::list_item::ListItemSelector;
 use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::{Column, Offset, Padding, Size, Stack};
+use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::event_editor_screen::EventEditorScreen;
 
@@ -53,10 +52,12 @@ impl YearSelectorScreen {
             }),
             None,
         );
+        let year = ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
+
         let content = Content::new(
             ctx,
             Offset::Start,
-            vec![Box::new(return_to_eventeditorscreen_icon)],
+            vec![Box::new(return_to_eventeditorscreen_icon), Box::new(year)],
         );
         let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
             ctx.trigger_event(NavigateEvent(0));
