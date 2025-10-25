@@ -129,23 +129,47 @@ impl EventEditorScreen {
             )
         };
 
-        let day = Button::secondary(
-            ctx,
-            Some("right"),
-            "Select day here",
-            None,
-            |_ctx: &mut Context| println!("Day"),
-            None,
-        );
+        let day = if event_for_ees.day.is_some() {
+            let day = event_for_ees.day.clone().unwrap();
+            Button::secondary(
+                ctx,
+                Some("right"),
+                &day,
+                None,
+                |_ctx: &mut Context| println!("day = event_for_ees.day.is_some clicked."),
+                None,
+            )
+        } else {
+            Button::secondary(
+                ctx,
+                Some("right"),
+                "Select day here",
+                None,
+                |_ctx: &mut Context| println!("day = !event_for_ees.day.is_some clicked."),
+                None,
+            )
+        };
 
-        let time = Button::secondary(
-            ctx,
-            Some("right"),
-            "Select time here",
-            None,
-            |_ctx: &mut Context| println!("Time"),
-            None,
-        );
+        let time = if event_for_ees.time.is_some() {
+            let time = event_for_ees.time.clone().unwrap();
+            Button::secondary(
+                ctx,
+                Some("right"),
+                &time,
+                None,
+                |_ctx: &mut Context| println!("time = event_for_ees.time.is_some clicked."),
+                None,
+            )
+        } else {
+            Button::secondary(
+                ctx,
+                Some("right"),
+                "Select time here",
+                None,
+                |_ctx: &mut Context| println!("time = !event_for_ees.time.is_some clicked."),
+                None,
+            )
+        };
 
         let content = Content::new(
             ctx,
