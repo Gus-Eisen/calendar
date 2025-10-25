@@ -105,14 +105,28 @@ impl EventEditorScreen {
             )
         };
 
-        let month = Button::secondary(
-            ctx,
-            Some("right"),
-            "Select month here",
-            None,
-            |_ctx: &mut Context| println!("Month"),
-            None,
-        );
+        let month = if event_for_ees.month.is_some() {
+            let month = event_for_ees.month.clone().unwrap();
+            Button::secondary(
+                ctx,
+                Some("right"),
+                &month,
+                None,
+                |_ctx: &mut Context| {
+                    println!("month = event_for_ees.month.is_some clicked.");
+                },
+                None,
+            )
+        } else {
+            Button::secondary(
+                ctx,
+                Some("right"),
+                "Select year here",
+                None,
+                |_ctx: &mut Context| println!("month = ! event_for_ees.month.is_some clicked."),
+                None,
+            )
+        };
 
         let day = Button::secondary(
             ctx,
