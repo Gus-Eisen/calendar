@@ -73,17 +73,37 @@ impl EventEditorScreen {
             true,
         );
 
-        let year = Button::secondary(
-            ctx,
-            Some("right"),
-            "Select year here",
-            None,
-            |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(1));
-                println!("Year button clicked.")
-            },
-            None,
-        );
+        let event_for_ees = ctx
+            .state()
+            .get_named::<EventForEES>("event_for_ees")
+            .unwrap();
+
+        let year = if event_for_ees.year.is_some() {
+            let year = event_for_ees.year.clone().unwrap();
+            Button::secondary(
+                ctx,
+                Some("right"),
+                &year,
+                None,
+                |ctx: &mut Context| {
+                    ctx.trigger_event(NavigateEvent(1));
+                    println!("year = event_for_ees.year.is_some clicked.")
+                },
+                None,
+            )
+        } else {
+            Button::secondary(
+                ctx,
+                Some("right"),
+                "Select year here",
+                None,
+                |ctx: &mut Context| {
+                    ctx.trigger_event(NavigateEvent(1));
+                    println!("year = !event_for_ees.year.is_some clicked.")
+                },
+                None,
+            )
+        };
 
         let month = Button::secondary(
             ctx,
@@ -132,41 +152,6 @@ impl EventEditorScreen {
 
         let bumper = Bumper::single_button(ctx, button);
 
-        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
-    }
-
-    //deprecated. Review and delete.
-    pub fn year(ctx: &mut Context) -> Self {
-        let return_to_eventeditorscreen_new = IconButton::new(
-            ctx,
-            "back",
-            ButtonSize::Medium,
-            ButtonStyle::Secondary,
-            ButtonState::Default,
-            Box::new(|ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(2));
-                println!("return_to_eventeditorscreen_new button clicked.");
-            }),
-            None,
-        );
-        let year = ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
-
-        let content = Content::new(
-            ctx,
-            Offset::Start,
-            vec![Box::new(return_to_eventeditorscreen_new), Box::new(year)],
-        );
-        let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
-            let event_for_ees = ctx
-                .state()
-                .get_named::<EventForEES>("event_for_ees")
-                .unwrap();
-            // println!("{}", year.index().unwrap());
-
-            ctx.trigger_event(NavigateEvent(2));
-            println!("Save Year clicked.")
-        });
-        let bumper = Bumper::single_button(ctx, button);
         EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
     }
 }

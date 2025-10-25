@@ -40,10 +40,10 @@ pub struct EventRegistry {
 
 #[derive(Debug)]
 pub struct EventForEES {
-    year: Option<String>,
-    month: Option<String>,
-    day: Option<String>,
-    time: Option<String>,
+    pub year: Option<String>,
+    pub month: Option<String>,
+    pub day: Option<String>,
+    pub time: Option<String>,
 }
 
 impl EventForEES {
