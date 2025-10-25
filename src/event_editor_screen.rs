@@ -76,7 +76,8 @@ impl EventEditorScreen {
         let event_for_ees = ctx
             .state()
             .get_named::<EventForEES>("event_for_ees")
-            .unwrap();
+            .unwrap()
+            .to_owned();
 
         let year = if event_for_ees.year.is_some() {
             let year = event_for_ees.year.clone().unwrap();
@@ -121,9 +122,9 @@ impl EventEditorScreen {
             Button::secondary(
                 ctx,
                 Some("right"),
-                "Select year here",
+                "Select month here",
                 None,
-                |_ctx: &mut Context| println!("month = ! event_for_ees.month.is_some clicked."),
+                |_ctx: &mut Context| println!("month = !event_for_ees.month.is_some clicked."),
                 None,
             )
         };

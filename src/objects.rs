@@ -38,7 +38,7 @@ pub struct EventRegistry {
     vec_of_events: Vec<Event>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EventForEES {
     pub year: Option<String>,
     pub month: Option<String>,
