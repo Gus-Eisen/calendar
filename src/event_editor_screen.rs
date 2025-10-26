@@ -63,21 +63,34 @@ impl EventEditorScreen {
             None,
         );
 
-        let event_title = TextInput::new(
-            ctx,
-            None,
-            Some("Event Title"),
-            "Enter Event Title",
-            Some("Ex.: Strategy meeting with Satoshi"),
-            TextInput::NO_ICON,
-            true,
-        );
-
         let event_for_ees = ctx
             .state()
             .get_named::<EventForEES>("event_for_ees")
             .unwrap()
             .to_owned();
+
+        let event_title = if event_for_ees.event_title.is_some() {
+            let event_title = event_for_ees.event_title.clone().unwrap();
+            TextInput::new(
+                ctx,
+                None,
+                Some("Event Title"),
+                &event_title,
+                None,
+                TextInput::NO_ICON,
+                true,
+            )
+        } else {
+            TextInput::new(
+                ctx,
+                None,
+                Some("Event Title"),
+                "Enter Event Title here",
+                Some("Ex.: Strategy meeting with Satoshi"),
+                TextInput::NO_ICON,
+                true,
+            )
+        };
 
         let year = if event_for_ees.year.is_some() {
             let year = event_for_ees.year.clone().unwrap();
