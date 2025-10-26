@@ -31,7 +31,10 @@ impl OnEvent for EventEditorScreen {
                 .unwrap();
 
             event_for_ees.event_title = Some(input.value().clone());
-            println!("{:?}", event_for_ees.event_title);
+            println!(
+                "Event Title: {:?}",
+                event_for_ees.event_title.clone().unwrap()
+            );
         }
         true
     }
