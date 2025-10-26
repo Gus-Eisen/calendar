@@ -88,7 +88,7 @@ impl MonthScreen {
             .get_named::<EventForEES>("event_for_ees")
             .is_none()
         {
-            let event_for_ees = EventForEES::new(None, None, None, None);
+            let event_for_ees = EventForEES::new(None, None, None, None, None);
             ctx.state()
                 .set_named(String::from("event_for_ees"), event_for_ees);
         }

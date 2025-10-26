@@ -40,6 +40,7 @@ pub struct EventRegistry {
 
 #[derive(Debug, Clone)]
 pub struct EventForEES {
+    pub event_title: Option<String>,
     pub year: Option<String>,
     pub month: Option<String>,
     pub day: Option<String>,
@@ -48,12 +49,14 @@ pub struct EventForEES {
 
 impl EventForEES {
     pub fn new(
+        event_title: Option<String>,
         year: Option<String>,
         month: Option<String>,
         day: Option<String>,
         time: Option<String>,
     ) -> Self {
         Self {
+            event_title,
             year,
             month,
             day,
