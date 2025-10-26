@@ -10,7 +10,7 @@ use pelican_ui_std::components::button::{
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
 use pelican_ui_std::components::list_item::ListItemSelector;
-use pelican_ui_std::events::NavigateEvent;
+use pelican_ui_std::events::{InputEditedEvent, NavigateEvent};
 use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
@@ -21,10 +21,18 @@ use crate::various_date_selector_screens::YearSelectorScreen;
 pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
-    fn on_event(&mut self, _ctx: &mut Context, _event: &mut dyn Event) -> bool {
-        // if event.downcast_ref()::<TextInputSelect>.is_some() {
-        //
-        // }
+    fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
+        if event.downcast_ref::<InputEditedEvent>().is_some()
+            && let Some(input) = self.1.content().find::<TextInput>()
+        {
+            let event_for_ees = ctx
+                .state()
+                .get_named_mut::<EventForEES>("event_for_ees")
+                .unwrap();
+
+            event_for_ees.event_title = Some(input.value().clone());
+            println!("{:?}", event_for_ees.event_title);
+        }
         true
     }
 }
