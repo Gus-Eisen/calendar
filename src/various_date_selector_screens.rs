@@ -3,12 +3,14 @@ use pelican_ui::events::OnEvent;
 use pelican_ui::layout::{Area, Layout, SizeRequest};
 use pelican_ui::{Component, Context};
 
+use crate::objects::EventForEES;
 use pelican_ui_std::AppPage;
 use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
 use pelican_ui_std::components::list_item::ListItemSelector;
+use pelican_ui_std::events::ListItemSelect;
 use pelican_ui_std::events::NavigateEvent;
 use pelican_ui_std::layout::{Offset, Stack};
 
@@ -20,7 +22,39 @@ pub mod year_selector_screen_block {
     #[derive(Debug, Component)]
     pub struct YearSelectorScreen(Stack, Page, #[skip] String);
 
-    impl OnEvent for YearSelectorScreen {}
+    impl OnEvent for YearSelectorScreen {
+        fn on_event(
+            &mut self,
+            ctx: &mut Context,
+            event: &mut dyn pelican_ui::events::Event,
+        ) -> bool {
+            if event.downcast_ref::<ListItemSelect>().is_some() {
+                let index = self
+                    .1
+                    .content()
+                    .find::<ListItemSelector>()
+                    .unwrap()
+                    .index()
+                    .unwrap();
+                let event_for_ees = ctx
+                    .state()
+                    .get_named_mut::<EventForEES>("event_for_ees")
+                    .unwrap();
+                match index {
+                    0 => {
+                        event_for_ees.year = Some("2025".to_string());
+                        println!("Year: 2025");
+                    }
+                    1 => {
+                        event_for_ees.year = Some("2026".to_string());
+                        println!("Year: 2026");
+                    }
+                    _ => (),
+                }
+            }
+            true
+        }
+    }
 
     impl AppPage for YearSelectorScreen {
         // This screen does not have a navigation bar
