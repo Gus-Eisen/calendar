@@ -9,13 +9,12 @@ use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
 };
 use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
-use pelican_ui_std::components::list_item::ListItemSelector;
 use pelican_ui_std::events::{InputEditedEvent, NavigateEvent};
 use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
 use crate::objects::EventForEES;
-use crate::various_date_selector_screens::YearSelectorScreen;
+use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
 
 #[derive(Debug, Component)]
 pub struct EventEditorScreen(Stack, Page);
