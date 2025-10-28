@@ -63,4 +63,12 @@ impl EventForEES {
             time,
         }
     }
+
+    pub fn all_some(&self) -> bool {
+        self.event_title.is_some()
+            && self.year.is_some()
+            && self.month.is_some()
+            && self.day.is_some()
+            && self.time.is_some()
+    }
 }

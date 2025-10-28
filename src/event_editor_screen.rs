@@ -208,6 +208,11 @@ impl EventEditorScreen {
         );
 
         let button = Button::primary(ctx, "Save Event", |ctx: &mut Context| {
+            let event_for_ees = ctx
+                .state()
+                .get_named::<EventForEES>("event_for_ees")
+                .unwrap();
+            event_for_ees.all_some();
             ctx.trigger_event(NavigateEvent(0));
             println!("Save Event button clicked.")
         });
