@@ -140,7 +140,47 @@ pub mod month_selector_screen_block {
                     }
                     1 => {
                         event_for_ees.month = Some(MonthOfYear::February.as_str().to_string());
-                        println!("Year: 2026");
+                        println!("Month: February");
+                    }
+                    2 => {
+                        event_for_ees.month = Some(MonthOfYear::March.as_str().to_string());
+                        println!("Month: March");
+                    }
+                    3 => {
+                        event_for_ees.month = Some(MonthOfYear::April.as_str().to_string());
+                        println!("Month: April");
+                    }
+                    4 => {
+                        event_for_ees.month = Some(MonthOfYear::May.as_str().to_string());
+                        println!("Month: May");
+                    }
+                    5 => {
+                        event_for_ees.month = Some(MonthOfYear::June.as_str().to_string());
+                        println!("Month: June");
+                    }
+                    6 => {
+                        event_for_ees.month = Some(MonthOfYear::July.as_str().to_string());
+                        println!("Month: July");
+                    }
+                    7 => {
+                        event_for_ees.month = Some(MonthOfYear::August.as_str().to_string());
+                        println!("Month: August");
+                    }
+                    8 => {
+                        event_for_ees.month = Some(MonthOfYear::September.as_str().to_string());
+                        println!("Month: September");
+                    }
+                    9 => {
+                        event_for_ees.month = Some(MonthOfYear::October.as_str().to_string());
+                        println!("Month: October");
+                    }
+                    10 => {
+                        event_for_ees.month = Some(MonthOfYear::November.as_str().to_string());
+                        println!("Month: November");
+                    }
+                    11 => {
+                        event_for_ees.month = Some(MonthOfYear::December.as_str().to_string());
+                        println!("Month: December");
                     }
                     _ => (),
                 }
