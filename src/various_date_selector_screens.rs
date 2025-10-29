@@ -4,6 +4,7 @@ use pelican_ui::layout::{Area, Layout, SizeRequest};
 use pelican_ui::{Component, Context};
 
 use crate::objects::EventForEES;
+use pelican_ui::events::Event;
 use pelican_ui_std::AppPage;
 use pelican_ui_std::components::button::{
     Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
@@ -23,15 +24,12 @@ pub mod year_selector_screen_block {
     pub struct YearSelectorScreen(Stack, Page, #[skip] String);
 
     impl OnEvent for YearSelectorScreen {
-        fn on_event(
-            &mut self,
-            ctx: &mut Context,
-            event: &mut dyn pelican_ui::events::Event,
-        ) -> bool {
+        fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
             if event.downcast_ref::<ListItemSelect>().is_some() {
                 let index = self
                     .1
                     .content()
+                    //TODO: ListItemSelector is broken within RAMP. Fix when updated.
                     .find::<ListItemSelector>()
                     .unwrap()
                     .index()
@@ -108,6 +106,46 @@ pub mod year_selector_screen_block {
                 Page::new(None, content, Some(bumper)),
                 String::default(),
             )
+        }
+    }
+}
+
+pub mod month_selector_screen_block {
+    use crate::objects::MonthOfYear;
+
+    use super::*;
+
+    #[derive(Debug, Component)]
+    pub struct MonthSelectorScreen(Stack, Page);
+
+    impl OnEvent for MonthSelectorScreen {
+        fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
+            if event.downcast_ref::<ListItemSelect>().is_some() {
+                let index = self
+                    .1
+                    .content()
+                    //TODO: ListItemSelector is broken within RAMP. Fix when updated.
+                    .find::<ListItemSelector>()
+                    .unwrap()
+                    .index()
+                    .unwrap();
+                let event_for_ees = ctx
+                    .state()
+                    .get_named_mut::<EventForEES>("event_for_ees")
+                    .unwrap();
+                match index {
+                    0 => {
+                        event_for_ees.month = Some(MonthOfYear::January.as_str().to_string());
+                        println!("Month: January");
+                    }
+                    1 => {
+                        event_for_ees.month = Some(MonthOfYear::February.as_str().to_string());
+                        println!("Year: 2026");
+                    }
+                    _ => (),
+                }
+            }
+            true
         }
     }
 }

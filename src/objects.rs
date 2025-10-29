@@ -25,6 +25,25 @@ pub enum MonthOfYear {
     December,
 }
 
+impl MonthOfYear {
+    pub fn as_str(&self) -> &str {
+        match self {
+            MonthOfYear::January => "January",
+            MonthOfYear::February => "February",
+            MonthOfYear::March => "March",
+            MonthOfYear::April => "April",
+            MonthOfYear::May => "May",
+            MonthOfYear::June => "June",
+            MonthOfYear::July => "July",
+            MonthOfYear::August => "August",
+            MonthOfYear::September => "September",
+            MonthOfYear::October => "October",
+            MonthOfYear::November => "November",
+            MonthOfYear::December => "December",
+        }
+    }
+}
+
 pub enum Year {
     Y2025,
 }
