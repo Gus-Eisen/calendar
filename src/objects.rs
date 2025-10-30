@@ -10,6 +10,7 @@ pub enum DayOfWeek {
     Sunday,
 }
 
+#[derive(Debug, Clone)]
 pub enum MonthOfYear {
     January,
     February,
@@ -56,12 +57,12 @@ pub struct Event {
 pub struct EventRegistry {
     vec_of_events: Vec<Event>,
 }
-
+//TODO: change month field to Option<MonthOfYear>
 #[derive(Debug, Clone)]
 pub struct EventForEES {
     pub event_title: Option<String>,
     pub year: Option<String>,
-    pub month: Option<String>,
+    pub month: Option<MonthOfYear>,
     pub day: Option<String>,
     pub time: Option<String>,
 }
@@ -70,7 +71,7 @@ impl EventForEES {
     pub fn new(
         event_title: Option<String>,
         year: Option<String>,
-        month: Option<String>,
+        month: Option<MonthOfYear>,
         day: Option<String>,
         time: Option<String>,
     ) -> Self {
