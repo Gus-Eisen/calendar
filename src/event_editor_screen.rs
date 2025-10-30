@@ -134,7 +134,7 @@ impl EventEditorScreen {
             Button::secondary(
                 ctx,
                 Some("right"),
-                &month,
+                month.as_str(),
                 None,
                 |_ctx: &mut Context| {
                     println!("month = event_for_ees.month.is_some clicked.");
