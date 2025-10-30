@@ -133,57 +133,7 @@ pub mod month_selector_screen_block {
                     .state()
                     .get_named_mut::<EventForEES>("event_for_ees")
                     .unwrap();
-                match index {
-                    0 => {
-                        event_for_ees.month = Some(Month::January);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    1 => {
-                        event_for_ees.month = Some(Month::February);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    2 => {
-                        event_for_ees.month = Some(Month::March);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    3 => {
-                        event_for_ees.month = Some(Month::April);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    4 => {
-                        event_for_ees.month = Some(Month::May);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    5 => {
-                        event_for_ees.month = Some(Month::June);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    6 => {
-                        event_for_ees.month = Some(Month::July);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    7 => {
-                        event_for_ees.month = Some(Month::August);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    8 => {
-                        event_for_ees.month = Some(Month::September);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    9 => {
-                        event_for_ees.month = Some(Month::October);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    10 => {
-                        event_for_ees.month = Some(Month::November);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    11 => {
-                        event_for_ees.month = Some(Month::December);
-                        println!("Month: {:?}", event_for_ees.month);
-                    }
-                    _ => (),
-                }
+                event_for_ees.month_adder(index);
             }
             true
         }

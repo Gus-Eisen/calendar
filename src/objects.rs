@@ -91,4 +91,58 @@ impl EventForEES {
             && self.day.is_some()
             && self.time.is_some()
     }
+
+    pub fn month_adder(&mut self, index: u8) {
+        match index {
+            0 => {
+                self.month = Some(Month::January);
+                println!("Month: {:?}", self.month);
+            }
+            1 => {
+                self.month = Some(Month::February);
+                println!("Month: {:?}", self.month);
+            }
+            2 => {
+                self.month = Some(Month::March);
+                println!("Month: {:?}", self.month);
+            }
+            3 => {
+                self.month = Some(Month::April);
+                println!("Month: {:?}", self.month);
+            }
+            4 => {
+                self.month = Some(Month::May);
+                println!("Month: {:?}", self.month);
+            }
+            5 => {
+                self.month = Some(Month::June);
+                println!("Month: {:?}", self.month);
+            }
+            6 => {
+                self.month = Some(Month::July);
+                println!("Month: {:?}", self.month);
+            }
+            7 => {
+                self.month = Some(Month::August);
+                println!("Month: {:?}", self.month);
+            }
+            8 => {
+                self.month = Some(Month::September);
+                println!("Month: {:?}", self.month);
+            }
+            9 => {
+                self.month = Some(Month::October);
+                println!("Month: {:?}", self.month);
+            }
+            10 => {
+                self.month = Some(Month::November);
+                println!("Month: {:?}", self.month);
+            }
+            11 => {
+                self.month = Some(Month::December);
+                println!("Month: {:?}", self.month);
+            }
+            _ => (),
+        }
+    }
 }
