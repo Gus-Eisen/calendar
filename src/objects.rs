@@ -11,7 +11,7 @@ pub enum DayOfWeek {
 }
 
 #[derive(Debug, Clone)]
-pub enum MonthOfYear {
+pub enum Month {
     January,
     February,
     March,
@@ -26,21 +26,21 @@ pub enum MonthOfYear {
     December,
 }
 
-impl MonthOfYear {
+impl Month {
     pub fn as_str(&self) -> &str {
         match self {
-            MonthOfYear::January => "January",
-            MonthOfYear::February => "February",
-            MonthOfYear::March => "March",
-            MonthOfYear::April => "April",
-            MonthOfYear::May => "May",
-            MonthOfYear::June => "June",
-            MonthOfYear::July => "July",
-            MonthOfYear::August => "August",
-            MonthOfYear::September => "September",
-            MonthOfYear::October => "October",
-            MonthOfYear::November => "November",
-            MonthOfYear::December => "December",
+            Month::January => "January",
+            Month::February => "February",
+            Month::March => "March",
+            Month::April => "April",
+            Month::May => "May",
+            Month::June => "June",
+            Month::July => "July",
+            Month::August => "August",
+            Month::September => "September",
+            Month::October => "October",
+            Month::November => "November",
+            Month::December => "December",
         }
     }
 }
@@ -57,12 +57,12 @@ pub struct Event {
 pub struct EventRegistry {
     vec_of_events: Vec<Event>,
 }
-//TODO: change month field to Option<MonthOfYear>
+
 #[derive(Debug, Clone)]
 pub struct EventForEES {
     pub event_title: Option<String>,
     pub year: Option<String>,
-    pub month: Option<MonthOfYear>,
+    pub month: Option<Month>,
     pub day: Option<String>,
     pub time: Option<String>,
 }
@@ -71,7 +71,7 @@ impl EventForEES {
     pub fn new(
         event_title: Option<String>,
         year: Option<String>,
-        month: Option<MonthOfYear>,
+        month: Option<Month>,
         day: Option<String>,
         time: Option<String>,
     ) -> Self {

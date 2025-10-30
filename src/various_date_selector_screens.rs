@@ -111,7 +111,7 @@ pub mod year_selector_screen_block {
 }
 
 pub mod month_selector_screen_block {
-    use crate::objects::MonthOfYear;
+    use crate::objects::Month;
 
     use super::*;
 
@@ -135,51 +135,51 @@ pub mod month_selector_screen_block {
                     .unwrap();
                 match index {
                     0 => {
-                        event_for_ees.month = Some(MonthOfYear::January);
+                        event_for_ees.month = Some(Month::January);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     1 => {
-                        event_for_ees.month = Some(MonthOfYear::February);
+                        event_for_ees.month = Some(Month::February);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     2 => {
-                        event_for_ees.month = Some(MonthOfYear::March);
+                        event_for_ees.month = Some(Month::March);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     3 => {
-                        event_for_ees.month = Some(MonthOfYear::April);
+                        event_for_ees.month = Some(Month::April);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     4 => {
-                        event_for_ees.month = Some(MonthOfYear::May);
+                        event_for_ees.month = Some(Month::May);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     5 => {
-                        event_for_ees.month = Some(MonthOfYear::June);
+                        event_for_ees.month = Some(Month::June);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     6 => {
-                        event_for_ees.month = Some(MonthOfYear::July);
+                        event_for_ees.month = Some(Month::July);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     7 => {
-                        event_for_ees.month = Some(MonthOfYear::August);
+                        event_for_ees.month = Some(Month::August);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     8 => {
-                        event_for_ees.month = Some(MonthOfYear::September);
+                        event_for_ees.month = Some(Month::September);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     9 => {
-                        event_for_ees.month = Some(MonthOfYear::October);
+                        event_for_ees.month = Some(Month::October);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     10 => {
-                        event_for_ees.month = Some(MonthOfYear::November);
+                        event_for_ees.month = Some(Month::November);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     11 => {
-                        event_for_ees.month = Some(MonthOfYear::December);
+                        event_for_ees.month = Some(Month::December);
                         println!("Month: {:?}", event_for_ees.month);
                     }
                     _ => (),
