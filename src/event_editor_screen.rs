@@ -107,7 +107,7 @@ impl EventEditorScreen {
             Button::secondary(
                 ctx,
                 Some("right"),
-                &year,
+                year.as_str(),
                 None,
                 |ctx: &mut Context| {
                     ctx.trigger_event(NavigateEvent(1));

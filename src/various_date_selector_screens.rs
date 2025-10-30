@@ -38,17 +38,8 @@ pub mod year_selector_screen_block {
                     .state()
                     .get_named_mut::<EventForEES>("event_for_ees")
                     .unwrap();
-                match index {
-                    0 => {
-                        event_for_ees.year = Some("2025".to_string());
-                        println!("Year: 2025");
-                    }
-                    1 => {
-                        event_for_ees.year = Some("2026".to_string());
-                        println!("Year: 2026");
-                    }
-                    _ => (),
-                }
+                //TODO: add set_year() to EventForEES and decompose.
+                event_for_ees.set_year(index);
             }
             true
         }

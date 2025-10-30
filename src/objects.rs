@@ -45,6 +45,7 @@ impl Month {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum Year {
     Y2025,
     Y2026,
@@ -71,7 +72,7 @@ pub struct EventRegistry {
 #[derive(Debug, Clone)]
 pub struct EventForEES {
     pub event_title: Option<String>,
-    pub year: Option<String>,
+    pub year: Option<Year>,
     pub month: Option<Month>,
     pub day: Option<String>,
     pub time: Option<String>,
@@ -80,7 +81,7 @@ pub struct EventForEES {
 impl EventForEES {
     pub fn new(
         event_title: Option<String>,
-        year: Option<String>,
+        year: Option<Year>,
         month: Option<Month>,
         day: Option<String>,
         time: Option<String>,
@@ -100,6 +101,20 @@ impl EventForEES {
             && self.month.is_some()
             && self.day.is_some()
             && self.time.is_some()
+    }
+
+    pub fn set_year(&mut self, index: u8) {
+        match index {
+            0 => {
+                self.year = Some(Year::Y2025);
+                println!("Year: {:?}", self.year);
+            }
+            1 => {
+                self.year = Some(Year::Y2026);
+                println!("Year: {:?}", self.year);
+            }
+            _ => (),
+        }
     }
 
     pub fn set_month(&mut self, index: u8) {
