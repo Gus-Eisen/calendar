@@ -103,6 +103,7 @@ impl EventForEES {
             && self.time.is_some()
     }
 
+    //TODO: Figure out how to return Result type.
     pub fn set_year(&mut self, index: u8) {
         match index {
             0 => {
@@ -113,7 +114,7 @@ impl EventForEES {
                 self.year = Some(Year::Y2026);
                 println!("Year: {:?}", self.year);
             }
-            _ => (),
+            _ => panic!("Invalid year index: {}", index),
         }
     }
 
@@ -167,7 +168,7 @@ impl EventForEES {
                 self.month = Some(Month::December);
                 println!("Month: {:?}", self.month);
             }
-            _ => (),
+            _ => panic!("Invalid month index: {}", index),
         }
     }
 }
