@@ -14,6 +14,7 @@ use pelican_ui_std::layout::{Offset, Stack};
 
 use crate::MonthScreen;
 use crate::objects::EventForEES;
+use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
 
 #[derive(Debug, Component)]
@@ -52,6 +53,7 @@ impl AppPage for EventEditorScreen {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
             1 => Ok(Box::new(YearSelectorScreen::new(ctx))),
+            2 => Ok(Box::new(MonthSelectorScreen::new(ctx))),
             _ => Err(self),
         }
     }
@@ -135,7 +137,8 @@ impl EventEditorScreen {
                 Some("right"),
                 month.as_str(),
                 None,
-                |_ctx: &mut Context| {
+                |ctx: &mut Context| {
+                    ctx.trigger_event(NavigateEvent(2));
                     println!("month = event_for_ees.month.is_some clicked.");
                 },
                 None,
@@ -146,7 +149,10 @@ impl EventEditorScreen {
                 Some("right"),
                 "Select month here",
                 None,
-                |_ctx: &mut Context| println!("month = !event_for_ees.month.is_some clicked."),
+                |ctx: &mut Context| {
+                    println!("month = !event_for_ees.month.is_some clicked.");
+                    ctx.trigger_event(NavigateEvent(2));
+                },
                 None,
             )
         };
