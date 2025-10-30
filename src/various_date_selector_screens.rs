@@ -133,7 +133,7 @@ pub mod month_selector_screen_block {
                     .state()
                     .get_named_mut::<EventForEES>("event_for_ees")
                     .unwrap();
-                event_for_ees.month_adder(index);
+                event_for_ees.set_month(index);
             }
             true
         }

@@ -92,7 +92,7 @@ impl EventForEES {
             && self.time.is_some()
     }
 
-    pub fn month_adder(&mut self, index: u8) {
+    pub fn set_month(&mut self, index: u8) {
         match index {
             0 => {
                 self.month = Some(Month::January);
