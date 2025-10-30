@@ -29,7 +29,7 @@ pub mod year_selector_screen_block {
                 let index = self
                     .1
                     .content()
-                    //TODO: ListItemSelector is broken within RAMP. Fix when updated.
+                    //FIX: ListItemSelector is broken within RAMP. Fix when updated.
                     .find::<ListItemSelector>()
                     .unwrap()
                     .index()
@@ -38,7 +38,6 @@ pub mod year_selector_screen_block {
                     .state()
                     .get_named_mut::<EventForEES>("event_for_ees")
                     .unwrap();
-                //TODO: add set_year() to EventForEES and decompose.
                 event_for_ees.set_year(index);
             }
             true
@@ -51,7 +50,6 @@ pub mod year_selector_screen_block {
             false
         }
 
-        // Handle page navigation. Always returns Err(self) because this page cannot navigate.
         fn navigate(
             self: Box<Self>,
             ctx: &mut Context,
@@ -115,7 +113,7 @@ pub mod month_selector_screen_block {
                 let index = self
                     .1
                     .content()
-                    //TODO: ListItemSelector is broken within RAMP. Fix when updated.
+                    //FIX: ListItemSelector is broken within RAMP. Fix when updated.
                     .find::<ListItemSelector>()
                     .unwrap()
                     .index()
@@ -127,6 +125,24 @@ pub mod month_selector_screen_block {
                 event_for_ees.set_month(index);
             }
             true
+        }
+    }
+
+    impl AppPage for MonthSelectorScreen {
+        // This screen does not have a navigation bar
+        fn has_nav(&self) -> bool {
+            false
+        }
+
+        fn navigate(
+            self: Box<Self>,
+            ctx: &mut Context,
+            index: usize,
+        ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+            match index {
+                0 => Ok(Box::new(EventEditorScreen::new(ctx))),
+                _ => Err(self),
+            }
         }
     }
 }
