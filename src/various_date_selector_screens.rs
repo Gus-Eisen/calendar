@@ -145,4 +145,52 @@ pub mod month_selector_screen_block {
             }
         }
     }
+
+    impl MonthSelectorScreen {
+        pub fn new(ctx: &mut Context) -> Self {
+            let return_to_eventeditorscreen_icon = IconButton::new(
+                ctx,
+                "backspace",
+                ButtonSize::Medium,
+                ButtonStyle::Secondary,
+                ButtonState::Default,
+                Box::new(|ctx: &mut Context| {
+                    ctx.trigger_event(NavigateEvent(0));
+                    println!("return_to_eventeditorscreen_icon clicked.")
+                }),
+                None,
+            );
+            let month_jan_to_apr = ListItemSelector::new(
+                ctx,
+                ("January", "", None),
+                ("February", "", None),
+                Some(("March", "", None)),
+                Some(("April", "", None)),
+            );
+            let month_may_to_aug = ListItemSelector::new(
+                ctx,
+                ("May", "", None),
+                ("June", "", None),
+                Some(("July", "", None)),
+                Some(("August", "", None)),
+            );
+
+            let content = Content::new(
+                ctx,
+                Offset::Start,
+                vec![
+                    Box::new(return_to_eventeditorscreen_icon),
+                    Box::new(month_jan_to_apr),
+                    Box::new(month_may_to_aug),
+                ],
+            );
+            let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(0));
+                println!("Save Year button clicked.")
+            });
+            let bumper = Bumper::single_button(ctx, button);
+
+            MonthSelectorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+        }
+    }
 }

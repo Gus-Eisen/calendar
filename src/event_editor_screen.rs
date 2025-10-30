@@ -52,7 +52,6 @@ impl AppPage for EventEditorScreen {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
             1 => Ok(Box::new(YearSelectorScreen::new(ctx))),
-            2 => Ok(Box::new(EventEditorScreen::new(ctx))),
             _ => Err(self),
         }
     }
