@@ -47,6 +47,16 @@ impl Month {
 
 pub enum Year {
     Y2025,
+    Y2026,
+}
+
+impl Year {
+    pub fn as_str(&self) -> &str {
+        match self {
+            Year::Y2025 => "2025",
+            Year::Y2026 => "2026",
+        }
+    }
 }
 
 pub struct Event {
@@ -66,7 +76,7 @@ pub struct EventForEES {
     pub day: Option<String>,
     pub time: Option<String>,
 }
-
+//TODO: change year to Option<Year>
 impl EventForEES {
     pub fn new(
         event_title: Option<String>,
