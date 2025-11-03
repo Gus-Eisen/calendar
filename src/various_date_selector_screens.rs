@@ -3,6 +3,7 @@ use crate::objects::EventForEES;
 use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
 use pelican::components::interface::general::{Bumper, Content, Page};
 use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican::components::list_item::{ListItem, ListItemGroup};
 use pelican::interactions::Button;
 use roost::events::{Event, OnEvent};
 use roost::layouts::Offset;
@@ -92,7 +93,6 @@ pub mod year_selector_screen_block {
 }
 
 pub mod month_selector_screen_block {
-    use pelican::components::list_item::{ListItem, ListItemGroup};
 
     use crate::objects::Month;
 

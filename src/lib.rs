@@ -3,18 +3,21 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use pelican_ui::drawable::{Align, Component, Drawable};
-use pelican_ui::events::OnEvent;
-use pelican_ui::layout::{Area, Layout, SizeRequest};
-use pelican_ui::{Application, Component, Context, Plugin, Plugins, start};
+use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican::components::interface::general::{Bumper, Content, Header, Interface, Page};
+use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican::components::list_item::{ListItem, ListItemGroup};
+use pelican::components::{ExpandableText, Text, TextStyle};
+use pelican::interactions::Button;
+use roost::drawable::{Align, Drawable};
+use roost::events::{Event, OnEvent};
+use roost::layouts::Stack;
+use roost::layouts::{Column, Offset};
+use roost::layouts::{Padding, Size};
+use roost::maverick_os::start;
+use roost::{Application, Component, Context, Plugin};
 use std::collections::BTreeMap;
 
-use pelican_ui_std::AppPage;
-use pelican_ui_std::components::button::Button;
-use pelican_ui_std::components::interface::general::{Content, Header, Interface, Page};
-use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
-use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::{Column, Offset, Padding, Size};
 use roost::{ServiceList, Services};
 
 use crate::event_editor_screen::EventEditorScreen;
@@ -31,8 +34,8 @@ impl Services for MyApp {
     }
 }
 
-// Implement the Plugins trait for MyApp
-impl Plugins for MyApp {
+//FIX: fn plugins needs reconciliation.
+impl Plugin for MyApp {
     // Provide a list of plugins used by the app. Currently, there are none.
     fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
         vec![]
@@ -46,7 +49,7 @@ impl Application for MyApp {
         // Create the first screen
         let home = MonthScreen::new(ctx);
         // Create the main interface with the first screen as the starting page
-        let interface = Interface::new(ctx, Box::new(home), None, None);
+        let interface = Interface::new(ctx, Box::new(home));
         // Return the interface wrapped in a Box
         Box::new(interface)
     }
@@ -65,7 +68,7 @@ impl OnEvent for MonthScreen {}
 // Implement the AppPage trait for navigation and UI behavior
 impl AppPage for MonthScreen {
     // This screen does not have a navigation bar
-    fn has_nav(&self) -> bool {
+    fn has_navigator(&self) -> bool {
         false
     }
 
