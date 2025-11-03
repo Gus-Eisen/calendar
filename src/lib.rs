@@ -5,10 +5,11 @@ mod various_date_selector_screens;
 
 use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
 use pelican::components::interface::general::{Bumper, Content, Header, Interface, Page};
-use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError, RootInfo};
 use pelican::components::list_item::{ListItem, ListItemGroup};
 use pelican::components::{ExpandableText, Text, TextStyle};
 use pelican::interactions::Button;
+use pelican::pages::PelicanHome;
 use roost::drawable::{Align, Drawable};
 use roost::events::{Event, OnEvent};
 use roost::layouts::Stack;
@@ -34,24 +35,17 @@ impl Services for MyApp {
     }
 }
 
-//FIX: fn plugins needs reconciliation.
-impl Plugin for MyApp {
-    // Provide a list of plugins used by the app. Currently, there are none.
-    fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
-        vec![]
-    }
-}
-
 // Implement the Application trait for MyApp
 impl Application for MyApp {
-    // Asynchronously create the main drawable UI component
-    async fn new(ctx: &mut Context) -> Box<dyn Drawable> {
-        // Create the first screen
-        let home = MonthScreen::new(ctx);
-        // Create the main interface with the first screen as the starting page
-        let interface = Interface::new(ctx, Box::new(home));
-        // Return the interface wrapped in a Box
-        Box::new(interface)
+    //TODO: initialize all state objects in new().
+    async fn new(ctx: &mut Context) -> impl Drawable {
+        let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
+            Box::new(MonthScreen::new(ctx) as Box<dyn AppPage>)
+        });
+        Interface::new(ctx, (vec![home], None))
+    }
+    fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
+        vec![]
     }
 }
 
