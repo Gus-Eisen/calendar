@@ -114,21 +114,22 @@ pub mod month_selector_screen_block {
 
     impl OnEvent for MonthSelectorScreen {
         fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
-            if event.downcast_ref::<ListItemSelect>().is_some() {
-                let index = self
-                    .1
-                    .content()
-                    //FIX: ListItemSelector is broken within RAMP. Fix when updated.
-                    .find::<ListItemSelector>()
-                    .unwrap()
-                    .index()
-                    .unwrap();
-                let event_for_ees = ctx
-                    .state()
-                    .get_named_mut::<EventForEES>("event_for_ees")
-                    .unwrap();
-                event_for_ees.set_month(index);
-            }
+            // if event.downcast_ref::<ListItemSelect>().is_some() {
+            //     let index = self
+            //         .1
+            //         .content()
+            //         .find::<ListItemGroup>()
+            //         .unwrap()
+            //         //TODO: figure out how to correlate ListItem.
+            //         .inner()
+            //         .iter();
+            //
+            //     let event_for_ees = ctx
+            //         .state()
+            //         .get_named_mut::<EventForEES>("event_for_ees")
+            //         .unwrap();
+            //     event_for_ees.set_month(index);
+            // }
             true
         }
     }
@@ -165,13 +166,6 @@ pub mod month_selector_screen_block {
                 }),
                 None,
             );
-            // let month_jan_to_apr = ListItemSelector::new(
-            //     ctx,
-            //     ("January", "", None),
-            //     ("February", "", None),
-            //     Some(("March", "", None)),
-            //     Some(("April", "", None)),
-            // );
             let vec_month_listitem = Self::vec_month_listitem_builder(ctx);
 
             let month_listitemgroup = ListItemGroup::new(vec_month_listitem);

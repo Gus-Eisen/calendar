@@ -77,7 +77,7 @@ pub struct EventForEES {
     pub day: Option<String>,
     pub time: Option<String>,
 }
-//TODO: change year to Option<Year>
+
 impl EventForEES {
     pub fn new(
         event_title: Option<String>,
@@ -103,7 +103,6 @@ impl EventForEES {
             && self.time.is_some()
     }
 
-    //TODO: Figure out how to return Result type.
     pub fn set_year(&mut self, index: u8) {
         match index {
             0 => {
