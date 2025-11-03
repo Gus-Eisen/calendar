@@ -1,16 +1,13 @@
-use pelican_ui::drawable::{Component, Drawable};
-use pelican_ui::events::{Event, OnEvent};
-use pelican_ui::layout::{Area, Layout, SizeRequest};
-use pelican_ui::{Component, Context};
-
-use pelican_ui_std::AppPage;
-use pelican_ui_std::components::TextInput;
-use pelican_ui_std::components::button::{
-    Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
-};
-use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
-use pelican_ui_std::events::{InputEditedEvent, NavigateEvent};
-use pelican_ui_std::layout::{Offset, Stack};
+use pelican::components::RadioSelector;
+use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican::components::interface::general::{Bumper, Content, Page};
+use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican::components::list_item::{ListItem, ListItemGroup};
+use pelican::interactions::Button;
+use roost::events::{Event, OnEvent};
+use roost::layouts::Offset;
+use roost::layouts::Stack;
+use roost::{Component, Context};
 
 use crate::MonthScreen;
 use crate::objects::EventForEES;
@@ -41,7 +38,7 @@ impl OnEvent for EventEditorScreen {
 }
 
 impl AppPage for EventEditorScreen {
-    fn has_nav(&self) -> bool {
+    fn has_navigator(&self) -> bool {
         false
     }
 
@@ -49,12 +46,12 @@ impl AppPage for EventEditorScreen {
         self: Box<Self>,
         ctx: &mut Context,
         index: usize,
-    ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+    ) -> Result<Box<dyn AppPage>, PelicanError> {
         match index {
             0 => Ok(Box::new(MonthScreen::new(ctx))),
             1 => Ok(Box::new(YearSelectorScreen::new(ctx))),
             2 => Ok(Box::new(MonthSelectorScreen::new(ctx))),
-            _ => Err(self),
+            _ => Err(PelicanError::InvalidPage(Some(self))),
         }
     }
 }

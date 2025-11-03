@@ -1,5 +1,6 @@
 use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;
+use pelican::components::RadioSelector;
 use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
 use pelican::components::interface::general::{Bumper, Content, Page};
 use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
@@ -11,6 +12,7 @@ use roost::layouts::Stack;
 use roost::{Component, Context};
 
 pub mod year_selector_screen_block {
+
     use super::*;
 
     #[derive(Debug, Component)]
@@ -18,12 +20,12 @@ pub mod year_selector_screen_block {
 
     impl OnEvent for YearSelectorScreen {
         fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
-            if event.downcast_ref::<ListItemSelect>().is_some() {
+            //FIX: Figure out event type emitter for RadioSelector.
+            if event.downcast_ref::<ListItem>().is_some() {
                 let index = self
                     .1
                     .content()
-                    //FIX: ListItemSelector is broken within RAMP. Fix when updated.
-                    .find::<ListItemSelector>()
+                    .find::<RadioSelector>()
                     .unwrap()
                     .index()
                     .unwrap();
@@ -50,7 +52,7 @@ pub mod year_selector_screen_block {
         ) -> Result<Box<dyn AppPage>, PelicanError> {
             match index {
                 0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-                _ => Err(self),
+                _ => Err(PelicanError::InvalidPage(Some(self))),
             }
         }
     }
@@ -125,7 +127,7 @@ pub mod month_selector_screen_block {
 
     impl AppPage for MonthSelectorScreen {
         // This screen does not have a navigation bar
-        fn has_nav(&self) -> bool {
+        fn has_navigator(&self) -> bool {
             false
         }
 
@@ -133,10 +135,10 @@ pub mod month_selector_screen_block {
             self: Box<Self>,
             ctx: &mut Context,
             index: usize,
-        ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+        ) -> Result<Box<dyn AppPage>, PelicanError> {
             match index {
                 0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-                _ => Err(self),
+                _ => Err(PelicanError::InvalidPage(Some(self))),
             }
         }
     }

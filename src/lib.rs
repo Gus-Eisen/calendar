@@ -72,15 +72,14 @@ impl AppPage for MonthScreen {
         false
     }
 
-    // Handle page navigation. Always returns Err(self) because this page cannot navigate.
     fn navigate(
         self: Box<Self>,
         ctx: &mut Context,
         index: usize,
-    ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+    ) -> Result<Box<dyn AppPage>, PelicanError> {
         match index {
             0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-            _ => Err(self),
+            _ => Err(PelicanError::InvalidPage(Some(self))),
         }
     }
 }
