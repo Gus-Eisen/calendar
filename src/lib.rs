@@ -15,6 +15,7 @@ use pelican_ui_std::components::interface::general::{Content, Header, Interface,
 use pelican_ui_std::components::{ExpandableText, Text, TextStyle};
 use pelican_ui_std::events::NavigateEvent;
 use pelican_ui_std::layout::{Column, Offset, Padding, Size};
+use roost::{ServiceList, Services};
 
 use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;

@@ -1,23 +1,13 @@
-use pelican_ui::drawable::{Component, Drawable};
-use pelican_ui::events::OnEvent;
-use pelican_ui::layout::{Area, Layout, SizeRequest};
-use pelican_ui::{Component, Context};
-
-use crate::objects::EventForEES;
-use pelican_ui::events::Event;
-use pelican_ui_std::AppPage;
-use pelican_ui_std::components::button::{
-    Button, ButtonSize, ButtonState, ButtonStyle, IconButton,
-};
-use pelican_ui_std::components::interface::general::{Bumper, Content, Page};
-use pelican_ui_std::components::list_item::ListItemSelector;
-use pelican_ui_std::events::ListItemSelect;
-use pelican_ui_std::events::NavigateEvent;
-use pelican_ui_std::layout::{Offset, Stack};
-
 use crate::event_editor_screen::EventEditorScreen;
+use crate::objects::EventForEES;
 
 pub mod year_selector_screen_block {
+    use pelican::components::interface::general::Page;
+    use pelican::components::interface::navigation::{AppPage, PelicanError};
+    use roost::events::{Event, OnEvent};
+    use roost::layouts::Stack;
+    use roost::{Component, Context};
+
     use super::*;
 
     #[derive(Debug, Component)]
@@ -46,15 +36,15 @@ pub mod year_selector_screen_block {
 
     impl AppPage for YearSelectorScreen {
         // This screen does not have a navigation bar
-        fn has_nav(&self) -> bool {
-            false
+        fn has_navigator(&self) -> bool {
+            true
         }
 
         fn navigate(
             self: Box<Self>,
             ctx: &mut Context,
             index: usize,
-        ) -> Result<Box<dyn AppPage>, Box<dyn AppPage>> {
+        ) -> Result<Box<dyn AppPage>, PelicanError> {
             match index {
                 0 => Ok(Box::new(EventEditorScreen::new(ctx))),
                 _ => Err(self),
