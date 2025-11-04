@@ -25,18 +25,16 @@ use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;
 
 // Define the main application struct. This is our entry point type.
-pub struct MyApp;
+pub struct Calendar;
 
-// Implement the Services trait for MyApp
-impl Services for MyApp {
+impl Services for Calendar {
     // Provide a list of services used by the app. Here, it's empty.
     fn services() -> ServiceList {
         ServiceList(BTreeMap::new())
     }
 }
 
-// Implement the Application trait for MyApp
-impl Application for MyApp {
+impl Application for Calendar {
     //TODO: initialize all state objects in new().
     async fn new(ctx: &mut Context) -> impl Drawable {
         let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
@@ -50,7 +48,7 @@ impl Application for MyApp {
 }
 
 // Macro to start the application
-start!(MyApp);
+start!(Calendar);
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
