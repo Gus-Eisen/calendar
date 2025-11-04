@@ -9,6 +9,7 @@ use pelican::components::interface::navigation::{AppPage, NavigateEvent, Pelican
 use pelican::components::list_item::{ListItem, ListItemGroup};
 use pelican::components::{ExpandableText, Text, TextStyle};
 use pelican::interactions::Button;
+use pelican::page;
 use pelican::pages::PelicanHome;
 use roost::drawable::{Align, Drawable};
 use roost::events::{Event, OnEvent};
@@ -27,13 +28,6 @@ use crate::objects::EventForEES;
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
 
-impl Services for Calendar {
-    // Provide a list of services used by the app. Here, it's empty.
-    fn services() -> ServiceList {
-        ServiceList(BTreeMap::new())
-    }
-}
-
 impl Application for Calendar {
     //TODO: initialize all state objects in new().
     async fn new(ctx: &mut Context) -> impl Drawable {
@@ -44,6 +38,29 @@ impl Application for Calendar {
     }
     fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
         vec![]
+    }
+}
+
+impl AppPage for Calendar {
+    fn has_navigator(&self) -> bool {
+        false
+    }
+    fn navigate(
+        self: Box<Self>,
+        ctx: &mut Context,
+        index: usize,
+    ) -> Result<Box<dyn AppPage>, PelicanError> {
+        match index {
+            0 => page!(MonthScreen::new(ctx), self),
+            _ => Err(PelicanError::InvalidPage(Some(self))),
+        }
+    }
+}
+
+impl Services for Calendar {
+    // Provide a list of services used by the app. Here, it's empty.
+    fn services() -> ServiceList {
+        ServiceList(BTreeMap::new())
     }
 }
 
