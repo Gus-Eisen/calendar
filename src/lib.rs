@@ -3,24 +3,26 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use pelican::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
-use pelican::components::interface::general::{Bumper, Content, Header, Interface, Page};
-use pelican::components::interface::navigation::{AppPage, NavigateEvent, PelicanError, RootInfo};
-use pelican::components::list_item::{ListItem, ListItemGroup};
-use pelican::components::{ExpandableText, Text, TextStyle};
-use pelican::drawable::{Align, Drawable};
-use pelican::events::{Event, OnEvent};
-use pelican::interactions::Button;
-use pelican::layouts::Stack;
-use pelican::layouts::{Column, Offset};
-use pelican::layouts::{Padding, Size};
-use pelican::maverick_os::start;
-use pelican::page;
-use pelican::pages::PelicanHome;
-use roost::{Application, Component, Context, Plugin};
+use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican_ui::components::interface::general::{Bumper, Content, Header, Interface, Page};
+use pelican_ui::components::interface::navigation::{
+    AppPage, NavigateEvent, PelicanError, RootInfo,
+};
+use pelican_ui::components::list_item::{ListItem, ListItemGroup};
+use pelican_ui::components::{ExpandableText, Text, TextStyle};
+use pelican_ui::drawable::{Align, Drawable};
+use pelican_ui::events::{Event, OnEvent};
+use pelican_ui::interactions::Button;
+use pelican_ui::layouts::Stack;
+use pelican_ui::layouts::{Column, Offset};
+use pelican_ui::layouts::{Padding, Size};
+use pelican_ui::maverick_os::start;
+use pelican_ui::page;
+use pelican_ui::pages::PelicanHome;
+use pelican_ui::{Application, Component, Context, Plugin};
 use std::collections::BTreeMap;
 
-use pelican::{ServiceList, Services};
+use pelican_ui::{ServiceList, Services};
 
 use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;
