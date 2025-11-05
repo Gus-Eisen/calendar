@@ -10,7 +10,7 @@ use pelican_ui::components::interface::navigation::{
 };
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{ExpandableText, Text, TextStyle};
-use pelican_ui::drawable::{Align, Drawable};
+use pelican_ui::drawable::{Align, Color, Drawable};
 use pelican_ui::events::{Event, OnEvent};
 use pelican_ui::interactions::Button;
 use pelican_ui::layouts::Stack;
@@ -19,6 +19,8 @@ use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::maverick_os::start;
 use pelican_ui::page;
 use pelican_ui::pages::PelicanHome;
+use pelican_ui::plugin::PelicanUI;
+use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Component, Context, Plugin};
 use std::collections::BTreeMap;
 
@@ -34,12 +36,13 @@ impl Application for Calendar {
     //TODO: initialize all state objects in new().
     async fn new(ctx: &mut Context) -> impl Drawable {
         let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
-            Box::new(MonthScreen::new(ctx) as Box<dyn AppPage>)
+            Box::new(MonthScreen::new(ctx).ok().unwrap()) as Box<dyn AppPage>
         });
         Interface::new(ctx, (vec![home], None))
     }
-    fn plugins(_ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
-        vec![]
+    fn plugins(ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
+        let theme = Theme::light(&mut ctx.assets, Color::from_hex("#00bf69ff", 255));
+        vec![Box::new(PelicanUI::new(ctx, theme))]
     }
 }
 
@@ -96,7 +99,7 @@ impl AppPage for MonthScreen {
 }
 
 impl MonthScreen {
-    pub fn new(ctx: &mut Context) -> Self {
+    pub fn new(ctx: &mut Context) -> Result<Self, String> {
         if ctx
             .state()
             .get_named::<EventForEES>("event_for_ees")
@@ -160,9 +163,9 @@ impl MonthScreen {
 
         // Return the FirstScreen with a default Stack and a
         // new Page containinhg our header, content, and no bumper.
-        MonthScreen(
+        Ok(Self(
             Column::new(1.0, Offset::Center, Size::Fit, Padding::new(1.0)),
             Page::new(Some(header), content, None),
-        )
+        ))
     }
 }
