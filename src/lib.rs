@@ -46,22 +46,6 @@ impl Application for Calendar {
     }
 }
 
-impl AppPage for Calendar {
-    fn has_navigator(&self) -> bool {
-        false
-    }
-    fn navigate(
-        self: Box<Self>,
-        ctx: &mut Context,
-        index: usize,
-    ) -> Result<Box<dyn AppPage>, PelicanError> {
-        match index {
-            0 => page!(MonthScreen::new(ctx), self),
-            _ => Err(PelicanError::InvalidPage(Some(self))),
-        }
-    }
-}
-
 impl Services for Calendar {
     // Provide a list of services used by the app. Here, it's empty.
     fn services() -> ServiceList {
