@@ -9,7 +9,7 @@ use pelican_ui::components::interface::navigation::{
     AppPage, NavigateEvent, PelicanError, RootInfo,
 };
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
-use pelican_ui::components::{ExpandableText, Text, TextStyle};
+use pelican_ui::components::{ExpandableText, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Drawable};
 use pelican_ui::events::{Event, OnEvent};
 use pelican_ui::interactions::Button;
@@ -102,29 +102,22 @@ impl MonthScreen {
             None,
         );
 
-        let font_size = ctx.theme.fonts.size;
-
         // Create the main heading text
         let text = Text::new(
             ctx,
-            // This text will say "Hello World!"
             "Hello World!",
-            // The style of this text will be heading
+            TextSize::Lg,
             TextStyle::Heading,
-            // The size will be h2
-            font_size.h2,
-            // The text alignment
             Align::Center,
+            None,
         );
 
         // Create subtext.
         let subtext = ExpandableText::new(
             ctx,
             "First project loaded successfully.",
-            // This text will have primary text style.
+            TextSize::Md,
             TextStyle::Primary,
-            // Medium font size
-            font_size.md,
             // Center the text
             Align::Center,
             // No max lines
