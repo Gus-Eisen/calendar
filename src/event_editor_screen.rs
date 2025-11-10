@@ -1,8 +1,8 @@
-use pelican_ui::components::RadioSelector;
 use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
+use pelican_ui::components::{RadioSelector, TextInput};
 use pelican_ui::events::{Event, OnEvent};
 use pelican_ui::interactions::Button;
 use pelican_ui::layouts::Offset;
@@ -58,17 +58,13 @@ impl AppPage for EventEditorScreen {
 
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
-        let return_to_monthscreen_icon = IconButton::new(
+        let return_to_monthscreen_icon = GhostIconButton::new(
             ctx,
             "back",
-            ButtonSize::Medium,
-            ButtonStyle::Secondary,
-            ButtonState::Default,
             Box::new(|ctx: &mut Context| {
                 ctx.trigger_event(NavigateEvent(0));
                 println!("return_to_monthscreen_icon clicked.")
             }),
-            None,
         );
 
         let event_for_ees = ctx
@@ -83,20 +79,18 @@ impl EventEditorScreen {
                 ctx,
                 None,
                 Some("Event Title"),
-                &event_title,
+                Some(&event_title),
                 None,
-                TextInput::NO_ICON,
-                true,
+                None,
             )
         } else {
             TextInput::new(
                 ctx,
                 None,
                 Some("Event Title"),
-                "Enter Event Title here",
+                Some("Enter Event Title here"),
                 Some("Ex.: Strategy meeting with Satoshi"),
-                TextInput::NO_ICON,
-                true,
+                None,
             )
         };
 

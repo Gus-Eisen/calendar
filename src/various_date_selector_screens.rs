@@ -65,14 +65,10 @@ pub mod year_selector_screen_block {
             let return_to_eventeditorscreen_icon = GhostIconButton::new(
                 ctx,
                 "backspace",
-                ButtonSize::Medium,
-                ButtonStyle::Secondary,
-                ButtonState::Default,
                 Box::new(|ctx: &mut Context| {
                     ctx.trigger_event(NavigateEvent(0));
                     println!("return_to_eventeditorscreen_icon clicked.")
                 }),
-                None,
             );
             let year =
                 ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
