@@ -3,7 +3,7 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{
     AppPage, NavigateEvent, PelicanError, RootInfo,
@@ -124,10 +124,19 @@ impl MonthScreen {
             None,
         );
 
-        let button = Button::primary(ctx, "test", |ctx: &mut Context| {
-            ctx.trigger_event(NavigateEvent(0));
-            println!("Test button clicked.")
-        });
+        let primary_button_test = PrimaryButton::new(
+            ctx,
+            "test",
+            |ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(0));
+            },
+            false,
+        );
+
+        // let button = Button::new(ctx, "test", |ctx: &mut Context| {
+        //     ctx.trigger_event(NavigateEvent(0));
+        //     println!("Test button clicked.")
+        // });
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
@@ -135,14 +144,16 @@ impl MonthScreen {
             // Vertically center items
             Offset::Center,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(text), Box::new(subtext), Box::new(button)],
+            vec![
+                Box::new(text),
+                Box::new(subtext),
+                Box::new(primary_button_test),
+            ],
         );
 
-        // Return the FirstScreen with a default Stack and a
-        // new Page containinhg our header, content, and no bumper.
         Ok(Self(
             Column::new(1.0, Offset::Center, Size::Fit, Padding::new(1.0)),
-            Page::new(Some(header), content, None),
+            Page::new(header, content, None),
         ))
     }
 }
