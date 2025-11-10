@@ -1,4 +1,6 @@
-use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican_ui::components::button::{
+    ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton, SecondaryButton,
+};
 use pelican_ui::components::interface::general::{Bumper, Content, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
@@ -96,97 +98,69 @@ impl EventEditorScreen {
 
         let year = if event_for_ees.year.is_some() {
             let year = event_for_ees.year.clone().unwrap();
-            Button::secondary(
-                ctx,
-                Some("right"),
-                year.as_str(),
-                None,
-                |ctx: &mut Context| {
-                    ctx.trigger_event(NavigateEvent(1));
-                    println!("year = event_for_ees.year.is_some clicked.")
-                },
-                None,
-            )
+            SecondaryButton::medium(ctx, "right", year.as_str(), None, |ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(1));
+                println!("year = event_for_ees.year.is_some clicked.")
+            })
         } else {
-            Button::secondary(
+            SecondaryButton::medium(
                 ctx,
-                Some("right"),
+                "right",
                 "Select year here",
                 None,
                 |ctx: &mut Context| {
                     ctx.trigger_event(NavigateEvent(1));
                     println!("year = !event_for_ees.year.is_some clicked.")
                 },
-                None,
             )
         };
 
         let month = if event_for_ees.month.is_some() {
             let month = event_for_ees.month.clone().unwrap();
-            Button::secondary(
-                ctx,
-                Some("right"),
-                month.as_str(),
-                None,
-                |ctx: &mut Context| {
-                    ctx.trigger_event(NavigateEvent(2));
-                    println!("month = event_for_ees.month.is_some clicked.");
-                },
-                None,
-            )
+            SecondaryButton::medium(ctx, "right", month.as_str(), None, |ctx: &mut Context| {
+                ctx.trigger_event(NavigateEvent(2));
+                println!("month = event_for_ees.month.is_some clicked.");
+            })
         } else {
-            Button::secondary(
+            SecondaryButton::medium(
                 ctx,
-                Some("right"),
+                "right",
                 "Select month here",
                 None,
                 |ctx: &mut Context| {
                     println!("month = !event_for_ees.month.is_some clicked.");
                     ctx.trigger_event(NavigateEvent(2));
                 },
-                None,
             )
         };
 
         let day = if event_for_ees.day.is_some() {
             let day = event_for_ees.day.clone().unwrap();
-            Button::secondary(
-                ctx,
-                Some("right"),
-                &day,
-                None,
-                |_ctx: &mut Context| println!("day = event_for_ees.day.is_some clicked."),
-                None,
-            )
+            SecondaryButton::medium(ctx, "right", &day, None, |_ctx: &mut Context| {
+                println!("day = event_for_ees.day.is_some clicked.")
+            })
         } else {
-            Button::secondary(
+            SecondaryButton::medium(
                 ctx,
-                Some("right"),
+                "right",
                 "Select day here",
                 None,
                 |_ctx: &mut Context| println!("day = !event_for_ees.day.is_some clicked."),
-                None,
             )
         };
 
         let time = if event_for_ees.time.is_some() {
             let time = event_for_ees.time.clone().unwrap();
-            Button::secondary(
-                ctx,
-                Some("right"),
-                &time,
-                None,
-                |_ctx: &mut Context| println!("time = event_for_ees.time.is_some clicked."),
-                None,
-            )
+            SecondaryButton::medium(ctx, "right", &time, None, |_ctx: &mut Context| {
+                println!("time = event_for_ees.time.is_some clicked.")
+            })
         } else {
-            Button::secondary(
+            SecondaryButton::medium(
                 ctx,
-                Some("right"),
+                "right",
                 "Select time here",
                 None,
                 |_ctx: &mut Context| println!("time = !event_for_ees.time.is_some clicked."),
-                None,
             )
         };
 
@@ -203,15 +177,20 @@ impl EventEditorScreen {
             ],
         );
 
-        let button = Button::primary(ctx, "Save Event", |ctx: &mut Context| {
-            let event_for_ees = ctx
-                .state()
-                .get_named::<EventForEES>("event_for_ees")
-                .unwrap();
-            event_for_ees.all_some();
-            ctx.trigger_event(NavigateEvent(0));
-            println!("Save Event button clicked.")
-        });
+        let button = PrimaryButton::new(
+            ctx,
+            "Save Event",
+            |ctx: &mut Context| {
+                let event_for_ees = ctx
+                    .state()
+                    .get_named::<EventForEES>("event_for_ees")
+                    .unwrap();
+                event_for_ees.all_some();
+                ctx.trigger_event(NavigateEvent(0));
+                println!("Save Event button clicked.")
+            },
+            false,
+        );
 
         let bumper = Bumper::single_button(ctx, button);
 
