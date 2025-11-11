@@ -17,11 +17,11 @@ use pelican_ui::layouts::Stack;
 use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::maverick_os::start;
-use pelican_ui::page;
 use pelican_ui::pages::PelicanHome;
 use pelican_ui::plugin::PelicanUI;
 use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Component, Context, Plugin};
+use pelican_ui::{Assets, page};
 use std::collections::BTreeMap;
 
 use pelican_ui::{ServiceList, Services};
@@ -33,17 +33,31 @@ use crate::objects::EventForEES;
 pub struct Calendar;
 
 impl Application for Calendar {
-    //TODO: initialize all state objects in new().
-    async fn new(ctx: &mut Context) -> impl Drawable {
-        let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
-            Box::new(MonthScreen::new(ctx).ok().unwrap()) as Box<dyn AppPage>
-        });
-        Interface::new(ctx, (vec![home], None))
+    fn interface(ctx: &mut Context) -> Interface {
+        // ctx.state().set(AllOrders::default());
+        // ctx.state().set(AllBikes::default());
+
+        let home = RootInfo::icon("home", "My Calendar", MonthScreen::new(ctx).ok().unwrap());
+
+        Interface::new(ctx, vec![home])
     }
-    fn plugins(ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
-        let theme = Theme::light(&mut ctx.assets, Color::from_hex("#00bf69ff", 255));
-        vec![Box::new(PelicanUI::new(ctx, theme))]
+
+    fn theme(assets: &mut Assets) -> Theme {
+        // assets.include_assets(pelican_ui::include_dir!("./resources"));
+        Theme::light(assets, Color::from_hex("#ff1f84ff", 255))
     }
+
+    ////TODO: initialize all state objects in new().
+    //async fn new(ctx: &mut Context) -> impl Drawable {
+    //    let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
+    //        Box::new(MonthScreen::new(ctx).ok().unwrap()) as Box<dyn AppPage>
+    //    });
+    //    Interface::new(ctx, (vec![home], None))
+    //}
+    //fn plugins(ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
+    //    let theme = Theme::light(&mut ctx.assets, Color::from_hex("#00bf69ff", 255));
+    //    vec![Box::new(PelicanUI::new(ctx, theme))]
+    //}
 }
 
 impl Services for Calendar {
