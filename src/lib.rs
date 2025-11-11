@@ -15,7 +15,6 @@ use pelican_ui::layouts::Stack;
 use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::pages::PelicanHome;
-use pelican_ui::plugin::PelicanUI;
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Assets, Component, Context, Plugin, drawables, include_dir};
@@ -31,7 +30,7 @@ pub struct Calendar;
 
 impl Application for Calendar {
     fn interface(ctx: &mut Context) -> Interface {
-        ////TODO: initialize all state objects in new().
+        ////TODO: initialize all state objects in interface().
         // ctx.state().set(AllOrders::default());
         // ctx.state().set(AllBikes::default());
 
