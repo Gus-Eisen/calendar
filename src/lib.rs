@@ -3,11 +3,10 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
+use pelican_ui::Assets;
 use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Interface, Page};
-use pelican_ui::components::interface::navigation::{
-    AppPage, NavigateEvent, PelicanError, RootInfo,
-};
+use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{ExpandableText, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Drawable};
@@ -21,7 +20,6 @@ use pelican_ui::pages::PelicanHome;
 use pelican_ui::plugin::PelicanUI;
 use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Component, Context, Plugin};
-use pelican_ui::{Assets, page};
 use std::collections::BTreeMap;
 
 use pelican_ui::{ServiceList, Services};
@@ -34,6 +32,7 @@ pub struct Calendar;
 
 impl Application for Calendar {
     fn interface(ctx: &mut Context) -> Interface {
+        ////TODO: initialize all state objects in new().
         // ctx.state().set(AllOrders::default());
         // ctx.state().set(AllBikes::default());
 
@@ -47,7 +46,6 @@ impl Application for Calendar {
         Theme::light(assets, Color::from_hex("#ff1f84ff", 255))
     }
 
-    ////TODO: initialize all state objects in new().
     //async fn new(ctx: &mut Context) -> impl Drawable {
     //    let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
     //        Box::new(MonthScreen::new(ctx).ok().unwrap()) as Box<dyn AppPage>
@@ -78,23 +76,22 @@ pub struct MonthScreen(Column, Page);
 impl OnEvent for MonthScreen {}
 
 // Implement the AppPage trait for navigation and UI behavior
-impl AppPage for MonthScreen {
-    // This screen does not have a navigation bar
-    fn has_navigator(&self) -> bool {
-        false
-    }
-
-    fn navigate(
-        self: Box<Self>,
-        ctx: &mut Context,
-        index: usize,
-    ) -> Result<Box<dyn AppPage>, PelicanError> {
-        match index {
-            0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-            _ => Err(PelicanError::InvalidPage(Some(self))),
-        }
-    }
-}
+impl AppPage for MonthScreen {}
+// // This screen does not have a navigation bar
+// fn has_navigator(&self) -> bool {
+//     false
+// }
+//
+// fn navigate(
+//     self: Box<Self>,
+//     ctx: &mut Context,
+//     index: usize,
+// ) -> Result<Box<dyn AppPage>, PelicanError> {
+//     match index {
+//         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
+//         _ => Err(PelicanError::InvalidPage(Some(self))),
+//     }
+// }
 
 impl MonthScreen {
     pub fn new(ctx: &mut Context) -> Result<Self, String> {
