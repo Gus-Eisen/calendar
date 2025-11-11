@@ -130,7 +130,8 @@ impl MonthScreen {
             ctx,
             "test",
             |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(0));
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)))
             },
             false,
         );
