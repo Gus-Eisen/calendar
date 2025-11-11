@@ -4,7 +4,7 @@ use pelican_ui::Context;
 use pelican_ui::components::RadioSelector;
 use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Page};
-use pelican_ui::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican_ui::components::interface::navigation::AppPage;
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::drawable;
 use pelican_ui::events::{Event, OnEvent};
@@ -15,6 +15,8 @@ use pelican_ui::layouts::Stack;
 use pelican_ui::{Application, Component, Plugin, drawables, include_dir};
 
 pub mod year_selector_screen_block {
+
+    use pelican_ui::components::interface::navigation::NavigationEvent;
 
     use super::*;
 
@@ -43,21 +45,20 @@ pub mod year_selector_screen_block {
     }
 
     impl AppPage for YearSelectorScreen {
-        // This screen does not have a navigation bar
-        fn has_navigator(&self) -> bool {
-            true
-        }
-
-        fn navigate(
-            self: Box<Self>,
-            ctx: &mut Context,
-            index: usize,
-        ) -> Result<Box<dyn AppPage>, PelicanError> {
-            match index {
-                0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-                _ => Err(PelicanError::InvalidPage(Some(self))),
-            }
-        }
+        // fn has_navigator(&self) -> bool {
+        //     true
+        // }
+        //
+        // fn navigate(
+        //     self: Box<Self>,
+        //     ctx: &mut Context,
+        //     index: usize,
+        // ) -> Result<Box<dyn AppPage>, PelicanError> {
+        //     match index {
+        //         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
+        //         _ => Err(PelicanError::InvalidPage(Some(self))),
+        //     }
+        // }
     }
 
     impl YearSelectorScreen {
@@ -66,7 +67,7 @@ pub mod year_selector_screen_block {
                 ctx,
                 "backspace",
                 Box::new(|ctx: &mut Context| {
-                    ctx.trigger_event(NavigateEvent(0));
+                    ctx.trigger_event(NavigationEvent::Pop);
                     println!("return_to_eventeditorscreen_icon clicked.")
                 }),
             );
@@ -78,11 +79,15 @@ pub mod year_selector_screen_block {
                 Offset::Start,
                 vec![Box::new(return_to_eventeditorscreen_icon), Box::new(year)],
             );
-            let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(0));
-                println!("Save Year button clicked.")
+            // let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
+            //     ctx.trigger_event(NavigationEvent::Pop);
+            //     println!("Save Year button clicked.")
+            // });
+            // let bumper = Bumper::single_button(ctx, button);
+            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
+                ctx.trigger_event(NavigationEvent::Pop);
+                println!("Save Year bumper clicked.")
             });
-            let bumper = Bumper::single_button(ctx, button);
 
             YearSelectorScreen(
                 Stack::default(),
@@ -125,21 +130,21 @@ pub mod month_selector_screen_block {
     }
 
     impl AppPage for MonthSelectorScreen {
-        // This screen does not have a navigation bar
-        fn has_navigator(&self) -> bool {
-            false
-        }
-
-        fn navigate(
-            self: Box<Self>,
-            ctx: &mut Context,
-            index: usize,
-        ) -> Result<Box<dyn AppPage>, PelicanError> {
-            match index {
-                0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-                _ => Err(PelicanError::InvalidPage(Some(self))),
-            }
-        }
+        // // This screen does not have a navigation bar
+        // fn has_navigator(&self) -> bool {
+        //     false
+        // }
+        //
+        // fn navigate(
+        //     self: Box<Self>,
+        //     ctx: &mut Context,
+        //     index: usize,
+        // ) -> Result<Box<dyn AppPage>, PelicanError> {
+        //     match index {
+        //         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
+        //         _ => Err(PelicanError::InvalidPage(Some(self))),
+        //     }
+        // }
     }
 
     impl MonthSelectorScreen {
