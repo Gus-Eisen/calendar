@@ -3,7 +3,6 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use pelican_ui::Assets;
 use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
@@ -15,11 +14,11 @@ use pelican_ui::interactions::Button;
 use pelican_ui::layouts::Stack;
 use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
-use pelican_ui::maverick_os::start;
 use pelican_ui::pages::PelicanHome;
 use pelican_ui::plugin::PelicanUI;
+use pelican_ui::start;
 use pelican_ui::theme::Theme;
-use pelican_ui::{Application, Component, Context, Plugin};
+use pelican_ui::{Application, Assets, Component, Context, Plugin, drawables, include_dir};
 use std::collections::BTreeMap;
 
 use pelican_ui::{ServiceList, Services};
@@ -56,13 +55,6 @@ impl Application for Calendar {
     //    let theme = Theme::light(&mut ctx.assets, Color::from_hex("#00bf69ff", 255));
     //    vec![Box::new(PelicanUI::new(ctx, theme))]
     //}
-}
-
-impl Services for Calendar {
-    // Provide a list of services used by the app. Here, it's empty.
-    fn services() -> ServiceList {
-        ServiceList(BTreeMap::new())
-    }
 }
 
 // Macro to start the application
