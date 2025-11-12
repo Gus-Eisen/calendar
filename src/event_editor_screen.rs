@@ -17,7 +17,7 @@ use crate::various_date_selector_screens::year_selector_screen_block::YearSelect
 pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
-    fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
+    fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
         if event.downcast_ref::<InputEditedEvent>().is_some()
             && let Some(input) = self.1.content().find::<TextInput>()
         {
@@ -32,7 +32,6 @@ impl OnEvent for EventEditorScreen {
                 event_for_ees.event_title.clone().unwrap()
             );
         }
-        true
     }
 }
 
