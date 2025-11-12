@@ -1,12 +1,9 @@
-use pelican_ui::components::button::{
-    ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton, SecondaryButton,
-};
+use pelican_ui::components::button::{GhostIconButton, PrimaryButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{RadioSelector, TextInput};
 use pelican_ui::events::{Event, OnEvent};
-use pelican_ui::interactions::Button;
 use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
@@ -39,24 +36,7 @@ impl OnEvent for EventEditorScreen {
     }
 }
 
-impl AppPage for EventEditorScreen {
-    // fn has_navigator(&self) -> bool {
-    //     false
-    // }
-
-    fn navigate(
-        self: Box<Self>,
-        ctx: &mut Context,
-        index: usize,
-    ) -> Result<Box<dyn AppPage>, PelicanError> {
-        match index {
-            0 => Ok(Box::new(MonthScreen::new(ctx))),
-            1 => Ok(Box::new(YearSelectorScreen::new(ctx))),
-            2 => Ok(Box::new(MonthSelectorScreen::new(ctx))),
-            _ => Err(PelicanError::InvalidPage(Some(self))),
-        }
-    }
-}
+impl AppPage for EventEditorScreen {}
 
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
