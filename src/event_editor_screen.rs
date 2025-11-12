@@ -99,7 +99,8 @@ impl EventEditorScreen {
         let year = if event_for_ees.year.is_some() {
             let year = event_for_ees.year.clone().unwrap();
             SecondaryButton::medium(ctx, "right", year.as_str(), None, |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(1));
+                let page = Box::new(YearSelectorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("year = event_for_ees.year.is_some clicked.")
             })
         } else {
@@ -109,7 +110,8 @@ impl EventEditorScreen {
                 "Select year here",
                 None,
                 |ctx: &mut Context| {
-                    ctx.trigger_event(NavigateEvent(1));
+                    let page = Box::new(YearSelectorScreen::new(ctx));
+                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
                     println!("year = !event_for_ees.year.is_some clicked.")
                 },
             )
@@ -118,7 +120,8 @@ impl EventEditorScreen {
         let month = if event_for_ees.month.is_some() {
             let month = event_for_ees.month.clone().unwrap();
             SecondaryButton::medium(ctx, "right", month.as_str(), None, |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(2));
+                let page = Box::new(MonthSelectorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("month = event_for_ees.month.is_some clicked.");
             })
         } else {
@@ -129,7 +132,8 @@ impl EventEditorScreen {
                 None,
                 |ctx: &mut Context| {
                     println!("month = !event_for_ees.month.is_some clicked.");
-                    ctx.trigger_event(NavigateEvent(2));
+                    let page = Box::new(MonthSelectorScreen::new(ctx));
+                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 },
             )
         };
@@ -186,7 +190,7 @@ impl EventEditorScreen {
                     .get_named::<EventForEES>("event_for_ees")
                     .unwrap();
                 event_for_ees.all_some();
-                ctx.trigger_event(NavigateEvent(0));
+                ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             },
             false,
