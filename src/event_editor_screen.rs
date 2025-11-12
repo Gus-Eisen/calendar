@@ -1,8 +1,8 @@
 use pelican_ui::components::button::{
     ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton, SecondaryButton,
 };
-use pelican_ui::components::interface::general::{Bumper, Content, Page};
-use pelican_ui::components::interface::navigation::{AppPage, NavigateEvent, PelicanError};
+use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
+use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{RadioSelector, TextInput};
 use pelican_ui::events::{Event, OnEvent};
@@ -40,9 +40,9 @@ impl OnEvent for EventEditorScreen {
 }
 
 impl AppPage for EventEditorScreen {
-    fn has_navigator(&self) -> bool {
-        false
-    }
+    // fn has_navigator(&self) -> bool {
+    //     false
+    // }
 
     fn navigate(
         self: Box<Self>,
@@ -64,7 +64,7 @@ impl EventEditorScreen {
             ctx,
             "back",
             Box::new(|ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(0));
+                ctx.trigger_event(NavigationEvent::Reset);
                 println!("return_to_monthscreen_icon clicked.")
             }),
         );
@@ -192,8 +192,20 @@ impl EventEditorScreen {
             false,
         );
 
-        let bumper = Bumper::single_button(ctx, button);
+        // let bumper = Bumper::single_button(ctx, button);
+        let bumper = Bumper::stack(ctx, Some("Save Event"), false, |ctx: &mut Context| {
+            let event_for_ees = ctx
+                .state()
+                .get_named::<EventForEES>("event_for_ees")
+                .unwrap();
+            event_for_ees.all_some();
+            ctx.trigger_event(NavigationEvent::Pop);
+            println!("Save Event button clicked.")
+        });
 
-        EventEditorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+        EventEditorScreen(
+            Stack::default(),
+            Page::new(Header::stack(ctx, "Stack Test"), content, Some(bumper)),
+        )
     }
 }

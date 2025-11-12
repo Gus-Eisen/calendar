@@ -100,6 +100,8 @@ pub mod year_selector_screen_block {
 
 pub mod month_selector_screen_block {
 
+    use pelican_ui::components::{button::PrimaryButton, interface::navigation::NavigationEvent};
+
     use crate::objects::Month;
 
     use super::*;
@@ -150,17 +152,13 @@ pub mod month_selector_screen_block {
     impl MonthSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
             //FIX: IconButton needs reconciliation.
-            let return_to_eventeditorscreen_icon = IconButton::new(
+            let return_to_eventeditorscreen_icon = GhostIconButton::new(
                 ctx,
                 "backspace",
-                ButtonSize::Medium,
-                ButtonStyle::Secondary,
-                ButtonState::Default,
                 Box::new(|ctx: &mut Context| {
-                    ctx.trigger_event(NavigateEvent(0));
+                    ctx.trigger_event(NavigationEvent::Pop);
                     println!("return_to_eventeditorscreen_icon clicked.")
                 }),
-                None,
             );
             let vec_month_listitem = Self::vec_month_listitem_builder(ctx);
 
@@ -173,10 +171,15 @@ pub mod month_selector_screen_block {
                     Box::new(month_listitemgroup),
                 ],
             );
-            let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
-                ctx.trigger_event(NavigateEvent(0));
-                println!("Save Year button clicked.")
-            });
+            let button = PrimaryButton::new(
+                ctx,
+                "Save Year",
+                |ctx: &mut Context| {
+                    ctx.trigger_event(NavigationEvent::Pop);
+                    println!("Save Year button clicked.")
+                },
+                false,
+            );
             let bumper = Bumper::single_button(ctx, button);
 
             MonthSelectorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
