@@ -100,7 +100,10 @@ pub mod year_selector_screen_block {
 
 pub mod month_selector_screen_block {
 
-    use pelican_ui::components::{button::PrimaryButton, interface::navigation::NavigationEvent};
+    use pelican_ui::components::{
+        button::PrimaryButton,
+        interface::{general::Header, navigation::NavigationEvent},
+    };
 
     use crate::objects::Month;
 
@@ -171,18 +174,15 @@ pub mod month_selector_screen_block {
                     Box::new(month_listitemgroup),
                 ],
             );
-            let button = PrimaryButton::new(
-                ctx,
-                "Save Year",
-                |ctx: &mut Context| {
-                    ctx.trigger_event(NavigationEvent::Pop);
-                    println!("Save Year button clicked.")
-                },
-                false,
-            );
-            let bumper = Bumper::single_button(ctx, button);
+            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
+                ctx.trigger_event(NavigationEvent::Pop);
+                println!("Save Year button clicked.")
+            });
 
-            MonthSelectorScreen(Stack::default(), Page::new(None, content, Some(bumper)))
+            MonthSelectorScreen(
+                Stack::default(),
+                Page::new(Header::stack(ctx, "Select Year"), content, Some(bumper)),
+            )
         }
 
         pub fn vec_month_listitem_builder(ctx: &mut Context) -> Vec<ListItem> {

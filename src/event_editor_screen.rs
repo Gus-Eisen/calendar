@@ -3,7 +3,7 @@ use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{RadioSelector, TextInput};
-use pelican_ui::events::{Event, OnEvent};
+use pelican_ui::events::{Event, KeyboardEvent, OnEvent};
 use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
@@ -18,7 +18,7 @@ pub struct EventEditorScreen(Stack, Page);
 
 impl OnEvent for EventEditorScreen {
     fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-        if event.downcast_ref::<InputEditedEvent>().is_some()
+        if event.downcast_ref::<KeyboardEvent>().is_some()
             && let Some(input) = self.1.content().find::<TextInput>()
         {
             let event_for_ees = ctx
@@ -32,6 +32,8 @@ impl OnEvent for EventEditorScreen {
                 event_for_ees.event_title.clone().unwrap()
             );
         }
+        //I think this blocks Event propagation to children.
+        vec![]
     }
 }
 
@@ -182,7 +184,7 @@ impl EventEditorScreen {
                 .get_named::<EventForEES>("event_for_ees")
                 .unwrap();
             event_for_ees.all_some();
-            ctx.trigger_event(NavigationEvent::Pop);
+            ctx.trigger_event(NavigationEvent::Reset);
             println!("Save Event button clicked.")
         });
 

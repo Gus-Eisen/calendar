@@ -43,17 +43,6 @@ impl Application for Calendar {
         // assets.include_assets(pelican_ui::include_dir!("./resources"));
         Theme::light(assets, Color::from_hex("#ff1f84ff", 255))
     }
-
-    //async fn new(ctx: &mut Context) -> impl Drawable {
-    //    let home = RootInfo::icon("home", "My Calendar", |ctx: &mut Context| {
-    //        Box::new(MonthScreen::new(ctx).ok().unwrap()) as Box<dyn AppPage>
-    //    });
-    //    Interface::new(ctx, (vec![home], None))
-    //}
-    //fn plugins(ctx: &mut Context) -> Vec<Box<dyn Plugin>> {
-    //    let theme = Theme::light(&mut ctx.assets, Color::from_hex("#00bf69ff", 255));
-    //    vec![Box::new(PelicanUI::new(ctx, theme))]
-    //}
 }
 
 // Macro to start the application
@@ -68,32 +57,12 @@ impl OnEvent for MonthScreen {}
 
 // Implement the AppPage trait for navigation and UI behavior
 impl AppPage for MonthScreen {}
-// // This screen does not have a navigation bar
-// fn has_navigator(&self) -> bool {
-//     false
-// }
-//
-// fn navigate(
-//     self: Box<Self>,
-//     ctx: &mut Context,
-//     index: usize,
-// ) -> Result<Box<dyn AppPage>, PelicanError> {
-//     match index {
-//         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-//         _ => Err(PelicanError::InvalidPage(Some(self))),
-//     }
-// }
 
 impl MonthScreen {
     pub fn new(ctx: &mut Context) -> Result<Self, String> {
-        if ctx
-            .state()
-            .get_named::<EventForEES>("event_for_ees")
-            .is_none()
-        {
+        if ctx.state().get::<EventForEES>().is_none() {
             let event_for_ees = EventForEES::new(None, None, None, None, None);
-            ctx.state()
-                .set_named(String::from("event_for_ees"), event_for_ees);
+            ctx.state().set(event_for_ees);
         }
 
         // Create a header for the page
@@ -135,11 +104,6 @@ impl MonthScreen {
             },
             false,
         );
-
-        // let button = Button::new(ctx, "test", |ctx: &mut Context| {
-        //     ctx.trigger_event(NavigateEvent(0));
-        //     println!("Test button clicked.")
-        // });
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
