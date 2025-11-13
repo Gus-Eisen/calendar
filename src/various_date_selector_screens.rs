@@ -16,7 +16,10 @@ use pelican_ui::{Application, Component, Plugin, drawables, include_dir};
 
 pub mod year_selector_screen_block {
 
-    use pelican_ui::{components::interface::navigation::NavigationEvent, events::MouseEvent};
+    use pelican_ui::{
+        components::interface::{general::Header, navigation::NavigationEvent},
+        events::MouseEvent,
+    };
 
     use super::*;
 
@@ -25,21 +28,21 @@ pub mod year_selector_screen_block {
 
     impl OnEvent for YearSelectorScreen {
         fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            //FIX: Figure out event type emitter for RadioSelector.
-            if event.downcast_ref::<MouseEvent>().is_some() {
-                let index = self
-                    .1
-                    .content()
-                    .find::<RadioSelector>()
-                    .unwrap()
-                    .
-                    .unwrap();
-                let event_for_ees = ctx
-                    .state()
-                    .get_mut::<EventForEES>()
-                    .unwrap();
-                event_for_ees.set_year(index);
-            }
+            ////FIX: Figure out event type emitter for RadioSelector.
+            //if event.downcast_ref::<MouseEvent>().is_some() {
+            //    let index = self
+            //        .1
+            //        .content()
+            //        .find::<RadioSelector>()
+            //        .unwrap()
+            //        .
+            //        .unwrap();
+            //    let event_for_ees = ctx
+            //        .state()
+            //        .get_mut::<EventForEES>()
+            //        .unwrap();
+            //    event_for_ees.set_year(index);
+            //}
             vec![]
         }
     }
@@ -71,13 +74,40 @@ pub mod year_selector_screen_block {
                     println!("return_to_eventeditorscreen_icon clicked.")
                 }),
             );
-            let year =
-                ListItemSelector::new(ctx, ("2025", "", None), ("2026", "", None), None, None);
+            let year_radioselector = RadioSelector::new(
+                ctx,
+                0,
+                vec![
+                    (
+                        "2025",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_year(0);
+                                println!("2025 selected.")
+                            }
+                        }),
+                    ),
+                    (
+                        "2026",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_year(1);
+                                println!("2026 selected.")
+                            }
+                        }),
+                    ),
+                ],
+            );
 
             let content = Content::new(
                 ctx,
                 Offset::Start,
-                vec![Box::new(return_to_eventeditorscreen_icon), Box::new(year)],
+                vec![
+                    Box::new(return_to_eventeditorscreen_icon),
+                    Box::new(year_radioselector),
+                ],
             );
             // let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
             //     ctx.trigger_event(NavigationEvent::Pop);
@@ -91,7 +121,7 @@ pub mod year_selector_screen_block {
 
             YearSelectorScreen(
                 Stack::default(),
-                Page::new(None, content, Some(bumper)),
+                Page::new(Header::stack(ctx, "Select Year"), content, Some(bumper)),
                 String::default(),
             )
         }
@@ -125,7 +155,7 @@ pub mod month_selector_screen_block {
     pub struct MonthSelectorScreen(Stack, Page);
 
     impl OnEvent for MonthSelectorScreen {
-        fn on_event(&mut self, ctx: &mut Context, event: &mut dyn Event) -> bool {
+        fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
             // if event.downcast_ref::<ListItemSelect>().is_some() {
             //     let index = self
             //         .1
@@ -142,7 +172,7 @@ pub mod month_selector_screen_block {
             //         .unwrap();
             //     event_for_ees.set_month(index);
             // }
-            true
+            vec![]
         }
     }
 
@@ -174,65 +204,132 @@ pub mod month_selector_screen_block {
                     println!("return_to_eventeditorscreen_icon clicked.")
                 }),
             );
-            let month_radioselector = 
-                RadioSelector::new(
-                    ctx,
-                    0,
-                    vec![
-                        ("January", "1", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(JAN);
-                            println!("Selected January.")
-                        })),
-                        ("February", "2", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(FEB);
-                            println!("Selected February.")
-                        })),
-                        ("March", "3", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(MAR);
-                            println!("Selected March.")
-                        })),
-                        ("April", "4", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(APR);
-                            println!("Selected April.")
-                        })),
-                        ("May", "5", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(MAY);
-                            println!("Selected May.")
-                        })),
-                        ("June", "6", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(JUN);
-                            println!("Selected June.")
-                        })),
-                        ("July", "7", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(JUL);
-                            println!("Selected July.")
-                        })),
-                        ("August", "8", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(AUG);
-                            println!("Selected August.")
-                        })),
-                        (
-                            "September",
-                            "9",
-                            Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+            let month_radioselector = RadioSelector::new(
+                ctx,
+                0,
+                vec![
+                    (
+                        "January",
+                        "1",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(JAN);
+                                println!("Selected January.")
+                            }
+                        }),
+                    ),
+                    (
+                        "February",
+                        "2",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(FEB);
+                                println!("Selected February.")
+                            }
+                        }),
+                    ),
+                    (
+                        "March",
+                        "3",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(MAR);
+                                println!("Selected March.")
+                            }
+                        }),
+                    ),
+                    (
+                        "April",
+                        "4",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(APR);
+                                println!("Selected April.")
+                            }
+                        }),
+                    ),
+                    (
+                        "May",
+                        "5",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(MAY);
+                                println!("Selected May.")
+                            }
+                        }),
+                    ),
+                    (
+                        "June",
+                        "6",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(JUN);
+                                println!("Selected June.")
+                            }
+                        }),
+                    ),
+                    (
+                        "July",
+                        "7",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(JUL);
+                                println!("Selected July.")
+                            }
+                        }),
+                    ),
+                    (
+                        "August",
+                        "8",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(AUG);
+                                println!("Selected August.")
+                            }
+                        }),
+                    ),
+                    (
+                        "September",
+                        "9",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_month(SEP);
                                 println!("Selected September.")
-                            })),
-                        ("October", "10", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(OCT);
-                            println!("Selected October.")
-                        })),
-                        ("November", "11", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(NOV);
-                            println!("Selected November.")
-                        })),
-                        ("December", "12", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                            efees.set_month(DEC);
-                            println!("Selected December.")
-                        })),
-                    ],
-                );
-            
+                            }
+                        }),
+                    ),
+                    (
+                        "October",
+                        "10",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(OCT);
+                                println!("Selected October.")
+                            }
+                        }),
+                    ),
+                    (
+                        "November",
+                        "11",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(NOV);
+                                println!("Selected November.")
+                            }
+                        }),
+                    ),
+                    (
+                        "December",
+                        "12",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_month(DEC);
+                                println!("Selected December.")
+                            }
+                        }),
+                    ),
+                ],
+            );
 
             let content = Content::new(
                 ctx,
@@ -255,33 +352,33 @@ pub mod month_selector_screen_block {
     }
 }
 
-        // pub fn month_radioselector_builder(ctx: &mut Context) -> RadioSelector {
-        //     RadioSelector::new(
-        //         ctx,
-        //         0,
-        //         vec![
-        //             ("January", "", Box::new(|ctx: &mut Context| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
-        //                 ees.set_month(JAN);
-        //                 println!("Selected January.")
-        //         })),
-        //             ("February", "", Box::new(|_| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
-        //                 ees.set_month(FEB);
-        //                 println!("Selected February.")
-        //         })),
-        //             ("March", "", Box::new(|_| println!("Selected March."))),
-        //             ("April", "", Box::new(|_| println!("Selected April."))),
-        //             ("May", "", Box::new(|_| println!("Selected May."))),
-        //             ("June", "", Box::new(|_| println!("Selected June."))),
-        //             ("July", "", Box::new(|_| println!("Selected July."))),
-        //             ("August", "", Box::new(|_| println!("Selected August."))),
-        //             (
-        //                 "September",
-        //                 "",
-        //                 Box::new(|_| println!("Selected September.")),
-        //             ),
-        //             ("October", "", Box::new(|_| println!("Selected October."))),
-        //             ("November", "", Box::new(|_| println!("Selected November."))),
-        //             ("December", "", Box::new(|_| println!("Selected December."))),
-        //         ],
-        //     )
-        // }
+// pub fn month_radioselector_builder(ctx: &mut Context) -> RadioSelector {
+//     RadioSelector::new(
+//         ctx,
+//         0,
+//         vec![
+//             ("January", "", Box::new(|ctx: &mut Context| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
+//                 ees.set_month(JAN);
+//                 println!("Selected January.")
+//         })),
+//             ("February", "", Box::new(|_| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
+//                 ees.set_month(FEB);
+//                 println!("Selected February.")
+//         })),
+//             ("March", "", Box::new(|_| println!("Selected March."))),
+//             ("April", "", Box::new(|_| println!("Selected April."))),
+//             ("May", "", Box::new(|_| println!("Selected May."))),
+//             ("June", "", Box::new(|_| println!("Selected June."))),
+//             ("July", "", Box::new(|_| println!("Selected July."))),
+//             ("August", "", Box::new(|_| println!("Selected August."))),
+//             (
+//                 "September",
+//                 "",
+//                 Box::new(|_| println!("Selected September.")),
+//             ),
+//             ("October", "", Box::new(|_| println!("Selected October."))),
+//             ("November", "", Box::new(|_| println!("Selected November."))),
+//             ("December", "", Box::new(|_| println!("Selected December."))),
+//         ],
+//     )
+// }
