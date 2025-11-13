@@ -183,50 +183,50 @@ pub mod month_selector_screen_block {
                             efees.set_month(JAN);
                             println!("Selected January.")
                         })),
-                        ("February", "2", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("February", "2", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(FEB);
                             println!("Selected February.")
                         })),
-                        ("March", "3", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("March", "3", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(MAR);
                             println!("Selected March.")
                         })),
-                        ("April", "4", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("April", "4", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(APR);
                             println!("Selected April.")
                         })),
-                        ("May", "5", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("May", "5", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(MAY);
                             println!("Selected May.")
                         })),
-                        ("June", "6", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("June", "6", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(JUN);
                             println!("Selected June.")
                         })),
-                        ("July", "7", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("July", "7", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(JUL);
                             println!("Selected July.")
                         })),
-                        ("August", "8", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("August", "8", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(AUG);
                             println!("Selected August.")
                         })),
                         (
                             "September",
                             "9",
-                            Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                            Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_month(SEP);
                                 println!("Selected September.")
                             })),
-                        ("October", "10", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("October", "10", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(OCT);
                             println!("Selected October.")
                         })),
-                        ("November", "11", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("November", "11", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(NOV);
                             println!("Selected November.")
                         })),
-                        ("December", "12", Box::new(|_| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                        ("December", "12", Box::new(|ctx: &mut Context| if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                             efees.set_month(DEC);
                             println!("Selected December.")
                         })),
