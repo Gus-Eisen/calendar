@@ -162,21 +162,6 @@ impl EventEditorScreen {
             ],
         );
 
-        let button = PrimaryButton::new(
-            ctx,
-            "Save Event",
-            |ctx: &mut Context| {
-                let event_for_ees = ctx
-                    .state()
-                    .get_named::<EventForEES>("event_for_ees")
-                    .unwrap();
-                event_for_ees.all_some();
-                ctx.trigger_event(NavigationEvent::Reset);
-                println!("Save Event button clicked.")
-            },
-            false,
-        );
-
         // let bumper = Bumper::single_button(ctx, button);
         let bumper = Bumper::stack(ctx, Some("Save Event"), false, |ctx: &mut Context| {
             let event_for_ees = ctx
