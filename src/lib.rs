@@ -82,12 +82,13 @@ impl MonthScreen {
             None,
         );
 
-        let primary_button_test = PrimaryButton::new(
+        let new_event_button = PrimaryButton::new(
             ctx,
-            "test",
+            "Create New Event",
             |ctx: &mut Context| {
                 let page = Box::new(EventEditorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)))
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                println!("Create New Event button clicked.")
             },
             false,
         );
@@ -101,7 +102,7 @@ impl MonthScreen {
             vec![
                 Box::new(text),
                 Box::new(subtext),
-                Box::new(primary_button_test),
+                Box::new(new_event_button),
             ],
         );
 

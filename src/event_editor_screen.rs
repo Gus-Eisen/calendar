@@ -38,14 +38,14 @@ impl AppPage for EventEditorScreen {}
 
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
-        let return_to_monthscreen_icon = GhostIconButton::new(
-            ctx,
-            "back",
-            Box::new(|ctx: &mut Context| {
-                ctx.trigger_event(NavigationEvent::Reset);
-                println!("return_to_monthscreen_icon clicked.")
-            }),
-        );
+        // let return_to_monthscreen_icon = GhostIconButton::new(
+        //     ctx,
+        //     "back",
+        //     Box::new(|ctx: &mut Context| {
+        //         ctx.trigger_event(NavigationEvent::Reset);
+        //         println!("return_to_monthscreen_icon clicked.")
+        //     }),
+        // );
 
         let event_for_ees = ctx.state().get::<EventForEES>().unwrap().to_owned();
 
@@ -146,7 +146,6 @@ impl EventEditorScreen {
             ctx,
             Offset::Start,
             vec![
-                Box::new(return_to_monthscreen_icon),
                 Box::new(event_title),
                 Box::new(year),
                 Box::new(month),
