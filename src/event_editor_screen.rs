@@ -1,14 +1,12 @@
-use pelican_ui::components::button::{GhostIconButton, PrimaryButton, SecondaryButton};
+use pelican_ui::components::TextInput;
+use pelican_ui::components::button::{GhostIconButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
-use pelican_ui::components::list_item::{ListItem, ListItemGroup};
-use pelican_ui::components::{RadioSelector, TextInput};
 use pelican_ui::events::{Event, KeyboardEvent, OnEvent};
 use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
 
-use crate::MonthScreen;
 use crate::objects::EventForEES;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
@@ -32,7 +30,6 @@ impl OnEvent for EventEditorScreen {
                 event_for_ees.event_title.clone().unwrap()
             );
         }
-        //I think this blocks Event propagation to children.
         vec![]
     }
 }
