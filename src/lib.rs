@@ -3,24 +3,17 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton, PrimaryButton};
-use pelican_ui::components::interface::general::{Bumper, Content, Header, Interface, Page};
+use pelican_ui::components::button::PrimaryButton;
+use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
-use pelican_ui::components::list_item::{ListItem, ListItemGroup};
 use pelican_ui::components::{ExpandableText, Text, TextSize, TextStyle};
-use pelican_ui::drawable::{Align, Color, Drawable};
-use pelican_ui::events::{Event, OnEvent};
-use pelican_ui::interactions::Button;
-use pelican_ui::layouts::Stack;
+use pelican_ui::drawable::{Align, Color};
+use pelican_ui::events::OnEvent;
 use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
-use pelican_ui::pages::PelicanHome;
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
-use pelican_ui::{Application, Assets, Component, Context, Plugin, drawables, include_dir};
-use std::collections::BTreeMap;
-
-use pelican_ui::{ServiceList, Services};
+use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;
@@ -32,7 +25,6 @@ impl Application for Calendar {
     fn interface(ctx: &mut Context) -> Interface {
         ////TODO: initialize all state objects in interface().
         // ctx.state().set(AllOrders::default());
-        // ctx.state().set(AllBikes::default());
 
         let home = RootInfo::icon("home", "My Calendar", MonthScreen::new(ctx).ok().unwrap());
 
@@ -40,7 +32,6 @@ impl Application for Calendar {
     }
 
     fn theme(assets: &mut Assets) -> Theme {
-        // assets.include_assets(pelican_ui::include_dir!("./resources"));
         Theme::light(assets, Color::from_hex("#ff1f84ff", 255))
     }
 }
@@ -52,10 +43,8 @@ start!(Calendar);
 #[derive(Debug, Component)]
 pub struct MonthScreen(Column, Page);
 
-// Implement event handling for FirstScreen (empty for now)
 impl OnEvent for MonthScreen {}
 
-// Implement the AppPage trait for navigation and UI behavior
 impl AppPage for MonthScreen {}
 
 impl MonthScreen {
@@ -65,12 +54,10 @@ impl MonthScreen {
             ctx.state().set(event_for_ees);
         }
 
-        // Create a header for the page
         let header = Header::home(
             // The majority of UI components will require the app context.
-            ctx,        // The text on this header will say "Calendar"
-            "Calendar", // There will not be an icon button on this header
-            None,
+            ctx, // The text on this header will say "Calendar"
+            "Calendar", None, // There will not be an icon button on this header
         );
 
         // Create the main heading text
