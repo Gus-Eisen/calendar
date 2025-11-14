@@ -99,7 +99,7 @@ pub mod month_selector_screen_block {
     const SEP: u8 = 8;
     const OCT: u8 = 9;
     const NOV: u8 = 10;
-    const DEC: u8 = 12;
+    const DEC: u8 = 11;
 
     #[derive(Debug, Component)]
     pub struct MonthSelectorScreen(Stack, Page);

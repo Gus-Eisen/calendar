@@ -47,11 +47,7 @@ impl EventEditorScreen {
             }),
         );
 
-        let event_for_ees = ctx
-            .state()
-            .get_named::<EventForEES>("event_for_ees")
-            .unwrap()
-            .to_owned();
+        let event_for_ees = ctx.state().get::<EventForEES>().unwrap().to_owned();
 
         let event_title = if event_for_ees.event_title.is_some() {
             let event_title = event_for_ees.event_title.clone().unwrap();
