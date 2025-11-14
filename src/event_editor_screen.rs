@@ -2,7 +2,7 @@ use pelican_ui::components::TextInput;
 use pelican_ui::components::button::{GhostIconButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
-use pelican_ui::events::{Event, KeyboardEvent, OnEvent};
+use pelican_ui::events::{Event, KeyboardEvent, MouseEvent, OnEvent};
 use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
@@ -19,10 +19,7 @@ impl OnEvent for EventEditorScreen {
         if event.downcast_ref::<KeyboardEvent>().is_some()
             && let Some(input) = self.1.content().find::<TextInput>()
         {
-            let event_for_ees = ctx
-                .state()
-                .get_named_mut::<EventForEES>("event_for_ees")
-                .unwrap();
+            let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
 
             event_for_ees.event_title = Some(input.value().clone());
             println!(
@@ -30,7 +27,7 @@ impl OnEvent for EventEditorScreen {
                 event_for_ees.event_title.clone().unwrap()
             );
         }
-        vec![]
+        vec![event]
     }
 }
 
@@ -38,15 +35,6 @@ impl AppPage for EventEditorScreen {}
 
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
-        // let return_to_monthscreen_icon = GhostIconButton::new(
-        //     ctx,
-        //     "back",
-        //     Box::new(|ctx: &mut Context| {
-        //         ctx.trigger_event(NavigationEvent::Reset);
-        //         println!("return_to_monthscreen_icon clicked.")
-        //     }),
-        // );
-
         let event_for_ees = ctx.state().get::<EventForEES>().unwrap().to_owned();
 
         let event_title = if event_for_ees.event_title.is_some() {
@@ -167,7 +155,7 @@ impl EventEditorScreen {
 
         EventEditorScreen(
             Stack::default(),
-            Page::new(Header::stack(ctx, "Stack Test"), content, Some(bumper)),
+            Page::new(Header::stack(ctx, "New Event"), content, Some(bumper)),
         )
     }
 }

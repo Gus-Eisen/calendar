@@ -20,8 +20,8 @@ pub mod year_selector_screen_block {
     pub struct YearSelectorScreen(Stack, Page);
 
     impl OnEvent for YearSelectorScreen {
-        fn on_event(&mut self, _ctx: &mut Context, _event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            vec![]
+        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+            vec![event]
         }
     }
 
@@ -29,14 +29,14 @@ pub mod year_selector_screen_block {
 
     impl YearSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
-            let return_to_eventeditorscreen_icon = GhostIconButton::new(
-                ctx,
-                "backspace",
-                Box::new(|ctx: &mut Context| {
-                    ctx.trigger_event(NavigationEvent::Pop);
-                    println!("return_to_eventeditorscreen_icon clicked.")
-                }),
-            );
+            // let return_to_eventeditorscreen_icon = GhostIconButton::new(
+            //     ctx,
+            //     "backspace",
+            //     Box::new(|ctx: &mut Context| {
+            //         ctx.trigger_event(NavigationEvent::Pop);
+            //         println!("return_to_eventeditorscreen_icon clicked.")
+            //     }),
+            // );
             let year_radioselector = RadioSelector::new(
                 ctx,
                 0,
@@ -64,14 +64,7 @@ pub mod year_selector_screen_block {
                 ],
             );
 
-            let content = Content::new(
-                ctx,
-                Offset::Start,
-                vec![
-                    Box::new(return_to_eventeditorscreen_icon),
-                    Box::new(year_radioselector),
-                ],
-            );
+            let content = Content::new(ctx, Offset::Start, vec![Box::new(year_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
                 ctx.trigger_event(NavigationEvent::Pop);
                 println!("Save Year bumper clicked.")
@@ -105,8 +98,8 @@ pub mod month_selector_screen_block {
     pub struct MonthSelectorScreen(Stack, Page);
 
     impl OnEvent for MonthSelectorScreen {
-        fn on_event(&mut self, _ctx: &mut Context, _event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            vec![]
+        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+            vec![event]
         }
     }
 
