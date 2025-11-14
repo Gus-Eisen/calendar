@@ -1,68 +1,31 @@
-use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventForEES;
+use pelican_ui::Component;
 use pelican_ui::Context;
 use pelican_ui::components::RadioSelector;
-use pelican_ui::components::button::{ButtonSize, ButtonStyle, GhostIconButton};
+use pelican_ui::components::button::GhostIconButton;
 use pelican_ui::components::interface::general::{Bumper, Content, Page};
 use pelican_ui::components::interface::navigation::AppPage;
-use pelican_ui::components::list_item::{ListItem, ListItemGroup};
-use pelican_ui::drawable;
+use pelican_ui::components::interface::{general::Header, navigation::NavigationEvent};
 use pelican_ui::events::{Event, OnEvent};
-use pelican_ui::interactions::Button;
-use pelican_ui::layout::Layout;
 use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
-use pelican_ui::{Application, Component, Plugin, drawables, include_dir};
 
 pub mod year_selector_screen_block {
-
-    use pelican_ui::{
-        components::interface::{general::Header, navigation::NavigationEvent},
-        events::MouseEvent,
-    };
-
     use super::*;
 
+    const Y2025: u8 = 0;
+    const Y2026: u8 = 1;
+
     #[derive(Debug, Component)]
-    pub struct YearSelectorScreen(Stack, Page, #[skip] String);
+    pub struct YearSelectorScreen(Stack, Page);
 
     impl OnEvent for YearSelectorScreen {
-        fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            ////FIX: Figure out event type emitter for RadioSelector.
-            //if event.downcast_ref::<MouseEvent>().is_some() {
-            //    let index = self
-            //        .1
-            //        .content()
-            //        .find::<RadioSelector>()
-            //        .unwrap()
-            //        .
-            //        .unwrap();
-            //    let event_for_ees = ctx
-            //        .state()
-            //        .get_mut::<EventForEES>()
-            //        .unwrap();
-            //    event_for_ees.set_year(index);
-            //}
+        fn on_event(&mut self, _ctx: &mut Context, _event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
             vec![]
         }
     }
 
-    impl AppPage for YearSelectorScreen {
-        // fn has_navigator(&self) -> bool {
-        //     true
-        // }
-        //
-        // fn navigate(
-        //     self: Box<Self>,
-        //     ctx: &mut Context,
-        //     index: usize,
-        // ) -> Result<Box<dyn AppPage>, PelicanError> {
-        //     match index {
-        //         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-        //         _ => Err(PelicanError::InvalidPage(Some(self))),
-        //     }
-        // }
-    }
+    impl AppPage for YearSelectorScreen {}
 
     impl YearSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
@@ -83,7 +46,7 @@ pub mod year_selector_screen_block {
                         "",
                         Box::new(|ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                                efees.set_year(0);
+                                efees.set_year(Y2025);
                                 println!("2025 selected.")
                             }
                         }),
@@ -93,7 +56,7 @@ pub mod year_selector_screen_block {
                         "",
                         Box::new(|ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                                efees.set_year(1);
+                                efees.set_year(Y2026);
                                 println!("2026 selected.")
                             }
                         }),
@@ -109,11 +72,6 @@ pub mod year_selector_screen_block {
                     Box::new(year_radioselector),
                 ],
             );
-            // let button = Button::primary(ctx, "Save Year", |ctx: &mut Context| {
-            //     ctx.trigger_event(NavigationEvent::Pop);
-            //     println!("Save Year button clicked.")
-            // });
-            // let bumper = Bumper::single_button(ctx, button);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
                 ctx.trigger_event(NavigationEvent::Pop);
                 println!("Save Year bumper clicked.")
@@ -122,22 +80,14 @@ pub mod year_selector_screen_block {
             YearSelectorScreen(
                 Stack::default(),
                 Page::new(Header::stack(ctx, "Select Year"), content, Some(bumper)),
-                String::default(),
             )
         }
     }
 }
 
 pub mod month_selector_screen_block {
-
-    use pelican_ui::components::{
-        button::PrimaryButton,
-        interface::{general::Header, navigation::NavigationEvent},
-    };
-
-    use crate::objects::Month;
-
     use super::*;
+
     const JAN: u8 = 0;
     const FEB: u8 = 1;
     const MAR: u8 = 2;
@@ -155,44 +105,12 @@ pub mod month_selector_screen_block {
     pub struct MonthSelectorScreen(Stack, Page);
 
     impl OnEvent for MonthSelectorScreen {
-        fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            // if event.downcast_ref::<ListItemSelect>().is_some() {
-            //     let index = self
-            //         .1
-            //         .content()
-            //         .find::<ListItemGroup>()
-            //         .unwrap()
-            //         //TODO: figure out how to correlate ListItem.
-            //         .inner()
-            //         .iter();
-            //
-            //     let event_for_ees = ctx
-            //         .state()
-            //         .get_named_mut::<EventForEES>("event_for_ees")
-            //         .unwrap();
-            //     event_for_ees.set_month(index);
-            // }
+        fn on_event(&mut self, _ctx: &mut Context, _event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
             vec![]
         }
     }
 
-    impl AppPage for MonthSelectorScreen {
-        // // This screen does not have a navigation bar
-        // fn has_navigator(&self) -> bool {
-        //     false
-        // }
-        //
-        // fn navigate(
-        //     self: Box<Self>,
-        //     ctx: &mut Context,
-        //     index: usize,
-        // ) -> Result<Box<dyn AppPage>, PelicanError> {
-        //     match index {
-        //         0 => Ok(Box::new(EventEditorScreen::new(ctx))),
-        //         _ => Err(PelicanError::InvalidPage(Some(self))),
-        //     }
-        // }
-    }
+    impl AppPage for MonthSelectorScreen {}
 
     impl MonthSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
