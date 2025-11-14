@@ -11,6 +11,8 @@ use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 
 pub mod year_selector_screen_block {
+    use crate::event_editor_screen::EventEditorScreen;
+
     use super::*;
 
     const Y2025: u8 = 0;
@@ -29,14 +31,6 @@ pub mod year_selector_screen_block {
 
     impl YearSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
-            // let return_to_eventeditorscreen_icon = GhostIconButton::new(
-            //     ctx,
-            //     "backspace",
-            //     Box::new(|ctx: &mut Context| {
-            //         ctx.trigger_event(NavigationEvent::Pop);
-            //         println!("return_to_eventeditorscreen_icon clicked.")
-            //     }),
-            // );
             let year_radioselector = RadioSelector::new(
                 ctx,
                 0,
@@ -57,7 +51,9 @@ pub mod year_selector_screen_block {
                         Box::new(|ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_year(Y2026);
-                                println!("2026 selected.")
+                                println!("2026 selected.");
+                                //TODO: delete this printf when done debugging !event_for_ees.year.
+                                println!("{:?}", efees)
                             }
                         }),
                     ),
@@ -66,7 +62,8 @@ pub mod year_selector_screen_block {
 
             let content = Content::new(ctx, Offset::Start, vec![Box::new(year_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
-                ctx.trigger_event(NavigationEvent::Pop);
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Year bumper clicked.")
             });
 

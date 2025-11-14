@@ -36,6 +36,8 @@ impl AppPage for EventEditorScreen {}
 impl EventEditorScreen {
     pub fn new(ctx: &mut Context) -> Self {
         let event_for_ees = ctx.state().get::<EventForEES>().unwrap().to_owned();
+        //TODO: delete this printf when done debugging.
+        println!("{:?}", &event_for_ees);
 
         let event_title = if event_for_ees.event_title.is_some() {
             let event_title = event_for_ees.event_title.clone().unwrap();
