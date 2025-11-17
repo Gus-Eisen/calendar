@@ -103,14 +103,6 @@ pub mod month_selector_screen_block {
 
     impl MonthSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
-            // let return_to_eventeditorscreen_icon = GhostIconButton::new(
-            //     ctx,
-            //     "backspace",
-            //     Box::new(|ctx: &mut Context| {
-            //         ctx.trigger_event(NavigationEvent::Pop);
-            //         println!("return_to_eventeditorscreen_icon clicked.")
-            //     }),
-            // );
             let month_radioselector = RadioSelector::new(
                 ctx,
                 0,
@@ -238,16 +230,10 @@ pub mod month_selector_screen_block {
                 ],
             );
 
-            let content = Content::new(
-                ctx,
-                Offset::Start,
-                vec![
-                    // Box::new(return_to_eventeditorscreen_icon),
-                    Box::new(month_radioselector),
-                ],
-            );
+            let content = Content::new(ctx, Offset::Start, vec![Box::new(month_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Month"), false, |ctx: &mut Context| {
-                ctx.trigger_event(NavigationEvent::Pop);
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Month button clicked.")
             });
 
