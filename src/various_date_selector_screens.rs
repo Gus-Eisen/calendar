@@ -4,7 +4,6 @@ use crate::objects::EventForEES;
 use pelican_ui::Component;
 use pelican_ui::Context;
 use pelican_ui::components::RadioSelector;
-use pelican_ui::components::button::GhostIconButton;
 use pelican_ui::components::interface::general::{Bumper, Content, Page};
 use pelican_ui::components::interface::navigation::AppPage;
 use pelican_ui::components::interface::{general::Header, navigation::NavigationEvent};
@@ -245,33 +244,21 @@ pub mod month_selector_screen_block {
     }
 }
 
-// pub fn month_radioselector_builder(ctx: &mut Context) -> RadioSelector {
-//     RadioSelector::new(
-//         ctx,
-//         0,
-//         vec![
-//             ("January", "", Box::new(|ctx: &mut Context| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
-//                 ees.set_month(JAN);
-//                 println!("Selected January.")
-//         })),
-//             ("February", "", Box::new(|_| if let Some(ees) = ctx.state().get_mut::<EventForEES>() {
-//                 ees.set_month(FEB);
-//                 println!("Selected February.")
-//         })),
-//             ("March", "", Box::new(|_| println!("Selected March."))),
-//             ("April", "", Box::new(|_| println!("Selected April."))),
-//             ("May", "", Box::new(|_| println!("Selected May."))),
-//             ("June", "", Box::new(|_| println!("Selected June."))),
-//             ("July", "", Box::new(|_| println!("Selected July."))),
-//             ("August", "", Box::new(|_| println!("Selected August."))),
-//             (
-//                 "September",
-//                 "",
-//                 Box::new(|_| println!("Selected September.")),
-//             ),
-//             ("October", "", Box::new(|_| println!("Selected October."))),
-//             ("November", "", Box::new(|_| println!("Selected November."))),
-//             ("December", "", Box::new(|_| println!("Selected December."))),
-//         ],
-//     )
-// }
+pub mod day_selector_screen_block {
+    use super::*;
+
+    #[derive(Component, Debug)]
+    pub struct DaySelectorScreen(Stack, Page);
+
+    impl OnEvent for DaySelectorScreen {
+        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+            vec![event]
+        }
+    }
+
+    impl AppPage for DaySelectorScreen {}
+
+    impl DaySelectorScreen {
+        pub fn new(ctx: &mut Context) -> Self {}
+    }
+}
