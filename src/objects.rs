@@ -170,4 +170,8 @@ impl EventForEES {
             _ => panic!("Invalid month index: {}", index),
         }
     }
+
+    pub fn get_month(&self) -> Option<Month> {
+        self.month.clone()
+    }
 }

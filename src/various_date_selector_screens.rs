@@ -245,6 +245,8 @@ pub mod month_selector_screen_block {
 }
 
 pub mod day_selector_screen_block {
+    use crate::objects::Month;
+
     use super::*;
 
     #[derive(Component, Debug)]
@@ -260,5 +262,24 @@ pub mod day_selector_screen_block {
 
     impl DaySelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {}
+
+        pub fn amt_of_days(ctx: &mut Context) -> u8 {
+            let efees = ctx.state().get::<EventForEES>().unwrap();
+            match efees.get_month().unwrap() {
+                Month::January => 31,
+                //TODO: code in logic for leap year.
+                Month::February => 28,
+                Month::March => 31,
+                Month::April => 30,
+                Month::May => 31,
+                Month::June => 30,
+                Month::July => 31,
+                Month::August => 31,
+                Month::September => 30,
+                Month::October => 31,
+                Month::November => 30,
+                Month::December => 31,
+            }
+        }
     }
 }
