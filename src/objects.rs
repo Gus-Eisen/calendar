@@ -171,6 +171,10 @@ impl EventForEES {
         }
     }
 
+    pub fn set_day(&mut self, day: String) {
+        self.day = Some(day)
+    }
+
     pub fn get_month(&self) -> Option<Month> {
         self.month.clone()
     }

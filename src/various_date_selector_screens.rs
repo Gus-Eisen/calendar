@@ -286,8 +286,23 @@ pub mod day_selector_screen_block {
 
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
-            let vec_builder_for_radioselector: Vec<(&str, &str, Callback)> = (1..=amt_of_days)
-                .map(|d| 
+            let vec_radioselector: Vec<(String, &str, Box<dyn FnMut(&mut Context)>)> = (1
+                ..=amt_of_days)
+                .map(|day| {
+                    (
+                        day.to_string(),
+                        //TODO: code in day of week logic here.
+                        "",
+                        Box::new(move |ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_day(day.to_string());
+                                println!("Selected day {}", day);
+                            }
+                        }) as Box<dyn FnMut(&mut Context)>,
+                    )
+                })
+                .collect();
+            RadioSelector::new(ctx, 0, vec_radioselector)
         }
     }
 }
