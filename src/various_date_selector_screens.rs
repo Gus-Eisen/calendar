@@ -245,6 +245,8 @@ pub mod month_selector_screen_block {
 }
 
 pub mod day_selector_screen_block {
+    use pelican_ui::utils::Callback;
+
     use crate::objects::Month;
 
     use super::*;
@@ -280,6 +282,12 @@ pub mod day_selector_screen_block {
                 Month::November => 30,
                 Month::December => 31,
             }
+        }
+
+        pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
+            let amt_of_days = Self::amt_of_days(ctx);
+            let vec_builder_for_radioselector: Vec<(&str, &str, Callback)> = (1..=amt_of_days)
+                .map(|d| 
         }
     }
 }
