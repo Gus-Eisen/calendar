@@ -334,9 +334,9 @@ pub mod day_selector_screen_block {
         pub fn day_of_week_determiner(ctx: &mut Context) -> &'static str {
             let ees = ctx.state().get::<EventForEES>().unwrap();
             let date = NaiveDate::from_ymd_opt(
-                ees.year.unwrap() as i32,
-                ees.month.unwrap() as u32,
-                ees.day_string_to_u32(),
+                ees.get_year_as_i32(),
+                ees.get_month_as_u32(),
+                ees.get_day_as_u32(),
             )
             .unwrap();
             match date.weekday() {
@@ -347,7 +347,6 @@ pub mod day_selector_screen_block {
                 Weekday::Fri => "Fri",
                 Weekday::Sat => "Sat",
                 Weekday::Sun => "Sun",
-                _ => panic!("Something went wrong with .weekday() in Chrono."),
             }
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {

@@ -75,6 +75,12 @@ impl Year {
             Year::Y2026 => "2026",
         }
     }
+    pub fn as_i32(&self) -> i32 {
+        match self {
+            Year::Y2025 => 2025,
+            Year::Y2026 => 2026,
+        }
+    }
 }
 
 pub struct Event {
@@ -111,7 +117,7 @@ impl EventForEES {
             time,
         }
     }
-    pub fn day_string_to_u32(&self) -> u32 {
+    pub fn get_day_as_u32(&self) -> u32 {
         self.day
             .clone()
             .unwrap()
@@ -121,6 +127,10 @@ impl EventForEES {
 
     pub fn get_month_as_u32(&self) -> u32 {
         self.month.clone().unwrap().as_u32()
+    }
+
+    pub fn get_year_as_i32(&self) -> i32 {
+        self.year.clone().unwrap().as_i32()
     }
 
     pub fn all_some(&self) -> bool {
