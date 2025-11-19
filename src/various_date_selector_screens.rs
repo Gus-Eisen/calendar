@@ -246,7 +246,7 @@ pub mod month_selector_screen_block {
 
 pub mod day_selector_screen_block {
     use crate::objects::Month;
-    use chrono::{Datelike, NaiveDate};
+    use chrono::{Datelike, NaiveDate, Weekday};
 
     use super::*;
 
@@ -333,11 +333,22 @@ pub mod day_selector_screen_block {
 
         pub fn day_of_week_determiner(ctx: &mut Context) -> &'static str {
             let ees = ctx.state().get::<EventForEES>().unwrap();
-            let test_date = NaiveDate::from_ymd_opt(
+            let date = NaiveDate::from_ymd_opt(
                 ees.year.unwrap() as i32,
                 ees.month.unwrap() as u32,
                 ees.day_string_to_u32(),
-            );
+            )
+            .unwrap();
+            match date.weekday() {
+                Weekday::Mon => "Mon",
+                Weekday::Tue => "Tue",
+                Weekday::Wed => "Wed",
+                Weekday::Thu => "Thu",
+                Weekday::Fri => "Fri",
+                Weekday::Sat => "Sat",
+                Weekday::Sun => "Sun",
+                _ => panic!("Something went wrong with .weekday() in Chrono."),
+            }
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
