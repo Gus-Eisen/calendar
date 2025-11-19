@@ -263,7 +263,19 @@ pub mod day_selector_screen_block {
     impl AppPage for DaySelectorScreen {}
 
     impl DaySelectorScreen {
-        pub fn new(ctx: &mut Context) -> Self {}
+        pub fn new(ctx: &mut Context) -> Self {
+            let day_radioselector = Self::day_radioselector_builder(ctx);
+            let content = Content::new(ctx, Offset::Start, vec![Box::new(day_radioselector)]);
+            let bumper = Bumper::stack(ctx, Some("Save Day"), false, |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                println!("Save Day button clicked.")
+            });
+            DaySelectorScreen(
+                Stack::default(),
+                Page::new(Header::stack(ctx, "Select Day"), content, Some(bumper)),
+            )
+        }
 
         pub fn amt_of_days(ctx: &mut Context) -> u8 {
             let efees = ctx.state().get::<EventForEES>().unwrap();
