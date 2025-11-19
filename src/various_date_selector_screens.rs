@@ -245,9 +245,8 @@ pub mod month_selector_screen_block {
 }
 
 pub mod day_selector_screen_block {
-    use pelican_ui::utils::Callback;
-
     use crate::objects::Month;
+    use chrono::{Datelike, NaiveDate};
 
     use super::*;
 
@@ -330,6 +329,15 @@ pub mod day_selector_screen_block {
                 31 => "31",
                 _ => panic!("Out of bounds day."),
             }
+        }
+
+        pub fn day_of_week_determiner(ctx: &mut Context) -> &'static str {
+            let ees = ctx.state().get::<EventForEES>().unwrap();
+            let test_date = NaiveDate::from_ymd_opt(
+                ees.year.unwrap() as i32,
+                ees.month.unwrap() as u32,
+                ees.day_string_to_u32(),
+            );
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);

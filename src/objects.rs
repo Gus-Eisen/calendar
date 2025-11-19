@@ -94,6 +94,13 @@ impl EventForEES {
             time,
         }
     }
+    pub fn day_string_to_u32(&self) -> u32 {
+        self.day
+            .clone()
+            .unwrap()
+            .parse::<u32>()
+            .expect("Invalid day.")
+    }
 
     pub fn all_some(&self) -> bool {
         self.event_title.is_some()
