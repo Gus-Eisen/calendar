@@ -8,6 +8,7 @@ use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
 
 use crate::objects::EventForEES;
+use crate::various_date_selector_screens::day_selector_screen_block::DaySelectorScreen;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
 
@@ -93,16 +94,18 @@ impl EventEditorScreen {
                 "Select month here",
                 None,
                 |ctx: &mut Context| {
-                    println!("month = !event_for_ees.month.is_some clicked.");
                     let page = Box::new(MonthSelectorScreen::new(ctx));
                     ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    println!("month = !event_for_ees.month.is_some clicked.")
                 },
             )
         };
 
         let day = if event_for_ees.day.is_some() {
             let day = event_for_ees.day.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", &day, None, |_ctx: &mut Context| {
+            SecondaryButton::medium(ctx, "right", &day, None, |ctx: &mut Context| {
+                let page = Box::new(DaySelectorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("day = event_for_ees.day.is_some clicked.")
             })
         } else {
@@ -111,7 +114,11 @@ impl EventEditorScreen {
                 "right",
                 "Select day here",
                 None,
-                |_ctx: &mut Context| println!("day = !event_for_ees.day.is_some clicked."),
+                |ctx: &mut Context| {
+                    let page = Box::new(DaySelectorScreen::new(ctx));
+                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    println!("day = !event_for_ees.day.is_some clicked.")
+                },
             )
         };
 
