@@ -295,14 +295,50 @@ pub mod day_selector_screen_block {
                 Month::December => 31,
             }
         }
+        pub fn day_u8_to_stringliteral(day: u8) -> &'static str {
+            match day {
+                1 => "1",
+                2 => "2",
+                3 => "3",
+                4 => "4",
+                5 => "5",
+                6 => "6",
+                7 => "7",
+                8 => "8",
+                9 => "9",
+                10 => "10",
+                11 => "11",
+                12 => "12",
+                13 => "13",
+                14 => "14",
+                15 => "15",
+                16 => "16",
+                17 => "17",
+                18 => "18",
+                19 => "19",
+                20 => "20",
+                21 => "21",
+                22 => "22",
+                23 => "23",
+                24 => "24",
+                25 => "25",
+                26 => "26",
+                27 => "27",
+                28 => "28",
+                29 => "29",
+                30 => "30",
+                31 => "31",
+                _ => panic!("Out of bounds day."),
+            }
+        }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
             let vec_radioselector: Vec<(&str, &str, Box<dyn FnMut(&mut Context) + 'static>)> = (1
                 ..=amt_of_days)
                 .map(|day| {
-                    let day_str = Box::leak(day.to_string().into_boxed_str());
+                    let day_str = Self::day_u8_to_stringliteral(day);
                     (
-                        day_str as &str,
+                        day_str,
                         //TODO: code in day of week logic here.
                         "",
                         Box::new(move |ctx: &mut Context| {
