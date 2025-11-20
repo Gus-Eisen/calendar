@@ -345,15 +345,18 @@ pub mod day_selector_screen_block {
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
-            let vec_radioselector: Vec<(&str, &str, Box<dyn FnMut(&mut Context) + 'static>)> = (1
-                ..=amt_of_days)
+            let vec_of_days_of_week = Self::days_of_week_determiner(ctx);
+            let mut vec_of_radioselector: Vec<(
+                &str,
+                &str,
+                Box<dyn FnMut(&mut Context) + 'static>,
+            )> = (1..=amt_of_days)
                 .map(|day| {
                     let day_str = Self::day_u8_to_stringliteral(day);
-                    let day_of_week = Self::day_of_week_determiner(ctx);
                     (
                         day_str,
                         //TODO: code in day of week logic here.
-                        day_of_week,
+                        "",
                         Box::new(move |ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_day(day.to_string());
@@ -363,7 +366,10 @@ pub mod day_selector_screen_block {
                     )
                 })
                 .collect();
-            RadioSelector::new(ctx, 0, vec_radioselector)
+            for day in vec_of_days_of_week {
+                vec_of_radioselector.push(("{:?}", day.to_string()));
+            }
+            RadioSelector::new(ctx, 0, vec_of_radioselector)
         }
     }
 }
