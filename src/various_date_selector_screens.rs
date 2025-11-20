@@ -331,24 +331,17 @@ pub mod day_selector_screen_block {
             }
         }
 
-        pub fn day_of_week_determiner(ctx: &mut Context) -> &'static str {
+        pub fn days_of_week_determiner(ctx: &mut Context) -> Vec<Weekday> {
             let ees = ctx.state().get::<EventForEES>().unwrap();
-            let date = NaiveDate::from_ymd_opt(
-                ees.get_year_as_i32(),
-                ees.get_month_as_u32(),
-                //FIX: this is broken as it's trying to pull Day prior to User selecting one.
-                ees.get_day_as_u32(),
-            )
-            .unwrap();
-            match date.weekday() {
-                Weekday::Mon => "Mon",
-                Weekday::Tue => "Tue",
-                Weekday::Wed => "Wed",
-                Weekday::Thu => "Thu",
-                Weekday::Fri => "Fri",
-                Weekday::Sat => "Sat",
-                Weekday::Sun => "Sun",
+            let mut date =
+                NaiveDate::from_ymd_opt(ees.get_year_as_i32(), ees.get_month_as_u32(), 1).unwrap();
+            let mut weekdays = Vec::new();
+
+            while date.month() == ees.get_month_as_u32() {
+                weekdays.push(date.weekday());
+                date = date.succ_opt().unwrap();
             }
+            weekdays
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
