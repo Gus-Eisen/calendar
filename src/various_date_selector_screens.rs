@@ -336,6 +336,7 @@ pub mod day_selector_screen_block {
             let date = NaiveDate::from_ymd_opt(
                 ees.get_year_as_i32(),
                 ees.get_month_as_u32(),
+                //FIX: this is broken as it's trying to pull Day prior to User selecting one.
                 ees.get_day_as_u32(),
             )
             .unwrap();
@@ -355,10 +356,11 @@ pub mod day_selector_screen_block {
                 ..=amt_of_days)
                 .map(|day| {
                     let day_str = Self::day_u8_to_stringliteral(day);
+                    let day_of_week = Self::day_of_week_determiner(ctx);
                     (
                         day_str,
                         //TODO: code in day of week logic here.
-                        "",
+                        day_of_week,
                         Box::new(move |ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_day(day.to_string());
