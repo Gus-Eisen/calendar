@@ -276,6 +276,7 @@ pub mod day_selector_screen_block {
             )
         }
 
+        // Pulls Month from EventForEES and returns number of days as u8.
         pub fn amt_of_days(ctx: &mut Context) -> u8 {
             let efees = ctx.state().get::<EventForEES>().unwrap();
             match efees.get_month().unwrap() {
@@ -331,6 +332,7 @@ pub mod day_selector_screen_block {
             }
         }
 
+        // Pulls Year and Month from EventForEES and returns an ordered vec of Weekday(s).
         pub fn days_of_week_determiner(ctx: &mut Context) -> Vec<Weekday> {
             let ees = ctx.state().get::<EventForEES>().unwrap();
             let mut date =
@@ -345,30 +347,38 @@ pub mod day_selector_screen_block {
         }
         pub fn day_radioselector_builder(ctx: &mut Context) -> RadioSelector {
             let amt_of_days = Self::amt_of_days(ctx);
-            let vec_of_days_of_week = Self::days_of_week_determiner(ctx);
-            let mut vec_of_radioselector: Vec<(
-                &str,
-                &str,
-                Box<dyn FnMut(&mut Context) + 'static>,
-            )> = (1..=amt_of_days)
-                .map(|day| {
-                    let day_str = Self::day_u8_to_stringliteral(day);
-                    (
-                        day_str,
-                        //TODO: code in day of week logic here.
-                        "",
-                        Box::new(move |ctx: &mut Context| {
-                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                                efees.set_day(day.to_string());
-                                println!("Selected day {}", day);
-                            }
-                        }) as Box<dyn FnMut(&mut Context)>,
-                    )
-                })
-                .collect();
-            for day in vec_of_days_of_week {
-                vec_of_radioselector.push(("{:?}", day.to_string()));
-            }
+            let vec_of_weekday = Self::days_of_week_determiner(ctx);
+
+            let vec_of_radioselector: Vec<(&str, &str, Box<dyn FnMut(&mut Context) + 'static>)> =
+                (1..=amt_of_days)
+                    .map(|day| {
+                        let day_str = Self::day_u8_to_stringliteral(day);
+                        let weekday_str = vec_of_weekday
+                            .get((day - 1) as usize)
+                            .map(|wd| match wd {
+                                Weekday::Mon => "Mon",
+                                Weekday::Tue => "Tue",
+                                Weekday::Wed => "Wed",
+                                Weekday::Thu => "Thu",
+                                Weekday::Fri => "Fri",
+                                Weekday::Sat => "Sat",
+                                Weekday::Sun => "Sun",
+                            })
+                            .expect("Weekday variant not found.");
+
+                        (
+                            day_str,
+                            weekday_str,
+                            Box::new(move |ctx: &mut Context| {
+                                if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                    efees.set_day(day.to_string());
+                                    println!("Selected day {}", day);
+                                }
+                            }) as Box<dyn FnMut(&mut Context)>,
+                        )
+                    })
+                    .collect();
+
             RadioSelector::new(ctx, 0, vec_of_radioselector)
         }
     }
