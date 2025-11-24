@@ -1,4 +1,4 @@
-use chrono::NaiveDateTime;
+use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 
 pub enum DayOfWeek {
     Monday,
@@ -83,9 +83,10 @@ impl Year {
     }
 }
 
+//Event(s) are stored in UTC, then converted to display appropriate TZ for User.
 pub struct Event {
     title: String,
-    time: NaiveDateTime,
+    datetime: DateTime<Utc>,
 }
 
 pub struct EventRegistry {
@@ -211,6 +212,10 @@ impl EventForEES {
 
     pub fn set_day(&mut self, day: String) {
         self.day = Some(day)
+    }
+
+    pub fn set_time(&mut self, time: String) {
+        self.time = Some(time)
     }
 
     pub fn get_month(&self) -> Option<Month> {

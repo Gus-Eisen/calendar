@@ -10,6 +10,7 @@ use pelican_ui::{Component, Context};
 use crate::objects::EventForEES;
 use crate::various_date_selector_screens::day_selector_screen_block::DaySelectorScreen;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
+use crate::various_date_selector_screens::time_selector_screen_block::TimeSelectorScreen;
 use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
 
 #[derive(Debug, Component)]
@@ -124,7 +125,9 @@ impl EventEditorScreen {
 
         let time = if event_for_ees.time.is_some() {
             let time = event_for_ees.time.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", &time, None, |_ctx: &mut Context| {
+            SecondaryButton::medium(ctx, "right", &time, None, |ctx: &mut Context| {
+                let page = Box::new(TimeSelectorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("time = event_for_ees.time.is_some clicked.")
             })
         } else {
@@ -133,7 +136,11 @@ impl EventEditorScreen {
                 "right",
                 "Select time here",
                 None,
-                |_ctx: &mut Context| println!("time = !event_for_ees.time.is_some clicked."),
+                |ctx: &mut Context| {
+                    let page = Box::new(TimeSelectorScreen::new(ctx));
+                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    println!("time = !event_for_ees.time.is_some clicked.")
+                },
             )
         };
 

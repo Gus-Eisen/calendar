@@ -383,3 +383,60 @@ pub mod day_selector_screen_block {
         }
     }
 }
+
+pub mod time_selector_screen_block {
+    use super::*;
+    #[derive(Component, Debug)]
+    pub struct TimeSelectorScreen(Stack, Page);
+
+    impl OnEvent for TimeSelectorScreen {
+        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+            vec![event]
+        }
+    }
+
+    impl AppPage for TimeSelectorScreen {}
+
+    impl TimeSelectorScreen {
+        pub fn new(ctx: &mut Context) -> Self {
+            let time_radioselector = RadioSelector::new(
+                ctx,
+                0,
+                vec![
+                    (
+                        "12:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0000".to_string());
+                                println!("12:00 a.m. selected.")
+                            }
+                        }),
+                    ),
+                    (
+                        "12:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0015".to_string());
+                                println!("2026 selected.");
+                            }
+                        }),
+                    ),
+                ],
+            );
+
+            let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
+            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                println!("Save Year bumper clicked.")
+            });
+
+            TimeSelectorScreen(
+                Stack::default(),
+                Page::new(Header::stack(ctx, "Select Time"), content, Some(bumper)),
+            )
+        }
+    }
+}
