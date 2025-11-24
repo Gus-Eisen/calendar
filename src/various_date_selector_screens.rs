@@ -409,7 +409,7 @@ pub mod time_selector_screen_block {
                         Box::new(|ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_time("0000".to_string());
-                                println!("12:00 a.m. selected.")
+                                println!("12:00 a.m. selected.");
                             }
                         }),
                     ),
@@ -419,13 +419,952 @@ pub mod time_selector_screen_block {
                         Box::new(|ctx: &mut Context| {
                             if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
                                 efees.set_time("0015".to_string());
-                                println!("2026 selected.");
+                                println!("12:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0030".to_string());
+                                println!("12:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0045".to_string());
+                                println!("12:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0100".to_string());
+                                println!("1:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0115".to_string());
+                                println!("1:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0130".to_string());
+                                println!("1:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0145".to_string());
+                                println!("1:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0200".to_string());
+                                println!("2:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0215".to_string());
+                                println!("2:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0230".to_string());
+                                println!("2:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0245".to_string());
+                                println!("2:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0300".to_string());
+                                println!("3:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0315".to_string());
+                                println!("3:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0330".to_string());
+                                println!("3:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0345".to_string());
+                                println!("3:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0400".to_string());
+                                println!("4:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0415".to_string());
+                                println!("4:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0430".to_string());
+                                println!("4:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0445".to_string());
+                                println!("4:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0500".to_string());
+                                println!("5:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0515".to_string());
+                                println!("5:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0530".to_string());
+                                println!("5:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0545".to_string());
+                                println!("5:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0600".to_string());
+                                println!("6:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0615".to_string());
+                                println!("6:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0630".to_string());
+                                println!("6:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0645".to_string());
+                                println!("6:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0700".to_string());
+                                println!("7:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0715".to_string());
+                                println!("7:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0730".to_string());
+                                println!("7:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0745".to_string());
+                                println!("7:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0800".to_string());
+                                println!("8:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0815".to_string());
+                                println!("8:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0830".to_string());
+                                println!("8:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0845".to_string());
+                                println!("8:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0900".to_string());
+                                println!("9:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0915".to_string());
+                                println!("9:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0930".to_string());
+                                println!("9:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("0945".to_string());
+                                println!("9:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1000".to_string());
+                                println!("10:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1015".to_string());
+                                println!("10:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1030".to_string());
+                                println!("10:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1045".to_string());
+                                println!("10:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:00 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1100".to_string());
+                                println!("11:00 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:15 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1115".to_string());
+                                println!("11:15 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:30 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1130".to_string());
+                                println!("11:30 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:45 a.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1145".to_string());
+                                println!("11:45 a.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1200".to_string());
+                                println!("12:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1215".to_string());
+                                println!("12:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1230".to_string());
+                                println!("12:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "12:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1245".to_string());
+                                println!("12:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1300".to_string());
+                                println!("1:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1315".to_string());
+                                println!("1:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1330".to_string());
+                                println!("1:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "1:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1345".to_string());
+                                println!("1:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1400".to_string());
+                                println!("2:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1415".to_string());
+                                println!("2:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1430".to_string());
+                                println!("2:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "2:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1445".to_string());
+                                println!("2:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1500".to_string());
+                                println!("3:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1515".to_string());
+                                println!("3:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1530".to_string());
+                                println!("3:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "3:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1545".to_string());
+                                println!("3:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1600".to_string());
+                                println!("4:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1615".to_string());
+                                println!("4:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1630".to_string());
+                                println!("4:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "4:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1645".to_string());
+                                println!("4:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1700".to_string());
+                                println!("5:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1715".to_string());
+                                println!("5:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1730".to_string());
+                                println!("5:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "5:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1745".to_string());
+                                println!("5:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1800".to_string());
+                                println!("6:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1815".to_string());
+                                println!("6:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1830".to_string());
+                                println!("6:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "6:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1845".to_string());
+                                println!("6:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1900".to_string());
+                                println!("7:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1915".to_string());
+                                println!("7:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1930".to_string());
+                                println!("7:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "7:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("1945".to_string());
+                                println!("7:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2000".to_string());
+                                println!("8:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2015".to_string());
+                                println!("8:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2030".to_string());
+                                println!("8:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "8:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2045".to_string());
+                                println!("8:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2100".to_string());
+                                println!("9:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2115".to_string());
+                                println!("9:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2130".to_string());
+                                println!("9:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "9:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2145".to_string());
+                                println!("9:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2200".to_string());
+                                println!("10:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2215".to_string());
+                                println!("10:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2230".to_string());
+                                println!("10:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "10:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2245".to_string());
+                                println!("10:45 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:00 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2300".to_string());
+                                println!("11:00 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:15 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2315".to_string());
+                                println!("11:15 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:30 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2330".to_string());
+                                println!("11:30 p.m. selected.");
+                            }
+                        }),
+                    ),
+                    (
+                        "11:45 p.m.",
+                        "",
+                        Box::new(|ctx: &mut Context| {
+                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                                efees.set_time("2345".to_string());
+                                println!("11:45 p.m. selected.");
                             }
                         }),
                     ),
                 ],
             );
-
             let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
                 let page = Box::new(EventEditorScreen::new(ctx));
