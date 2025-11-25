@@ -399,6 +399,7 @@ pub mod time_selector_screen_block {
 
     impl TimeSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
+            //HACK: this could be refactored with a loop or something to about 15 lines.
             let time_radioselector = RadioSelector::new(
                 ctx,
                 0,

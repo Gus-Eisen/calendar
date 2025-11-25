@@ -126,6 +126,19 @@ impl EventForEES {
             time,
         }
     }
+
+    pub fn get_title(&self) -> Option<String> {
+        self.event_title.clone()
+    }
+
+    pub fn get_year_as_i32(&self) -> i32 {
+        self.year.clone().unwrap().as_i32()
+    }
+
+    pub fn get_month_as_u32(&self) -> u32 {
+        self.month.clone().unwrap().as_u32()
+    }
+
     pub fn get_day_as_u32(&self) -> u32 {
         self.day
             .clone()
@@ -134,12 +147,8 @@ impl EventForEES {
             .expect("Unable to parse Day from EventForEES")
     }
 
-    pub fn get_month_as_u32(&self) -> u32 {
-        self.month.clone().unwrap().as_u32()
-    }
-
-    pub fn get_year_as_i32(&self) -> i32 {
-        self.year.clone().unwrap().as_i32()
+    pub fn get_time(&self) -> Option<String> {
+        self.time.clone()
     }
 
     pub fn all_some(&self) -> bool {

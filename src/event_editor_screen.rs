@@ -159,6 +159,12 @@ impl EventEditorScreen {
         let bumper = Bumper::stack(ctx, Some("Save Event"), false, |ctx: &mut Context| {
             let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
             if event_for_ees.all_some() {
+                //TODO: Convert EventForEES to an Event here.
+                let title = event_for_ees.get_title().unwrap();
+                let year = event_for_ees.get_year_as_i32().to_string();
+                let month = event_for_ees.get_month_as_u32().to_string();
+                let day = event_for_ees.get_day_as_u32().to_string();
+                let time = event_for_ees.get_time().unwrap();
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {
