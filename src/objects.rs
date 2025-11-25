@@ -84,13 +84,21 @@ impl Year {
 }
 
 //Event(s) are stored in UTC, then converted to display appropriate TZ for User.
+#[derive(Debug)]
 pub struct Event {
     title: String,
     datetime: DateTime<Utc>,
 }
 
+#[derive(Debug)]
 pub struct EventRegistry {
-    vec_of_events: Vec<Event>,
+    vec_of_events: Option<Vec<Event>>,
+}
+
+impl EventRegistry {
+    pub fn new(vec_of_events: Option<Vec<Event>>) -> Self {
+        Self { vec_of_events }
+    }
 }
 
 #[derive(Debug, Clone)]

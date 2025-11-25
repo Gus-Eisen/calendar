@@ -16,7 +16,7 @@ use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::EventForEES;
+use crate::objects::{EventForEES, EventRegistry};
 
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
@@ -52,6 +52,11 @@ impl MonthScreen {
         if ctx.state().get::<EventForEES>().is_none() {
             let event_for_ees = EventForEES::new(None, None, None, None, None);
             ctx.state().set(event_for_ees);
+        }
+
+        if ctx.state().get::<EventRegistry>().is_none() {
+            let event_registry = EventRegistry::new(None);
+            ctx.state().set(event_registry);
         }
 
         let header = Header::home(
