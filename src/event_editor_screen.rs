@@ -1,4 +1,4 @@
-use chrono::{DateTime, FixedOffset, NaiveDate, TimeZone};
+use chrono::{DateTime, FixedOffset, NaiveDate, TimeZone, Utc};
 use pelican_ui::components::TextInput;
 use pelican_ui::components::button::{GhostIconButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
@@ -8,7 +8,7 @@ use pelican_ui::layouts::Offset;
 use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
 
-use crate::objects::EventForEES;
+use crate::objects::{EventForEES, EventForER, EventRegistry};
 use crate::various_date_selector_screens::day_selector_screen_block::DaySelectorScreen;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::time_selector_screen_block::TimeSelectorScreen;
@@ -168,9 +168,14 @@ impl EventEditorScreen {
                 let day = event_for_ees.get_day_as_u32().to_string();
                 let time = event_for_ees.get_time().unwrap();
                 let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
-                //HACK: User's time wrongly gets saved in UTC.
                 let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
-                    .expect("Failed to parse into DateTime");
+                    .expect("Failed to parse into DateTime")
+                    // convert to UTC for storage as Event.
+                    .with_timezone(&Utc);
+                let event = EventForER::new(title, datetime);
+                let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
+                event_registry.push(event);
+                println!("{:?}", event_registry);
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {
@@ -184,6 +189,7 @@ impl EventEditorScreen {
         )
     }
     pub fn formatter(year: &str, month: &str, day: &str, time: &str) -> String {
+        //FIX: This wrongly sets all User's TZ to UTC.
         format!("{year} {month} {day} {time} +0000")
     }
 }
