@@ -1,4 +1,4 @@
-use chrono::{DateTime, FixedOffset, NaiveDate, TimeZone, Utc};
+use chrono::{DateTime, FixedOffset, Local, NaiveDate, TimeZone, Utc};
 use pelican_ui::components::TextInput;
 use pelican_ui::components::button::{GhostIconButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
@@ -168,14 +168,15 @@ impl EventEditorScreen {
                 let day = event_for_ees.get_day_as_u32().to_string();
                 let time = event_for_ees.get_time().unwrap();
                 let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
+                println!("{:?}", &fmt_for_datetime);
                 let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
                     .expect("Failed to parse into DateTime")
-                    // convert to UTC for storage as Event.
+                    // convert to UTC for storage as EventForER.
                     .with_timezone(&Utc);
+                println!("{:?}", &datetime);
                 let event = EventForER::new(title, datetime);
                 let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
                 event_registry.push(Some(event));
-                println!("{:?}", &event_registry);
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {
@@ -189,7 +190,9 @@ impl EventEditorScreen {
         )
     }
     pub fn formatter(year: &str, month: &str, day: &str, time: &str) -> String {
-        //FIX: This wrongly sets all User's TZ to UTC.
-        format!("{year} {month} {day} {time} +0000")
+        // sets selected time value to TZ of User's machine.
+        let local_time = Local::now();
+        let tz_string = local_time.format("%z").to_string();
+        format!("{year} {month} {day} {time} {tz_string}")
     }
 }
