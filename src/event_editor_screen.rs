@@ -161,7 +161,7 @@ impl EventEditorScreen {
             let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
 
             if event_for_ees.all_some() {
-                //TODO: Convert EventForEES to an Event here.
+                // Creates and pushes an EventForER from a EventForEES to EventRegistry.
                 let title = event_for_ees.get_title().unwrap();
                 let year = event_for_ees.get_year_as_i32().to_string();
                 let month = event_for_ees.get_month_as_u32().to_string();
@@ -174,8 +174,8 @@ impl EventEditorScreen {
                     .with_timezone(&Utc);
                 let event = EventForER::new(title, datetime);
                 let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
-                event_registry.push(event);
-                println!("{:?}", event_registry);
+                event_registry.push(Some(event));
+                println!("{:?}", &event_registry);
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {

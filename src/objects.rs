@@ -98,16 +98,16 @@ impl EventForER {
 
 #[derive(Debug)]
 pub struct EventRegistry {
-    vec_of_events: Option<Vec<EventForER>>,
+    vec_of_events: Vec<Option<EventForER>>,
 }
 
 impl EventRegistry {
-    pub fn new(vec_of_events: Option<Vec<EventForER>>) -> Self {
+    pub fn new(vec_of_events: Vec<Option<EventForER>>) -> Self {
         Self { vec_of_events }
     }
 
-    pub fn push(&mut self, event: EventForER) {
-        self.vec_of_events.as_mut().unwrap().push(event)
+    pub fn push(&mut self, event: Option<EventForER>) {
+        self.vec_of_events.push(event)
     }
 }
 
