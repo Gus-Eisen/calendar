@@ -1,3 +1,4 @@
+use chrono::{DateTime, FixedOffset, NaiveDate, TimeZone};
 use pelican_ui::components::TextInput;
 use pelican_ui::components::button::{GhostIconButton, SecondaryButton};
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
@@ -158,6 +159,7 @@ impl EventEditorScreen {
 
         let bumper = Bumper::stack(ctx, Some("Save Event"), false, |ctx: &mut Context| {
             let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
+
             if event_for_ees.all_some() {
                 //TODO: Convert EventForEES to an Event here.
                 let title = event_for_ees.get_title().unwrap();
@@ -165,6 +167,10 @@ impl EventEditorScreen {
                 let month = event_for_ees.get_month_as_u32().to_string();
                 let day = event_for_ees.get_day_as_u32().to_string();
                 let time = event_for_ees.get_time().unwrap();
+                let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
+                //HACK: User's time wrongly gets saved in UTC.
+                let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
+                    .expect("Failed to parse into DateTime");
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {
@@ -176,5 +182,8 @@ impl EventEditorScreen {
             Stack::default(),
             Page::new(Header::stack(ctx, "New Event"), content, Some(bumper)),
         )
+    }
+    pub fn formatter(year: &str, month: &str, day: &str, time: &str) -> String {
+        format!("{year} {month} {day} {time} +0000")
     }
 }

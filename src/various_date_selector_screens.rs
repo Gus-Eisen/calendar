@@ -76,18 +76,18 @@ pub mod year_selector_screen_block {
 pub mod month_selector_screen_block {
     use super::*;
 
-    const JAN: u8 = 0;
-    const FEB: u8 = 1;
-    const MAR: u8 = 2;
-    const APR: u8 = 3;
-    const MAY: u8 = 4;
-    const JUN: u8 = 5;
-    const JUL: u8 = 6;
-    const AUG: u8 = 7;
-    const SEP: u8 = 8;
-    const OCT: u8 = 9;
-    const NOV: u8 = 10;
-    const DEC: u8 = 11;
+    const JAN: u8 = 1;
+    const FEB: u8 = 2;
+    const MAR: u8 = 3;
+    const APR: u8 = 4;
+    const MAY: u8 = 5;
+    const JUN: u8 = 6;
+    const JUL: u8 = 7;
+    const AUG: u8 = 8;
+    const SEP: u8 = 9;
+    const OCT: u8 = 10;
+    const NOV: u8 = 11;
+    const DEC: u8 = 12;
 
     #[derive(Debug, Component)]
     pub struct MonthSelectorScreen(Stack, Page);
