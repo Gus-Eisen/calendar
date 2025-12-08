@@ -169,14 +169,17 @@ impl EventEditorScreen {
                 let time = event_for_ees.get_time().unwrap();
                 let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
                 println!("{:?}", &fmt_for_datetime);
+                // reset EventForEES to all None types for future use.
+                event_for_ees.set_all_none();
                 let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
                     .expect("Failed to parse into DateTime")
-                    // convert to UTC for storage as EventForER.
+                    // converts to UTC for storage as EventForER.
                     .with_timezone(&Utc);
                 println!("{:?}", &datetime);
                 let event = EventForER::new(title, datetime);
                 let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
                 event_registry.push(Some(event));
+                println!("{:?}", &event_registry);
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {

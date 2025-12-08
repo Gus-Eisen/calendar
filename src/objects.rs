@@ -248,4 +248,12 @@ impl EventForEES {
     pub fn get_month(&self) -> Option<Month> {
         self.month.clone()
     }
+
+    pub fn set_all_none(&mut self) {
+        self.event_title = None;
+        self.year = None;
+        self.month = None;
+        self.day = None;
+        self.time = None;
+    }
 }
