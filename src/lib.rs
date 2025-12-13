@@ -82,6 +82,34 @@ impl MonthScreen {
             "Calendar", None, // There will not be an icon button on this header
         );
 
+        let new_event_button = PrimaryButton::new(
+            ctx,
+            "Create New Event",
+            |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                println!("Create New Event button clicked.")
+            },
+            false,
+        );
+
+        let weekday_row = Self::weekday_row_builder(ctx);
+
+        // Combine icon, heading, and subtext into page content
+        let content = Content::new(
+            ctx,
+            Offset::Start,
+            // All items must be boxed as Box<dyn Drawable>
+            vec![Box::new(weekday_row), Box::new(new_event_button)],
+        );
+
+        Ok(Self(
+            Row::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
+            Page::new(header, content, None),
+        ))
+    }
+
+    pub fn weekday_row_builder(ctx: &mut Context) -> WeekdayRow {
         let mon = {
             let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
             let label = Text::new(
@@ -95,8 +123,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -115,8 +143,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -135,8 +163,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -155,8 +183,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -175,8 +203,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -195,8 +223,8 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
@@ -215,14 +243,14 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Fill,
-                Size::Fill,
+                Size::Static(100.0),
+                Size::Static(100.0),
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
-        let weekday_row = WeekdayRow(
+        WeekdayRow(
             Row::new(12.0, Offset::Start, Size::Fit, Padding::default()),
             mon,
             tue,
@@ -231,30 +259,6 @@ impl MonthScreen {
             fri,
             sat,
             sun,
-        );
-
-        let new_event_button = PrimaryButton::new(
-            ctx,
-            "Create New Event",
-            |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("Create New Event button clicked.")
-            },
-            false,
-        );
-
-        // Combine icon, heading, and subtext into page content
-        let content = Content::new(
-            ctx,
-            Offset::Start,
-            // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(weekday_row), Box::new(new_event_button)],
-        );
-
-        Ok(Self(
-            Row::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
-            Page::new(header, content, None),
-        ))
+        )
     }
 }
