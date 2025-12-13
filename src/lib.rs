@@ -111,7 +111,11 @@ impl MonthScreen {
 
     pub fn weekday_row_builder(ctx: &mut Context) -> WeekdayRow {
         let mon = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Mon",
@@ -131,7 +135,11 @@ impl MonthScreen {
         };
 
         let tue = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Tue",
@@ -151,7 +159,11 @@ impl MonthScreen {
         };
 
         let wed = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Wed",
@@ -171,7 +183,11 @@ impl MonthScreen {
         };
 
         let thu = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Thu",
@@ -191,7 +207,11 @@ impl MonthScreen {
         };
 
         let fri = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Fri",
@@ -211,7 +231,11 @@ impl MonthScreen {
         };
 
         let sat = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Sat",
@@ -231,7 +255,11 @@ impl MonthScreen {
         };
 
         let sun = {
-            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let rect = Rectangle::new(
+                Color(255, 255, 255, 1),
+                8.0,
+                Some((2.0, Color(0, 0, 0, 255))),
+            );
             let label = Text::new(
                 ctx,
                 "Sun",
