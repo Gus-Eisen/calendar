@@ -179,7 +179,6 @@ impl EventEditorScreen {
                 let event = EventForER::new(title, datetime);
                 let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
                 event_registry.push(Some(event));
-                println!("{:?}", &event_registry);
                 ctx.trigger_event(NavigationEvent::Reset);
                 println!("Save Event button clicked.")
             } else {

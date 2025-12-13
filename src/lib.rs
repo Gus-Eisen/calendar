@@ -6,10 +6,10 @@ mod various_date_selector_screens;
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
-use pelican_ui::components::{ExpandableText, Text, TextSize, TextStyle};
+use pelican_ui::components::{ExpandableText, Rectangle, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color};
 use pelican_ui::events::OnEvent;
-use pelican_ui::layouts::{Column, Offset};
+use pelican_ui::layouts::{Bin, Column, Offset, Row, Stack};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
@@ -39,9 +39,26 @@ impl Application for Calendar {
 // Macro to start the application
 start!(Calendar);
 
+#[derive(Debug, Component)]
+pub struct WeekdayRow(
+    Row,
+    Weekday,
+    Weekday,
+    Weekday,
+    Weekday,
+    Weekday,
+    Weekday,
+    Weekday,
+);
+impl OnEvent for WeekdayRow {}
+
+#[derive(Debug, Component)]
+pub struct Weekday(Stack, Rectangle, Text);
+impl OnEvent for Weekday {}
+
 // Define the first screen of the app
 #[derive(Debug, Component)]
-pub struct MonthScreen(Column, Page);
+pub struct MonthScreen(Row, Page);
 
 impl OnEvent for MonthScreen {}
 
@@ -65,26 +82,155 @@ impl MonthScreen {
             "Calendar", None, // There will not be an icon button on this header
         );
 
-        // Create the main heading text
-        let text = Text::new(
-            ctx,
-            "Hello World!",
-            TextSize::Lg,
-            TextStyle::Heading,
-            Align::Center,
-            None,
-        );
+        let mon = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Mon",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
 
-        // Create subtext.
-        let subtext = ExpandableText::new(
-            ctx,
-            "First project loaded successfully.",
-            TextSize::Md,
-            TextStyle::Primary,
-            // Center the text
-            Align::Center,
-            // No max lines
-            None,
+        let tue = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Tue",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let wed = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Wed",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let thu = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Thu",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let fri = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Fri",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let sat = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Sat",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let sun = {
+            let rect = Rectangle::new(Color(39, 43, 245, 1), 8.0, Some((2.0, Color(0, 0, 0, 255))));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fill,
+                Size::Fill,
+                Padding::default(),
+            );
+            Weekday(layout, rect, label)
+        };
+
+        let weekday_row = WeekdayRow(
+            Row::new(12.0, Offset::Start, Size::Fit, Padding::default()),
+            mon,
+            tue,
+            wed,
+            thu,
+            fri,
+            sat,
+            sun,
         );
 
         let new_event_button = PrimaryButton::new(
@@ -101,18 +247,13 @@ impl MonthScreen {
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
-            // Vertically center items
-            Offset::Center,
+            Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![
-                Box::new(text),
-                Box::new(subtext),
-                Box::new(new_event_button),
-            ],
+            vec![Box::new(weekday_row), Box::new(new_event_button)],
         );
 
         Ok(Self(
-            Column::new(1.0, Offset::Center, Size::Fit, Padding::new(1.0)),
+            Row::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
             Page::new(header, content, None),
         ))
     }
