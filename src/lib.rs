@@ -111,11 +111,7 @@ impl MonthScreen {
 
     pub fn weekday_row_builder(ctx: &mut Context) -> WeekdayRow {
         let mon = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Mon",
@@ -127,19 +123,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let tue = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Tue",
@@ -151,19 +143,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let wed = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Wed",
@@ -175,19 +163,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let thu = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Thu",
@@ -199,19 +183,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let fri = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Fri",
@@ -223,19 +203,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let sat = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Sat",
@@ -247,19 +223,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         let sun = {
-            let rect = Rectangle::new(
-                Color(255, 255, 255, 1),
-                8.0,
-                Some((2.0, Color(0, 0, 0, 255))),
-            );
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
                 ctx,
                 "Sun",
@@ -271,15 +243,15 @@ impl MonthScreen {
             let layout = Stack(
                 Offset::Center,
                 Offset::Center,
-                Size::Static(100.0),
-                Size::Static(100.0),
+                Size::Fit,
+                Size::Fit,
                 Padding::default(),
             );
             Weekday(layout, rect, label)
         };
 
         WeekdayRow(
-            Row::new(12.0, Offset::Start, Size::Fit, Padding::default()),
+            Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
             mon,
             tue,
             wed,
