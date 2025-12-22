@@ -3,6 +3,7 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
+use chrono::Local;
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
@@ -38,6 +39,19 @@ impl Application for Calendar {
 
 // Macro to start the application
 start!(Calendar);
+
+#[derive(Debug, Component)]
+pub struct MonthOfWeekdayRow(
+    Row,
+    WeekdayRow,
+    WeekdayRow,
+    WeekdayRow,
+    WeekdayRow,
+    WeekdayRow,
+    Option<WeekdayRow>,
+);
+
+impl OnEvent for MonthOfWeekdayRow {}
 
 #[derive(Debug, Component)]
 pub struct WeekdayRow(
@@ -261,4 +275,6 @@ impl MonthScreen {
             sun,
         )
     }
+
+    pub fn monthrows_builder(ctx: &mut Context) -> MonthRows {}
 }
