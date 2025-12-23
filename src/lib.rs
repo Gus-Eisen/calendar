@@ -3,7 +3,7 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use chrono::Local;
+use chrono::{Datelike, Local};
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
@@ -276,5 +276,35 @@ impl MonthScreen {
         )
     }
 
-    pub fn monthrows_builder(ctx: &mut Context) -> MonthRows {}
+    pub fn monthofweekdayrow_builder(ctx: &mut Context) -> MonthOfWeekdayRow {
+        let now = Local::now();
+        let current_month = now.month();
+        let first_of_month_as_weekday = now.with_day(1).unwrap().weekday();
+        let num_of_days_in_month = match current_month {
+            1 => 31,
+            2 => {
+                if Self::leap_year_determiner() {
+                    29
+                } else {
+                    28
+                }
+            }
+            3 => 31,
+            4 => 30,
+            5 => 31,
+            6 => 30,
+            7 => 31,
+            8 => 31,
+            9 => 30,
+            10 => 31,
+            11 => 30,
+            12 => 31,
+            _ => panic!("Invalid month number."),
+        };
+    }
+
+    fn leap_year_determiner() -> bool {
+        let current_year = Local::now().year();
+        (current_year % 4 == 0) && (current_year % 100 != 0 || current_year % 400 == 0)
+    }
 }
