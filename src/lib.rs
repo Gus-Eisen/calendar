@@ -3,7 +3,7 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use chrono::{Datelike, Local};
+use chrono::{Datelike, Local, Weekday};
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
@@ -47,7 +47,7 @@ pub struct MonthOfWeekdayRow(
     WeekdayRow,
     WeekdayRow,
     WeekdayRow,
-    WeekdayRow,
+    Option<WeekdayRow>,
     Option<WeekdayRow>,
 );
 
@@ -56,19 +56,20 @@ impl OnEvent for MonthOfWeekdayRow {}
 #[derive(Debug, Component)]
 pub struct WeekdayRow(
     Row,
-    Weekday,
-    Weekday,
-    Weekday,
-    Weekday,
-    Weekday,
-    Weekday,
-    Weekday,
+    Weekday_change_this,
+    Weekday_change_this,
+    Weekday_change_this,
+    Weekday_change_this,
+    Weekday_change_this,
+    Weekday_change_this,
+    Weekday_change_this,
 );
 impl OnEvent for WeekdayRow {}
 
+//TODO: struct name conflicts with Chrono's Weekday.
 #[derive(Debug, Component)]
-pub struct Weekday(Stack, Rectangle, Text);
-impl OnEvent for Weekday {}
+pub struct Weekday_change_this(Stack, Rectangle, Text);
+impl OnEvent for Weekday_change_this {}
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
@@ -141,7 +142,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let tue = {
@@ -161,7 +162,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let wed = {
@@ -181,7 +182,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let thu = {
@@ -201,7 +202,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let fri = {
@@ -221,7 +222,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let sat = {
@@ -241,7 +242,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         let sun = {
@@ -261,7 +262,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday(layout, rect, label)
+            Weekday_change_this(layout, rect, label)
         };
 
         WeekdayRow(
@@ -301,6 +302,20 @@ impl MonthScreen {
             12 => 31,
             _ => panic!("Invalid month number."),
         };
+    }
+
+    fn num_of_row_determiner(num_of_days_in_month: i32, first_of_month_as_weekday: Weekday) -> i32 {
+        let offset = match first_of_month_as_weekday {
+            Weekday::Mon => 0,
+            Weekday::Tue => 1,
+            Weekday::Wed => 2,
+            Weekday::Thu => 3,
+            Weekday::Fri => 4,
+            Weekday::Sat => 5,
+            Weekday::Sun => 6,
+        };
+
+        (offset + num_of_days_in_month + 6) / 7
     }
 
     fn leap_year_determiner() -> bool {
