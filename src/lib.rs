@@ -305,6 +305,168 @@ impl MonthScreen {
             Self::num_of_row_determiner(num_of_days_in_month, first_of_month_as_weekday);
 
         //TODO: assemble correct number of unpopulated rectangles here.
+        let myweekday_test1 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test2 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test3 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test4 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test5 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test6 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let myweekday_test7 = {
+            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
+            let label = Text::new(
+                ctx,
+                "Sun",
+                TextSize::Md,
+                TextStyle::Primary,
+                Align::Center,
+                None,
+            );
+            let layout = Stack(
+                Offset::Center,
+                Offset::Center,
+                Size::Fit,
+                Size::Fit,
+                Padding::default(),
+            );
+            MyWeekday(layout, rect, label)
+        };
+
+        let weekdayrow_test = {
+            WeekdayRow(
+                Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
+                myweekday_test1,
+                myweekday_test2,
+                myweekday_test3,
+                myweekday_test4,
+                myweekday_test5,
+                myweekday_test6,
+                myweekday_test7,
+            )
+        };
+
+        MonthOfWeekdayRow(
+            Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
+            weekdayrow_test,
+            weekdayrow_test,
+            weekdayrow_test,
+            weekdayrow_test,
+            None,
+            None,
+        )
     }
 
     fn num_of_row_determiner(num_of_days_in_month: i32, first_of_month_as_weekday: Weekday) -> i32 {
