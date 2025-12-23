@@ -56,20 +56,19 @@ impl OnEvent for MonthOfWeekdayRow {}
 #[derive(Debug, Component)]
 pub struct WeekdayRow(
     Row,
-    Weekday_change_this,
-    Weekday_change_this,
-    Weekday_change_this,
-    Weekday_change_this,
-    Weekday_change_this,
-    Weekday_change_this,
-    Weekday_change_this,
+    MyWeekday,
+    MyWeekday,
+    MyWeekday,
+    MyWeekday,
+    MyWeekday,
+    MyWeekday,
+    MyWeekday,
 );
 impl OnEvent for WeekdayRow {}
 
-//TODO: struct name conflicts with Chrono's Weekday.
 #[derive(Debug, Component)]
-pub struct Weekday_change_this(Stack, Rectangle, Text);
-impl OnEvent for Weekday_change_this {}
+pub struct MyWeekday(Stack, Rectangle, Text);
+impl OnEvent for MyWeekday {}
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
@@ -142,7 +141,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let tue = {
@@ -162,7 +161,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let wed = {
@@ -182,7 +181,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let thu = {
@@ -202,7 +201,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let fri = {
@@ -222,7 +221,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let sat = {
@@ -242,7 +241,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         let sun = {
@@ -262,7 +261,7 @@ impl MonthScreen {
                 Size::Fit,
                 Padding::default(),
             );
-            Weekday_change_this(layout, rect, label)
+            MyWeekday(layout, rect, label)
         };
 
         WeekdayRow(
@@ -302,6 +301,10 @@ impl MonthScreen {
             12 => 31,
             _ => panic!("Invalid month number."),
         };
+        let num_of_rows =
+            Self::num_of_row_determiner(num_of_days_in_month, first_of_month_as_weekday);
+
+        //TODO: assemble correct number of unpopulated rectangles here.
     }
 
     fn num_of_row_determiner(num_of_days_in_month: i32, first_of_month_as_weekday: Weekday) -> i32 {
