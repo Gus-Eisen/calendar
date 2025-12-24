@@ -70,6 +70,28 @@ impl OnEvent for WeekdayRow {}
 pub struct MyWeekday(Stack, Rectangle, Text);
 impl OnEvent for MyWeekday {}
 
+impl MyWeekday {
+    pub fn new(ctx: &mut Context, label: &str, border: Option<(f32, Color)>) -> Self {
+        let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, border);
+        let text = Text::new(
+            ctx,
+            label,
+            TextSize::Md,
+            TextStyle::Primary,
+            Align::Center,
+            None,
+        );
+        let layout = Stack(
+            Offset::Center,
+            Offset::Center,
+            Size::Fit,
+            Size::Fit,
+            Padding::default(),
+        );
+        Self(layout, rect, text)
+    }
+}
+
 // Define the first screen of the app
 #[derive(Debug, Component)]
 pub struct MonthScreen(Row, Page);
