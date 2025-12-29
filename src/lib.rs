@@ -42,7 +42,7 @@ start!(Calendar);
 
 #[derive(Debug, Component)]
 pub struct MonthOfMyWeekdayRow(
-    Row,
+    Column,
     MyWeekdayRow,
     MyWeekdayRow,
     MyWeekdayRow,
@@ -87,7 +87,7 @@ impl OnEvent for MyWeekday {}
 
 impl MyWeekday {
     pub fn new(ctx: &mut Context, label: &str, border: Option<(f32, Color)>) -> Self {
-        let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, border);
+        let rect = Rectangle::new(Color(255, 255, 255, 255), 8.0, border);
         let text = Text::new(
             ctx,
             label,
@@ -99,8 +99,8 @@ impl MyWeekday {
         let layout = Stack(
             Offset::Center,
             Offset::Center,
-            Size::Fit,
-            Size::Fit,
+            Size::Static(40.0),
+            Size::Static(40.0),
             Padding::default(),
         );
         Self(layout, rect, text)
@@ -145,13 +145,18 @@ impl MonthScreen {
         );
 
         let weekday_row = Self::weekday_row_builder(ctx);
+        let month_grid = Self::monthofweekdayrow_builder(ctx);
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(weekday_row), Box::new(new_event_button)],
+            vec![
+                Box::new(weekday_row),
+                Box::new(month_grid),
+                Box::new(new_event_button),
+            ],
         );
 
         Ok(Self(
@@ -161,155 +166,15 @@ impl MonthScreen {
     }
 
     pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
-        let mon = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Mon",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let tue = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Tue",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let wed = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Wed",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let thu = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Thu",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let fri = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Fri",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let sat = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Sat",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let sun = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            mon,
-            tue,
-            wed,
-            thu,
-            fri,
-            sat,
-            sun,
+            MyWeekday::new(ctx, "Mon", None),
+            MyWeekday::new(ctx, "Tue", None),
+            MyWeekday::new(ctx, "Wed", None),
+            MyWeekday::new(ctx, "Thu", None),
+            MyWeekday::new(ctx, "Fri", None),
+            MyWeekday::new(ctx, "Sat", None),
+            MyWeekday::new(ctx, "Sun", None),
         )
     }
 
@@ -377,7 +242,7 @@ impl MonthScreen {
         };
 
         MonthOfMyWeekdayRow(
-            Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
+            Column::new(0.0, Offset::Start, Size::Fit, Padding::default()),
             row1,
             row2,
             row3,
