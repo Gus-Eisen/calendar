@@ -66,6 +66,21 @@ pub struct MyWeekdayRow(
 );
 impl OnEvent for MyWeekdayRow {}
 
+impl MyWeekdayRow {
+    pub fn new(ctx: &mut Context, days: [Option<u32>; 7], today: u32) -> Self {
+        MyWeekdayRow(
+            Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
+            MonthScreen::make_day_cell(ctx, days[0], today),
+            MonthScreen::make_day_cell(ctx, days[1], today),
+            MonthScreen::make_day_cell(ctx, days[2], today),
+            MonthScreen::make_day_cell(ctx, days[3], today),
+            MonthScreen::make_day_cell(ctx, days[4], today),
+            MonthScreen::make_day_cell(ctx, days[5], today),
+            MonthScreen::make_day_cell(ctx, days[6], today),
+        )
+    }
+}
+
 #[derive(Debug, Component)]
 pub struct MyWeekday(Stack, Rectangle, Text);
 impl OnEvent for MyWeekday {}
@@ -300,8 +315,10 @@ impl MonthScreen {
 
     pub fn monthofweekdayrow_builder(ctx: &mut Context) -> MonthOfMyWeekdayRow {
         let now = Local::now();
+        let today = now.day();
         let current_month = now.month();
         let first_of_month_as_weekday = now.with_day(1).unwrap().weekday();
+
         let num_of_days_in_month = match current_month {
             1 => 31,
             2 => {
@@ -323,171 +340,50 @@ impl MonthScreen {
             12 => 31,
             _ => panic!("Invalid month number."),
         };
+
         let num_of_rows =
             Self::num_of_row_determiner(num_of_days_in_month, first_of_month_as_weekday);
 
-        //TODO: assemble correct number of unpopulated rectangles here.
-        let myweekday_test1 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
+        let offset = match first_of_month_as_weekday {
+            Weekday::Mon => 0,
+            Weekday::Tue => 1,
+            Weekday::Wed => 2,
+            Weekday::Thu => 3,
+            Weekday::Fri => 4,
+            Weekday::Sat => 5,
+            Weekday::Sun => 6,
         };
 
-        let myweekday_test2 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
+        let mut day = 1u32;
+        let num_days = num_of_days_in_month as u32;
 
-        let myweekday_test3 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
+        let row1 = Self::build_week_row(ctx, &mut day, num_days, today, 0, offset);
+        let row2 = Self::build_week_row(ctx, &mut day, num_days, today, 1, offset);
+        let row3 = Self::build_week_row(ctx, &mut day, num_days, today, 2, offset);
+        let row4 = Self::build_week_row(ctx, &mut day, num_days, today, 3, offset);
+        let row5 = if num_of_rows >= 5 {
+            Some(Self::build_week_row(
+                ctx, &mut day, num_days, today, 4, offset,
+            ))
+        } else {
+            None
         };
-
-        let myweekday_test4 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let myweekday_test5 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let myweekday_test6 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let myweekday_test7 = {
-            let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, Some((1.0, Color::BLACK)));
-            let label = Text::new(
-                ctx,
-                "Sun",
-                TextSize::Md,
-                TextStyle::Primary,
-                Align::Center,
-                None,
-            );
-            let layout = Stack(
-                Offset::Center,
-                Offset::Center,
-                Size::Fit,
-                Size::Fit,
-                Padding::default(),
-            );
-            MyWeekday(layout, rect, label)
-        };
-
-        let weekdayrow_test = {
-            MyWeekdayRow(
-                Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-                myweekday_test1,
-                myweekday_test2,
-                myweekday_test3,
-                myweekday_test4,
-                myweekday_test5,
-                myweekday_test6,
-                myweekday_test7,
-            )
+        let row6 = if num_of_rows >= 6 {
+            Some(Self::build_week_row(
+                ctx, &mut day, num_days, today, 5, offset,
+            ))
+        } else {
+            None
         };
 
         MonthOfMyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            weekdayrow_test,
-            weekdayrow_test,
-            weekdayrow_test,
-            weekdayrow_test,
-            None,
-            None,
+            row1,
+            row2,
+            row3,
+            row4,
+            row5,
+            row6,
         )
     }
 
@@ -508,5 +404,42 @@ impl MonthScreen {
     fn leap_year_determiner() -> bool {
         let current_year = Local::now().year();
         (current_year % 4 == 0) && (current_year % 100 != 0 || current_year % 400 == 0)
+    }
+
+    fn make_day_cell(ctx: &mut Context, day_opt: Option<u32>, today: u32) -> MyWeekday {
+        match day_opt {
+            Some(day) => {
+                let is_today = day == today;
+                let border = if is_today {
+                    Some((2.0, Color::from_hex("#ff1f84ff", 255)))
+                } else {
+                    Some((1.0, Color::BLACK))
+                };
+                MyWeekday::new(ctx, &day.to_string(), border)
+            }
+            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK))),
+        }
+    }
+
+    fn build_week_row(
+        ctx: &mut Context,
+        day: &mut u32,
+        num_days: u32,
+        today: u32,
+        row_idx: i32,
+        offset: usize,
+    ) -> MyWeekdayRow {
+        let mut days: [Option<u32>; 7] = [None; 7];
+        for col in 0..7 {
+            if row_idx == 0 && col < offset {
+                days[col] = None;
+            } else if *day <= num_days {
+                days[col] = Some(*day);
+                *day += 1;
+            } else {
+                days[col] = None;
+            }
+        }
+        MyWeekdayRow::new(ctx, days, today)
     }
 }
