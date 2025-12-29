@@ -41,20 +41,20 @@ impl Application for Calendar {
 start!(Calendar);
 
 #[derive(Debug, Component)]
-pub struct MonthOfWeekdayRow(
+pub struct MonthOfMyWeekdayRow(
     Row,
-    WeekdayRow,
-    WeekdayRow,
-    WeekdayRow,
-    WeekdayRow,
-    Option<WeekdayRow>,
-    Option<WeekdayRow>,
+    MyWeekdayRow,
+    MyWeekdayRow,
+    MyWeekdayRow,
+    MyWeekdayRow,
+    Option<MyWeekdayRow>,
+    Option<MyWeekdayRow>,
 );
 
-impl OnEvent for MonthOfWeekdayRow {}
+impl OnEvent for MonthOfMyWeekdayRow {}
 
 #[derive(Debug, Component)]
-pub struct WeekdayRow(
+pub struct MyWeekdayRow(
     Row,
     MyWeekday,
     MyWeekday,
@@ -64,7 +64,7 @@ pub struct WeekdayRow(
     MyWeekday,
     MyWeekday,
 );
-impl OnEvent for WeekdayRow {}
+impl OnEvent for MyWeekdayRow {}
 
 #[derive(Debug, Component)]
 pub struct MyWeekday(Stack, Rectangle, Text);
@@ -145,7 +145,7 @@ impl MonthScreen {
         ))
     }
 
-    pub fn weekday_row_builder(ctx: &mut Context) -> WeekdayRow {
+    pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
         let mon = {
             let rect = Rectangle::new(Color(0, 0, 0, 1), 8.0, None);
             let label = Text::new(
@@ -286,7 +286,7 @@ impl MonthScreen {
             MyWeekday(layout, rect, label)
         };
 
-        WeekdayRow(
+        MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
             mon,
             tue,
@@ -298,7 +298,7 @@ impl MonthScreen {
         )
     }
 
-    pub fn monthofweekdayrow_builder(ctx: &mut Context) -> MonthOfWeekdayRow {
+    pub fn monthofweekdayrow_builder(ctx: &mut Context) -> MonthOfMyWeekdayRow {
         let now = Local::now();
         let current_month = now.month();
         let first_of_month_as_weekday = now.with_day(1).unwrap().weekday();
@@ -468,7 +468,7 @@ impl MonthScreen {
         };
 
         let weekdayrow_test = {
-            WeekdayRow(
+            MyWeekdayRow(
                 Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
                 myweekday_test1,
                 myweekday_test2,
@@ -480,7 +480,7 @@ impl MonthScreen {
             )
         };
 
-        MonthOfWeekdayRow(
+        MonthOfMyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
             weekdayrow_test,
             weekdayrow_test,
