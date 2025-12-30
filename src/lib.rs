@@ -295,14 +295,14 @@ impl MonthScreen {
         offset: usize,
     ) -> MyWeekdayRow {
         let mut days: [Option<u32>; 7] = [None; 7];
-        for col in 0..7 {
+        for (col, day_slot) in days.iter_mut().enumerate() {
             if row_idx == 0 && col < offset {
-                days[col] = None;
+                *day_slot = None;
             } else if *day <= num_days {
-                days[col] = Some(*day);
+                *day_slot = Some(*day);
                 *day += 1;
             } else {
-                days[col] = None;
+                *day_slot = None;
             }
         }
         MyWeekdayRow::new(ctx, days, today)
