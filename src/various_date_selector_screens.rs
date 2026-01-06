@@ -15,7 +15,6 @@ pub mod year_selector_screen_block {
 
     use super::*;
 
-    const Y2025: u8 = 0;
     const Y2026: u8 = 1;
 
     #[derive(Debug, Component)]
@@ -34,28 +33,16 @@ pub mod year_selector_screen_block {
             let year_radioselector = RadioSelector::new(
                 ctx,
                 0,
-                vec![
-                    (
-                        "2025",
-                        "",
-                        Box::new(|ctx: &mut Context| {
-                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                                efees.set_year(Y2025);
-                                println!("2025 selected.")
-                            }
-                        }),
-                    ),
-                    (
-                        "2026",
-                        "",
-                        Box::new(|ctx: &mut Context| {
-                            if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
-                                efees.set_year(Y2026);
-                                println!("2026 selected.");
-                            }
-                        }),
-                    ),
-                ],
+                vec![(
+                    "2026",
+                    "",
+                    Box::new(|ctx: &mut Context| {
+                        if let Some(efees) = ctx.state().get_mut::<EventForEES>() {
+                            efees.set_year(Y2026);
+                            println!("2026 selected.");
+                        }
+                    }),
+                )],
             );
 
             let content = Content::new(ctx, Offset::Start, vec![Box::new(year_radioselector)]);
@@ -386,34 +373,6 @@ pub mod day_selector_screen_block {
 
 pub mod time_selector_screen_block {
     use super::*;
-    #[derive(Component, Debug)]
-    pub struct TimeSelectorScreen(Stack, Page);
-
-    impl OnEvent for TimeSelectorScreen {
-        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-            vec![event]
-        }
-    }
-
-    impl AppPage for TimeSelectorScreen {}
-
-    impl TimeSelectorScreen {
-        pub fn new(ctx: &mut Context) -> Self {
-            let time_builder = vec_for_timeselector_builder(ctx);
-            let time_radioselector = RadioSelector::new(ctx, 0, time_builder);
-            let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
-            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("Save Year bumper clicked.")
-            });
-
-            TimeSelectorScreen(
-                Stack::default(),
-                Page::new(Header::stack(ctx, "Select Time"), content, Some(bumper)),
-            )
-        }
-    }
     const TIME_DISPLAYS: [&str; 96] = [
         "12:00 a.m.",
         "12:15 a.m.",
@@ -524,6 +483,35 @@ pub mod time_selector_screen_block {
         "1915", "1930", "1945", "2000", "2015", "2030", "2045", "2100", "2115", "2130", "2145",
         "2200", "2215", "2230", "2245", "2300", "2315", "2330", "2345",
     ];
+
+    #[derive(Component, Debug)]
+    pub struct TimeSelectorScreen(Stack, Page);
+
+    impl OnEvent for TimeSelectorScreen {
+        fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+            vec![event]
+        }
+    }
+
+    impl AppPage for TimeSelectorScreen {}
+
+    impl TimeSelectorScreen {
+        pub fn new(ctx: &mut Context) -> Self {
+            let time_builder = vec_for_timeselector_builder(ctx);
+            let time_radioselector = RadioSelector::new(ctx, 0, time_builder);
+            let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
+            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(ctx));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                println!("Save Year bumper clicked.")
+            });
+
+            TimeSelectorScreen(
+                Stack::default(),
+                Page::new(Header::stack(ctx, "Select Time"), content, Some(bumper)),
+            )
+        }
+    }
 
     fn vec_for_timeselector_builder(
         _ctx: &mut Context,
