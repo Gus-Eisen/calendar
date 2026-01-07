@@ -124,7 +124,11 @@ impl MyWeekdayRow {
 }
 
 #[derive(Debug, Component)]
-pub struct MyWeekday(Stack, Rectangle, Text, Option<Shape>);
+pub struct DayCellContent(Column, Text, Option<Shape>);
+impl OnEvent for DayCellContent {}
+
+#[derive(Debug, Component)]
+pub struct MyWeekday(Stack, Rectangle, DayCellContent);
 impl OnEvent for MyWeekday {}
 
 impl MyWeekday {
@@ -143,6 +147,16 @@ impl MyWeekday {
             Align::Center,
             None,
         );
+        let dot = if has_event {
+            Some(Circle::new(6.0, Color::from_hex("#ff1f84ff", 255), false))
+        } else {
+            None
+        };
+        let content = DayCellContent(
+            Column::new(2.0, Offset::Center, Size::Fit, Padding::default()),
+            text,
+            dot,
+        );
         let layout = Stack(
             Offset::Center,
             Offset::Center,
@@ -150,12 +164,7 @@ impl MyWeekday {
             Size::Static(40.0),
             Padding::default(),
         );
-        let dot = if has_event {
-            Some(Circle::new(6.0, Color::from_hex("#ff1f84ff", 255), false))
-        } else {
-            None
-        };
-        Self(layout, rect, text, dot)
+        Self(layout, rect, content)
     }
 }
 
