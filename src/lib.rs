@@ -35,7 +35,7 @@ impl Application for Calendar {
     }
 
     fn theme(assets: &mut Assets) -> Theme {
-        Theme::light(assets, Color::from_hex("#ff1f84ff", 255))
+        Theme::light(assets, Color::from_hex("#ff0000ff", 255))
     }
 }
 
@@ -148,7 +148,7 @@ impl MyWeekday {
             None,
         );
         let dot = if has_event {
-            Some(Circle::new(6.0, Color::from_hex("#ff1f84ff", 255), false))
+            Some(Circle::new(6.0, Color::from_hex("#ff0000ff", 255), false))
         } else {
             None
         };
@@ -349,7 +349,7 @@ impl MonthScreen {
             Some(day) => {
                 let is_today = day == today;
                 let border = if is_today {
-                    Some((2.0, Color::from_hex("#ff1f84ff", 255)))
+                    Some((2.0, Color::from_hex("#0000ffff", 255)))
                 } else {
                     Some((1.0, Color::BLACK))
                 };
