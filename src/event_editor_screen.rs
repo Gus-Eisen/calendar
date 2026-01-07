@@ -9,6 +9,7 @@ use pelican_ui::layouts::Stack;
 use pelican_ui::{Component, Context};
 
 use crate::objects::{EventForEES, EventForER, EventRegistry};
+use crate::MonthScreen;
 use crate::various_date_selector_screens::day_selector_screen_block::DaySelectorScreen;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::time_selector_screen_block::TimeSelectorScreen;
@@ -179,7 +180,9 @@ impl EventEditorScreen {
                 let event = EventForER::new(title, datetime);
                 let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
                 event_registry.push(Some(event));
+                let page = Box::new(MonthScreen::new(ctx).unwrap());
                 ctx.trigger_event(NavigationEvent::Reset);
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Event button clicked.")
             } else {
                 //TODO: figure out how to create error popup message.
