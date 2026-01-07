@@ -32,7 +32,7 @@ pub mod year_selector_screen_block {
         pub fn new(ctx: &mut Context) -> Self {
             let year_radioselector = RadioSelector::new(
                 ctx,
-                0,
+                usize::MAX,
                 vec![(
                     "2026",
                     "",
@@ -61,6 +61,7 @@ pub mod year_selector_screen_block {
 }
 
 pub mod month_selector_screen_block {
+
     use super::*;
 
     const JAN: u8 = 1;
@@ -91,7 +92,7 @@ pub mod month_selector_screen_block {
         pub fn new(ctx: &mut Context) -> Self {
             let month_radioselector = RadioSelector::new(
                 ctx,
-                0,
+                usize::MAX,
                 vec![
                     (
                         "January",
@@ -366,7 +367,7 @@ pub mod day_selector_screen_block {
                     })
                     .collect();
 
-            RadioSelector::new(ctx, 0, vec_of_radioselector)
+            RadioSelector::new(ctx, usize::MAX, vec_of_radioselector)
         }
     }
 }
@@ -498,7 +499,7 @@ pub mod time_selector_screen_block {
     impl TimeSelectorScreen {
         pub fn new(ctx: &mut Context) -> Self {
             let time_builder = vec_for_timeselector_builder(ctx);
-            let time_radioselector = RadioSelector::new(ctx, 0, time_builder);
+            let time_radioselector = RadioSelector::new(ctx, usize::MAX, time_builder);
             let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
                 let page = Box::new(EventEditorScreen::new(ctx));
