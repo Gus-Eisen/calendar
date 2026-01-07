@@ -188,10 +188,16 @@ impl MonthScreen {
             ctx.state().set(event_registry);
         }
 
+        let now = Local::now();
+        let current_month = now.format("%B").to_string();
+        let current_year = now.year().to_string();
+        let month_and_year = format!("{current_month} {current_year}");
+
         let header = Header::home(
             // The majority of UI components will require the app context.
             ctx, // The text on this header will say "Calendar"
-            "Calendar", None, // There will not be an icon button on this header
+            &month_and_year,
+            None, // There will not be an icon button on this header
         );
 
         let new_event_button = PrimaryButton::new(
