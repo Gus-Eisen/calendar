@@ -3,12 +3,14 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
+use std::collections::HashSet;
+
 use chrono::{Datelike, Local, Weekday};
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
-use pelican_ui::components::{ExpandableText, Rectangle, Text, TextSize, TextStyle};
-use pelican_ui::drawable::{Align, Color};
+use pelican_ui::components::{Circle, ExpandableText, Rectangle, Text, TextSize, TextStyle};
+use pelican_ui::drawable::{Align, Color, Shape};
 use pelican_ui::events::OnEvent;
 use pelican_ui::layouts::{Bin, Column, Offset, Row, Stack};
 use pelican_ui::layouts::{Padding, Size};
@@ -67,26 +69,71 @@ pub struct MyWeekdayRow(
 impl OnEvent for MyWeekdayRow {}
 
 impl MyWeekdayRow {
-    pub fn new(ctx: &mut Context, days: [Option<u32>; 7], today: u32) -> Self {
+    pub fn new(
+        ctx: &mut Context,
+        days: [Option<u32>; 7],
+        today: u32,
+        events: &HashSet<u32>,
+    ) -> Self {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            MonthScreen::make_day_cell(ctx, days[0], today),
-            MonthScreen::make_day_cell(ctx, days[1], today),
-            MonthScreen::make_day_cell(ctx, days[2], today),
-            MonthScreen::make_day_cell(ctx, days[3], today),
-            MonthScreen::make_day_cell(ctx, days[4], today),
-            MonthScreen::make_day_cell(ctx, days[5], today),
-            MonthScreen::make_day_cell(ctx, days[6], today),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[0],
+                today,
+                days[0].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[1],
+                today,
+                days[1].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[2],
+                today,
+                days[2].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[3],
+                today,
+                days[3].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[4],
+                today,
+                days[4].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[5],
+                today,
+                days[5].map_or(false, |d| events.contains(&d)),
+            ),
+            MonthScreen::make_day_cell(
+                ctx,
+                days[6],
+                today,
+                days[6].map_or(false, |d| events.contains(&d)),
+            ),
         )
     }
 }
 
 #[derive(Debug, Component)]
-pub struct MyWeekday(Stack, Rectangle, Text);
+pub struct MyWeekday(Stack, Rectangle, Text, Option<Shape>);
 impl OnEvent for MyWeekday {}
 
 impl MyWeekday {
-    pub fn new(ctx: &mut Context, label: &str, border: Option<(f32, Color)>) -> Self {
+    pub fn new(
+        ctx: &mut Context,
+        label: &str,
+        border: Option<(f32, Color)>,
+        has_event: bool,
+    ) -> Self {
         let rect = Rectangle::new(Color(255, 255, 255, 255), 8.0, border);
         let text = Text::new(
             ctx,
@@ -103,7 +150,12 @@ impl MyWeekday {
             Size::Static(40.0),
             Padding::default(),
         );
-        Self(layout, rect, text)
+        let dot = if has_event {
+            Some(Circle::new(6.0, Color::from_hex("#ff1f84ff", 255), false))
+        } else {
+            None
+        };
+        Self(layout, rect, text, dot)
     }
 }
 
@@ -168,13 +220,13 @@ impl MonthScreen {
     pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            MyWeekday::new(ctx, "Mon", None),
-            MyWeekday::new(ctx, "Tue", None),
-            MyWeekday::new(ctx, "Wed", None),
-            MyWeekday::new(ctx, "Thu", None),
-            MyWeekday::new(ctx, "Fri", None),
-            MyWeekday::new(ctx, "Sat", None),
-            MyWeekday::new(ctx, "Sun", None),
+            MyWeekday::new(ctx, "Mon", None, false),
+            MyWeekday::new(ctx, "Tue", None, false),
+            MyWeekday::new(ctx, "Wed", None, false),
+            MyWeekday::new(ctx, "Thu", None, false),
+            MyWeekday::new(ctx, "Fri", None, false),
+            MyWeekday::new(ctx, "Sat", None, false),
+            MyWeekday::new(ctx, "Sun", None, false),
         )
     }
 
@@ -187,7 +239,7 @@ impl MonthScreen {
         let num_of_days_in_month = match current_month {
             1 => 31,
             2 => {
-                if Self::leap_year_determiner() {
+                if Self::is_leap_year() {
                     29
                 } else {
                     28
@@ -222,20 +274,23 @@ impl MonthScreen {
         let mut day = 1u32;
         let num_days = num_of_days_in_month as u32;
 
-        let row1 = Self::build_week_row(ctx, &mut day, num_days, today, 0, offset);
-        let row2 = Self::build_week_row(ctx, &mut day, num_days, today, 1, offset);
-        let row3 = Self::build_week_row(ctx, &mut day, num_days, today, 2, offset);
-        let row4 = Self::build_week_row(ctx, &mut day, num_days, today, 3, offset);
+        // Placeholder - wire to EventRegistry later
+        let events: HashSet<u32> = HashSet::new();
+
+        let row1 = Self::build_week_row(ctx, &mut day, num_days, today, 0, offset, &events);
+        let row2 = Self::build_week_row(ctx, &mut day, num_days, today, 1, offset, &events);
+        let row3 = Self::build_week_row(ctx, &mut day, num_days, today, 2, offset, &events);
+        let row4 = Self::build_week_row(ctx, &mut day, num_days, today, 3, offset, &events);
         let row5 = if num_of_rows >= 5 {
             Some(Self::build_week_row(
-                ctx, &mut day, num_days, today, 4, offset,
+                ctx, &mut day, num_days, today, 4, offset, &events,
             ))
         } else {
             None
         };
         let row6 = if num_of_rows >= 6 {
             Some(Self::build_week_row(
-                ctx, &mut day, num_days, today, 5, offset,
+                ctx, &mut day, num_days, today, 5, offset, &events,
             ))
         } else {
             None
@@ -266,12 +321,17 @@ impl MonthScreen {
         (offset + num_of_days_in_month + 6) / 7
     }
 
-    fn leap_year_determiner() -> bool {
+    fn is_leap_year() -> bool {
         let current_year = Local::now().year();
         (current_year % 4 == 0) && (current_year % 100 != 0 || current_year % 400 == 0)
     }
 
-    fn make_day_cell(ctx: &mut Context, day_opt: Option<u32>, today: u32) -> MyWeekday {
+    fn make_day_cell(
+        ctx: &mut Context,
+        day_opt: Option<u32>,
+        today: u32,
+        has_event: bool,
+    ) -> MyWeekday {
         match day_opt {
             Some(day) => {
                 let is_today = day == today;
@@ -280,9 +340,9 @@ impl MonthScreen {
                 } else {
                     Some((1.0, Color::BLACK))
                 };
-                MyWeekday::new(ctx, &day.to_string(), border)
+                MyWeekday::new(ctx, &day.to_string(), border, has_event)
             }
-            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK))),
+            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false),
         }
     }
 
@@ -293,6 +353,7 @@ impl MonthScreen {
         today: u32,
         row_idx: i32,
         offset: usize,
+        events: &HashSet<u32>,
     ) -> MyWeekdayRow {
         let mut days: [Option<u32>; 7] = [None; 7];
         for (col, day_slot) in days.iter_mut().enumerate() {
@@ -305,6 +366,6 @@ impl MonthScreen {
                 *day_slot = None;
             }
         }
-        MyWeekdayRow::new(ctx, days, today)
+        MyWeekdayRow::new(ctx, days, today, events)
     }
 }
