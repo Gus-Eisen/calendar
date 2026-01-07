@@ -1,4 +1,6 @@
-use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
+use std::collections::HashSet;
+
+use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
 
 pub enum DayOfWeek {
     Monday,
@@ -108,6 +110,15 @@ impl EventRegistry {
 
     pub fn push(&mut self, event: Option<EventForER>) {
         self.vec_of_events.push(event)
+    }
+
+    pub fn days_with_events(&self, year: i32, month: u32) -> HashSet<u32> {
+        self.vec_of_events
+            .iter()
+            .filter_map(|opt| opt.as_ref())
+            .filter(|event| event.datetime.year() == year && event.datetime.month() == month)
+            .map(|event| event.datetime.day())
+            .collect()
     }
 }
 

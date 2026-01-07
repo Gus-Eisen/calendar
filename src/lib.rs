@@ -274,8 +274,12 @@ impl MonthScreen {
         let mut day = 1u32;
         let num_days = num_of_days_in_month as u32;
 
-        // Placeholder - wire to EventRegistry later
-        let events: HashSet<u32> = HashSet::new();
+        let current_year = now.year();
+        let events = ctx
+            .state()
+            .get::<EventRegistry>()
+            .map(|registry| registry.days_with_events(current_year, current_month))
+            .unwrap_or_default();
 
         let row1 = Self::build_week_row(ctx, &mut day, num_days, today, 0, offset, &events);
         let row2 = Self::build_week_row(ctx, &mut day, num_days, today, 1, offset, &events);
