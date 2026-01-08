@@ -11,7 +11,7 @@ use pelican_ui::components::interface::general::{Content, Header, Interface, Pag
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::{Circle, ExpandableText, Rectangle, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Shape};
-use pelican_ui::events::OnEvent;
+use pelican_ui::events::{Event, MouseEvent, MouseState, OnEvent};
 use pelican_ui::layouts::{Bin, Column, Offset, Row, Stack};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::start;
@@ -128,8 +128,22 @@ pub struct DayCellContent(Column, Text, Option<Shape>);
 impl OnEvent for DayCellContent {}
 
 #[derive(Debug, Component)]
-pub struct MyWeekday(Stack, Rectangle, DayCellContent);
-impl OnEvent for MyWeekday {}
+pub struct MyWeekday(Stack, Rectangle, DayCellContent, #[skip] Option<u32>);
+impl OnEvent for MyWeekday {
+    fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+        if let Some(MouseEvent {
+            state: MouseState::Pressed,
+            position: Some(_),
+        }) = event.downcast_ref::<MouseEvent>()
+        {
+            if let Some(day) = self.3 {
+                println!("Day {} clicked.", day);
+                // _ctx.trigger_event(NavigationEvent::Push(...));
+            }
+        }
+        vec![event]
+    }
+}
 
 impl MyWeekday {
     pub fn new(
@@ -137,6 +151,7 @@ impl MyWeekday {
         label: &str,
         border: Option<(f32, Color)>,
         has_event: bool,
+        day: Option<u32>,
     ) -> Self {
         let rect = Rectangle::new(Color(255, 255, 255, 255), 8.0, border);
         let text = Text::new(
@@ -164,7 +179,7 @@ impl MyWeekday {
             Size::Static(40.0),
             Padding::default(),
         );
-        Self(layout, rect, content)
+        Self(layout, rect, content, day)
     }
 }
 
@@ -195,7 +210,7 @@ impl MonthScreen {
 
         let header = Header::home(
             // The majority of UI components will require the app context.
-            ctx, // The text on this header will say "Calendar"
+            ctx,
             &month_and_year,
             None, // There will not be an icon button on this header
         );
@@ -235,13 +250,13 @@ impl MonthScreen {
     pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            MyWeekday::new(ctx, "Mon", None, false),
-            MyWeekday::new(ctx, "Tue", None, false),
-            MyWeekday::new(ctx, "Wed", None, false),
-            MyWeekday::new(ctx, "Thu", None, false),
-            MyWeekday::new(ctx, "Fri", None, false),
-            MyWeekday::new(ctx, "Sat", None, false),
-            MyWeekday::new(ctx, "Sun", None, false),
+            MyWeekday::new(ctx, "Mon", None, false, None),
+            MyWeekday::new(ctx, "Tue", None, false, None),
+            MyWeekday::new(ctx, "Wed", None, false, None),
+            MyWeekday::new(ctx, "Thu", None, false, None),
+            MyWeekday::new(ctx, "Fri", None, false, None),
+            MyWeekday::new(ctx, "Sat", None, false, None),
+            MyWeekday::new(ctx, "Sun", None, false, None),
         )
     }
 
@@ -359,9 +374,9 @@ impl MonthScreen {
                 } else {
                     Some((1.0, Color::BLACK))
                 };
-                MyWeekday::new(ctx, &day.to_string(), border, has_event)
+                MyWeekday::new(ctx, &day.to_string(), border, has_event, Some(day))
             }
-            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false),
+            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false, None),
         }
     }
 
