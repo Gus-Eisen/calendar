@@ -133,12 +133,11 @@ impl OnEvent for MyWeekday {
             state: MouseState::Pressed,
             position: Some(_),
         }) = event.downcast_ref::<MouseEvent>()
+            && let Some(day) = self.3
         {
-            if let Some(day) = self.3 {
-                println!("Day {} clicked.", day);
-                let page = Box::new(DayViewScreen::new(ctx).unwrap());
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-            }
+            println!("Day {} clicked.", day);
+            let page = Box::new(DayViewScreen::new(ctx).unwrap());
+            ctx.trigger_event(NavigationEvent::Push(Some(page)));
         }
         vec![event]
     }
