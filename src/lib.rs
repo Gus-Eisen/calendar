@@ -72,6 +72,8 @@ impl MyWeekdayRow {
         days: [Option<u32>; 7],
         today: u32,
         events: &HashSet<u32>,
+        year: i32,
+        month: u32,
     ) -> Self {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
@@ -80,42 +82,56 @@ impl MyWeekdayRow {
                 days[0],
                 today,
                 days[0].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[1],
                 today,
                 days[1].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[2],
                 today,
                 days[2].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[3],
                 today,
                 days[3].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[4],
                 today,
                 days[4].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[5],
                 today,
                 days[5].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
             MonthScreen::make_day_cell(
                 ctx,
                 days[6],
                 today,
                 days[6].map_or(false, |d| events.contains(&d)),
+                year,
+                month,
             ),
         )
     }
@@ -126,7 +142,12 @@ pub struct DayCellContent(Column, Text, Option<Shape>);
 impl OnEvent for DayCellContent {}
 
 #[derive(Debug, Component)]
-pub struct MyWeekday(Stack, Rectangle, DayCellContent, #[skip] Option<u32>);
+pub struct MyWeekday(
+    Stack,
+    Rectangle,
+    DayCellContent,
+    #[skip] Option<(i32, u32, u32)>,
+);
 impl OnEvent for MyWeekday {
     fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
         // handles logic for User clicking on day cell.
@@ -134,10 +155,10 @@ impl OnEvent for MyWeekday {
             state: MouseState::Pressed,
             position: Some(_),
         }) = event.downcast_ref::<MouseEvent>()
-            && let Some(day) = self.3
+            && let Some((year, month, day)) = self.3
         {
-            println!("Day {} clicked.", day);
-            let page = Box::new(DayViewScreen::new(ctx).unwrap());
+            println!("Day {}-{}-{} clicked.", year, month, day);
+            let page = Box::new(DayViewScreen::new(ctx, year, month, day).unwrap());
             ctx.trigger_event(NavigationEvent::Push(Some(page)));
         }
         vec![event]
@@ -151,6 +172,8 @@ impl MyWeekday {
         border: Option<(f32, Color)>,
         has_event: bool,
         is_today: bool,
+        year: i32,
+        month: u32,
         day: Option<u32>,
     ) -> Self {
         let background_color = if is_today {
@@ -184,7 +207,8 @@ impl MyWeekday {
             Size::Static(40.0),
             Padding::default(),
         );
-        Self(layout, rect, content, day)
+        let date = day.map(|d| (year, month, d));
+        Self(layout, rect, content, date)
     }
 }
 
@@ -255,13 +279,13 @@ impl MonthScreen {
     pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            MyWeekday::new(ctx, "Mon", None, false, false, None),
-            MyWeekday::new(ctx, "Tue", None, false, false, None),
-            MyWeekday::new(ctx, "Wed", None, false, false, None),
-            MyWeekday::new(ctx, "Thu", None, false, false, None),
-            MyWeekday::new(ctx, "Fri", None, false, false, None),
-            MyWeekday::new(ctx, "Sat", None, false, false, None),
-            MyWeekday::new(ctx, "Sun", None, false, false, None),
+            MyWeekday::new(ctx, "Mon", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Tue", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Wed", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Thu", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Fri", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Sat", None, false, false, 0, 0, None),
+            MyWeekday::new(ctx, "Sun", None, false, false, 0, 0, None),
         )
     }
 
@@ -316,20 +340,76 @@ impl MonthScreen {
             .map(|registry| registry.days_with_events(current_year, current_month))
             .unwrap_or_default();
 
-        let row1 = Self::build_week_row(ctx, &mut day, num_days, today, 0, offset, &events);
-        let row2 = Self::build_week_row(ctx, &mut day, num_days, today, 1, offset, &events);
-        let row3 = Self::build_week_row(ctx, &mut day, num_days, today, 2, offset, &events);
-        let row4 = Self::build_week_row(ctx, &mut day, num_days, today, 3, offset, &events);
+        let row1 = Self::build_week_row(
+            ctx,
+            &mut day,
+            num_days,
+            today,
+            0,
+            offset,
+            &events,
+            current_year,
+            current_month,
+        );
+        let row2 = Self::build_week_row(
+            ctx,
+            &mut day,
+            num_days,
+            today,
+            1,
+            offset,
+            &events,
+            current_year,
+            current_month,
+        );
+        let row3 = Self::build_week_row(
+            ctx,
+            &mut day,
+            num_days,
+            today,
+            2,
+            offset,
+            &events,
+            current_year,
+            current_month,
+        );
+        let row4 = Self::build_week_row(
+            ctx,
+            &mut day,
+            num_days,
+            today,
+            3,
+            offset,
+            &events,
+            current_year,
+            current_month,
+        );
         let row5 = if num_of_rows >= 5 {
             Some(Self::build_week_row(
-                ctx, &mut day, num_days, today, 4, offset, &events,
+                ctx,
+                &mut day,
+                num_days,
+                today,
+                4,
+                offset,
+                &events,
+                current_year,
+                current_month,
             ))
         } else {
             None
         };
         let row6 = if num_of_rows >= 6 {
             Some(Self::build_week_row(
-                ctx, &mut day, num_days, today, 5, offset, &events,
+                ctx,
+                &mut day,
+                num_days,
+                today,
+                5,
+                offset,
+                &events,
+                current_year,
+                current_month,
             ))
         } else {
             None
@@ -370,6 +450,8 @@ impl MonthScreen {
         day_opt: Option<u32>,
         today: u32,
         has_event: bool,
+        year: i32,
+        month: u32,
     ) -> MyWeekday {
         match day_opt {
             Some(day) => {
@@ -381,10 +463,21 @@ impl MonthScreen {
                     border,
                     has_event,
                     is_today,
+                    year,
+                    month,
                     Some(day),
                 )
             }
-            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false, false, None),
+            None => MyWeekday::new(
+                ctx,
+                "",
+                Some((1.0, Color::BLACK)),
+                false,
+                false,
+                year,
+                month,
+                None,
+            ),
         }
     }
 
@@ -396,6 +489,8 @@ impl MonthScreen {
         row_idx: i32,
         offset: usize,
         events: &HashSet<u32>,
+        year: i32,
+        month: u32,
     ) -> MyWeekdayRow {
         let mut days: [Option<u32>; 7] = [None; 7];
         for (col, day_slot) in days.iter_mut().enumerate() {
@@ -408,6 +503,6 @@ impl MonthScreen {
                 *day_slot = None;
             }
         }
-        MyWeekdayRow::new(ctx, days, today, events)
+        MyWeekdayRow::new(ctx, days, today, events, year, month)
     }
 }

@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
@@ -14,11 +16,14 @@ impl OnEvent for DayViewScreen {}
 impl AppPage for DayViewScreen {}
 
 impl DayViewScreen {
-    pub fn new(ctx: &mut Context) -> Result<Self, String> {
+    pub fn new(ctx: &mut Context, year: i32, month: u32, day: u32) -> Result<Self, String> {
+        let month_for_header = Self::month_name(month).unwrap();
+        let title = format!("{} {}, {}", month_for_header, day, year);
+        println!("DEBUG HEADER: '{}'", title);
         let header = Header::home(
             // The majority of UI components will require the app context.
             ctx,
-            "placeholder",
+            &format!("{} {}, {}", month_for_header, day, year),
             None, // There will not be an icon button on this header
         );
 
@@ -44,5 +49,24 @@ impl DayViewScreen {
             Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
             Page::new(header, content, None),
         ))
+    }
+
+    pub fn month_name(month: u32) -> Option<&'static str> {
+        const MONTHS: [&str; 12] = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ];
+
+        MONTHS.get((month - 1) as usize).copied()
     }
 }
