@@ -129,6 +129,7 @@ impl OnEvent for DayCellContent {}
 pub struct MyWeekday(Stack, Rectangle, DayCellContent, #[skip] Option<u32>);
 impl OnEvent for MyWeekday {
     fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+        // handles logic for User clicking on day cell.
         if let Some(MouseEvent {
             state: MouseState::Pressed,
             position: Some(_),
@@ -149,9 +150,15 @@ impl MyWeekday {
         label: &str,
         border: Option<(f32, Color)>,
         has_event: bool,
+        is_today: bool,
         day: Option<u32>,
     ) -> Self {
-        let rect = Rectangle::new(Color(255, 255, 255, 255), 8.0, border);
+        let background_color = if is_today {
+            Color::from_hex("#b3e0f2", 235)
+        } else {
+            Color(255, 255, 255, 255)
+        };
+        let rect = Rectangle::new(background_color, 8.0, border);
         let text = Text::new(
             ctx,
             label,
@@ -248,13 +255,13 @@ impl MonthScreen {
     pub fn weekday_row_builder(ctx: &mut Context) -> MyWeekdayRow {
         MyWeekdayRow(
             Row::new(0.0, Offset::Start, Size::Fit, Padding::default()),
-            MyWeekday::new(ctx, "Mon", None, false, None),
-            MyWeekday::new(ctx, "Tue", None, false, None),
-            MyWeekday::new(ctx, "Wed", None, false, None),
-            MyWeekday::new(ctx, "Thu", None, false, None),
-            MyWeekday::new(ctx, "Fri", None, false, None),
-            MyWeekday::new(ctx, "Sat", None, false, None),
-            MyWeekday::new(ctx, "Sun", None, false, None),
+            MyWeekday::new(ctx, "Mon", None, false, false, None),
+            MyWeekday::new(ctx, "Tue", None, false, false, None),
+            MyWeekday::new(ctx, "Wed", None, false, false, None),
+            MyWeekday::new(ctx, "Thu", None, false, false, None),
+            MyWeekday::new(ctx, "Fri", None, false, false, None),
+            MyWeekday::new(ctx, "Sat", None, false, false, None),
+            MyWeekday::new(ctx, "Sun", None, false, false, None),
         )
     }
 
@@ -367,14 +374,17 @@ impl MonthScreen {
         match day_opt {
             Some(day) => {
                 let is_today = day == today;
-                let border = if is_today {
-                    Some((2.0, Color::from_hex("#0c95bf", 255)))
-                } else {
-                    Some((1.0, Color::BLACK))
-                };
-                MyWeekday::new(ctx, &day.to_string(), border, has_event, Some(day))
+                let border = Some((1.0, Color::BLACK));
+                MyWeekday::new(
+                    ctx,
+                    &day.to_string(),
+                    border,
+                    has_event,
+                    is_today,
+                    Some(day),
+                )
             }
-            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false, None),
+            None => MyWeekday::new(ctx, "", Some((1.0, Color::BLACK)), false, false, None),
         }
     }
 
