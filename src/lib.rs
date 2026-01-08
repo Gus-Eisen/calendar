@@ -9,26 +9,24 @@ use chrono::{Datelike, Local, Weekday};
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
-use pelican_ui::components::{Circle, ExpandableText, Rectangle, Text, TextSize, TextStyle};
+use pelican_ui::components::{Circle, Rectangle, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Shape};
 use pelican_ui::events::{Event, MouseEvent, MouseState, OnEvent};
-use pelican_ui::layouts::{Bin, Column, Offset, Row, Stack};
+use pelican_ui::layouts::{Column, Offset, Row, Stack};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
 use pelican_ui::{Application, Assets, Component, Context};
 
+use crate::day_view_screen::DayViewScreen;
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::{EventForEES, EventForER, EventRegistry};
+use crate::objects::{EventForEES, EventRegistry};
 
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
 
 impl Application for Calendar {
     fn interface(ctx: &mut Context) -> Interface {
-        ////TODO: initialize all state objects in interface().
-        // ctx.state().set(AllOrders::default());
-
         let home = RootInfo::icon("home", "My Calendar", MonthScreen::new(ctx).ok().unwrap());
 
         Interface::new(ctx, vec![home])
@@ -130,7 +128,7 @@ impl OnEvent for DayCellContent {}
 #[derive(Debug, Component)]
 pub struct MyWeekday(Stack, Rectangle, DayCellContent, #[skip] Option<u32>);
 impl OnEvent for MyWeekday {
-    fn on_event(&mut self, _ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
+    fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
         if let Some(MouseEvent {
             state: MouseState::Pressed,
             position: Some(_),
@@ -138,7 +136,8 @@ impl OnEvent for MyWeekday {
         {
             if let Some(day) = self.3 {
                 println!("Day {} clicked.", day);
-                // _ctx.trigger_event(NavigationEvent::Push(...));
+                let page = Box::new(DayViewScreen::new(ctx).unwrap());
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
             }
         }
         vec![event]
