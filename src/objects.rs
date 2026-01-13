@@ -130,7 +130,8 @@ impl EventRegistry {
     }
 
     pub fn events_for_day(&self, year: i32, month: u32, day: u32) -> Vec<&EventForER> {
-        self.vec_of_events
+        let mut events: Vec<&EventForER> = self
+            .vec_of_events
             .iter()
             .filter_map(|opt| opt.as_ref())
             .filter(|event| {
@@ -138,7 +139,9 @@ impl EventRegistry {
                     && event.datetime.month() == month
                     && event.datetime.day() == day
             })
-            .collect()
+            .collect();
+        events.sort_by_key(|event| event.datetime);
+        events
     }
 }
 

@@ -26,14 +26,7 @@ impl DayViewScreen {
 
         // Debug: print events found
         for event in &events {
-            println!(
-                "Event on {}-{}-{}: {} at {}",
-                year,
-                month,
-                day,
-                event.title(),
-                event.datetime()
-            );
+            println!("Event: '{}' on {}", event.title(), event.datetime());
         }
 
         let month_for_header = Self::month_name(month).unwrap();
