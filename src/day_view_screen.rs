@@ -1,3 +1,5 @@
+use chrono::Timelike;
+use pelican_ui::components::Text;
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
@@ -6,7 +8,7 @@ use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::{Component, Context};
 
-use crate::objects::EventRegistry;
+use crate::objects::{EventForER, EventRegistry};
 
 #[derive(Debug, Component)]
 pub struct DayViewScreen(Column, Page);
@@ -75,5 +77,23 @@ impl DayViewScreen {
         ];
 
         MONTHS.get((month - 1) as usize).copied()
+    }
+
+    pub fn vec_of_text(ctx: &mut Context, events: Vec<&EventForER>) -> Vec<Text> {
+        let mut texts = Vec::new();
+        for event in events {
+            let dt = event.datetime();
+            let label = format!("{:02}:{:02} - {}", dt.hour(), dt.minute(), event.title());
+            let text = Text::new(
+                ctx,
+                &label,
+                pelican_ui::components::TextSize::Md,
+                pelican_ui::components::TextStyle::Primary,
+                pelican_ui::drawable::Align::Left,
+                None,
+            );
+            texts.push(text);
+        }
+        texts
     }
 }
