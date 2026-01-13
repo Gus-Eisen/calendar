@@ -96,6 +96,14 @@ impl EventForER {
     pub fn new(title: String, datetime: DateTime<Utc>) -> Self {
         Self { title, datetime }
     }
+
+    pub fn title(&self) -> &str {
+        &self.title
+    }
+
+    pub fn datetime(&self) -> DateTime<Utc> {
+        self.datetime
+    }
 }
 
 #[derive(Debug)]
@@ -118,6 +126,18 @@ impl EventRegistry {
             .filter_map(|opt| opt.as_ref())
             .filter(|event| event.datetime.year() == year && event.datetime.month() == month)
             .map(|event| event.datetime.day())
+            .collect()
+    }
+
+    pub fn events_for_day(&self, year: i32, month: u32, day: u32) -> Vec<&EventForER> {
+        self.vec_of_events
+            .iter()
+            .filter_map(|opt| opt.as_ref())
+            .filter(|event| {
+                event.datetime.year() == year
+                    && event.datetime.month() == month
+                    && event.datetime.day() == day
+            })
             .collect()
     }
 }
