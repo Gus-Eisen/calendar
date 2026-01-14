@@ -20,7 +20,7 @@ impl AppPage for DayViewScreen {}
 
 impl DayViewScreen {
     pub fn new(ctx: &mut Context, year: i32, month: u32, day: u32) -> Result<Self, String> {
-        // Query EventRegistry for events on this day (clone data to release borrow)
+        // Query EventRegistry for events on this day (clone data to defeat borrow checker)
         let events: Vec<(String, DateTime<Utc>)> = ctx
             .state()
             .get::<EventRegistry>()
@@ -91,12 +91,7 @@ impl DayViewScreen {
         let mut texts = Vec::new();
         for (title, datetime) in events {
             let local_datetime = datetime.with_timezone(&Local);
-            let label = format!(
-                "{:02}:{:02} - {}",
-                local_datetime.hour(),
-                local_datetime.minute(),
-                title
-            );
+            let label = format!("{} - {}", local_datetime.format("%I:%M %p"), title);
             let text = Text::new(
                 ctx,
                 &label,
