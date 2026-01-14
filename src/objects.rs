@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
 use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
+use pelican_ui::{components::{interface::general::HeaderIcon, ExpandableText}, events::OnEvent, Context};
 
 pub enum DayOfWeek {
     Monday,
@@ -290,4 +291,13 @@ impl EventForEES {
         self.day = None;
         self.time = None;
     }
+}
+
+#[derive(Debug, Component)]
+pub struct CustomHeaderForMonthScreen(Row, HeaderIcon, ExpandableText, HeaderIcon);
+
+impl OnEvent for CustomHeaderForMonthScreen {}
+
+impl CustomHeaderForMonthScreen {
+    pub fn new(ctx: &mut Context, title: &str, left_icon: &'static str, left_callback: impl FnMut)
 }
