@@ -1,4 +1,4 @@
-use chrono::{DateTime, Timelike, Utc};
+use chrono::{DateTime, Local, Timelike, Utc};
 use pelican_ui::components::Text;
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Page};
@@ -90,10 +90,11 @@ impl DayViewScreen {
     pub fn vec_of_text(ctx: &mut Context, events: Vec<(String, DateTime<Utc>)>) -> Vec<Text> {
         let mut texts = Vec::new();
         for (title, datetime) in events {
+            let local_datetime = datetime.with_timezone(&Local);
             let label = format!(
                 "{:02}:{:02} - {}",
-                datetime.hour(),
-                datetime.minute(),
+                local_datetime.hour(),
+                local_datetime.minute(),
                 title
             );
             let text = Text::new(
