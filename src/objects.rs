@@ -1,7 +1,13 @@
 use std::collections::HashSet;
 
 use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
-use pelican_ui::{components::{interface::general::HeaderIcon, ExpandableText}, events::OnEvent, Context};
+use pelican_ui::{
+    Component, Context,
+    components::{ExpandableText, TextStyle, interface::general::HeaderIcon},
+    drawable::Align,
+    events::OnEvent,
+    layouts::{Offset, Row, Size},
+};
 
 pub enum DayOfWeek {
     Monday,
@@ -299,5 +305,32 @@ pub struct CustomHeaderForMonthScreen(Row, HeaderIcon, ExpandableText, HeaderIco
 impl OnEvent for CustomHeaderForMonthScreen {}
 
 impl CustomHeaderForMonthScreen {
-    pub fn new(ctx: &mut Context, title: &str, left_icon: &'static str, left_callback: impl FnMut)
+    pub fn new(
+        ctx: &mut Context,
+        title: &str,
+        left_icon: &'static str,
+        left_callback: impl FnMut(&mut Context) + 'static,
+        right_icon: &'static str,
+        right_callback: impl FnMut(&mut Context) + 'static,
+    ) -> Self {
+        let text = ExpandableText::new(
+            ctx,
+            title,
+            pelican_ui::components::TextSize::H4,
+            TextStyle::Heading,
+            Align::Center,
+            Some(1),
+        );
+        let left = HeaderIcon::new(ctx, left_icon, left_callback);
+        let right = HeaderIcon::new(ctx, right_icon, right_callback);
+
+        let layout = Row::new(
+            16.0,
+            Offset::Center,
+            Size::Fit,
+            pelican_ui::layouts::Padding(24.0, 16.0, 24.0, 16.0),
+        );
+
+        CustomHeaderForMonthScreen(layout, left, text, right)
+    }
 }
