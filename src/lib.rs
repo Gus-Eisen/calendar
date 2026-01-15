@@ -7,7 +7,7 @@ use std::collections::HashSet;
 
 use chrono::{Datelike, Local, Weekday};
 use pelican_ui::components::button::PrimaryButton;
-use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
+use pelican_ui::components::interface::general::{Content, Interface};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::{Circle, Rectangle, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Shape};
@@ -20,7 +20,9 @@ use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::day_view_screen::DayViewScreen;
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::{EventForEES, EventRegistry};
+use crate::objects::{
+    CustomHeaderForMonthScreen, CustomPageForMonthScreen, EventForEES, EventRegistry,
+};
 
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
@@ -214,7 +216,7 @@ impl MyWeekday {
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
-pub struct MonthScreen(Row, Page);
+pub struct MonthScreen(Row, CustomPageForMonthScreen);
 
 impl OnEvent for MonthScreen {}
 
@@ -237,11 +239,13 @@ impl MonthScreen {
         let current_year = now.year().to_string();
         let month_and_year = format!("{current_month} {current_year}");
 
-        let header = Header::home(
-            // The majority of UI components will require the app context.
+        let header = CustomHeaderForMonthScreen::new(
             ctx,
             &month_and_year,
-            None, // There will not be an icon button on this header
+            "left",
+            |_ctx| { /* TODO: go to previous month */ },
+            "right",
+            |_ctx| { /* TODO: go to next month */ },
         );
 
         let new_event_button = PrimaryButton::new(
@@ -272,7 +276,7 @@ impl MonthScreen {
 
         Ok(Self(
             Row::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
-            Page::new(header, content, None),
+            CustomPageForMonthScreen::new(header, content),
         ))
     }
 

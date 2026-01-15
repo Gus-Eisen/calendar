@@ -3,10 +3,13 @@ use std::collections::HashSet;
 use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
 use pelican_ui::{
     Component, Context,
-    components::{ExpandableText, TextStyle, interface::general::HeaderIcon},
+    components::{
+        Text, TextSize, TextStyle,
+        interface::general::{Content, HeaderIcon},
+    },
     drawable::Align,
     events::OnEvent,
-    layouts::{Offset, Row, Size},
+    layouts::{Column, Offset, Padding, Row, Size},
 };
 
 pub enum DayOfWeek {
@@ -300,7 +303,7 @@ impl EventForEES {
 }
 
 #[derive(Debug, Component)]
-pub struct CustomHeaderForMonthScreen(Row, HeaderIcon, ExpandableText, HeaderIcon);
+pub struct CustomHeaderForMonthScreen(Row, HeaderIcon, Text, HeaderIcon);
 
 impl OnEvent for CustomHeaderForMonthScreen {}
 
@@ -313,13 +316,13 @@ impl CustomHeaderForMonthScreen {
         right_icon: &'static str,
         right_callback: impl FnMut(&mut Context) + 'static,
     ) -> Self {
-        let text = ExpandableText::new(
+        let text = Text::new(
             ctx,
             title,
-            pelican_ui::components::TextSize::H4,
+            TextSize::H4,
             TextStyle::Heading,
             Align::Center,
-            Some(1),
+            None,
         );
         let left = HeaderIcon::new(ctx, left_icon, left_callback);
         let right = HeaderIcon::new(ctx, right_icon, right_callback);
@@ -328,9 +331,25 @@ impl CustomHeaderForMonthScreen {
             16.0,
             Offset::Center,
             Size::Fit,
-            pelican_ui::layouts::Padding(24.0, 16.0, 24.0, 16.0),
+            Padding(24.0, 16.0, 24.0, 16.0),
         );
 
         CustomHeaderForMonthScreen(layout, left, text, right)
+    }
+}
+
+#[derive(Debug, Component)]
+pub struct CustomPageForMonthScreen(Column, CustomHeaderForMonthScreen, Content);
+
+impl OnEvent for CustomPageForMonthScreen {}
+
+impl CustomPageForMonthScreen {
+    pub fn new(header: CustomHeaderForMonthScreen, content: Content) -> Self {
+        let width = Size::custom(move |widths: Vec<(f32, f32)>| (widths[0].0, f32::MAX));
+        CustomPageForMonthScreen(
+            Column::new(12.0, Offset::Center, width, Padding::default()),
+            header,
+            content,
+        )
     }
 }
