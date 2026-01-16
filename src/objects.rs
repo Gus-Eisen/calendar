@@ -302,6 +302,7 @@ impl EventForEES {
     }
 }
 
+// Checkpoint before UI refactor.
 #[derive(Debug, Component)]
 pub struct CustomHeaderForMonthScreen(Row, HeaderIcon, Text, HeaderIcon);
 
