@@ -216,7 +216,7 @@ impl MyWeekday {
 
 // Define the first screen of the app
 #[derive(Debug, Component)]
-pub struct MonthScreen(Row, Page);
+pub struct MonthScreen(Column, Page);
 
 impl OnEvent for MonthScreen {}
 
@@ -234,41 +234,32 @@ impl MonthScreen {
             ctx.state().set(event_registry);
         }
 
-        let now = Local::now();
-        let current_month = now.format("%B").to_string();
-        let current_year = now.year().to_string();
-        let month_and_year = format!("{current_month} {current_year}");
-
         let header = Header::home(ctx, "Calendar", None);
 
-        let new_event_button = PrimaryButton::new(
-            ctx,
-            "Create New Event",
-            |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("Create New Event button clicked.")
-            },
-            false,
-        );
+        // let now = Local::now();
+        // let current_month = now.format("%B").to_string();
+        // let current_year = now.year().to_string();
+        // let month_and_year = format!("{current_month} {current_year}");
 
-        let weekday_row = Self::weekday_row_builder(ctx);
-        let month_grid = Self::monthofweekdayrow_builder(ctx);
+        let placeholder = Text::new(
+            ctx,
+            "placeholder",
+            TextSize::H2,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![
-                Box::new(weekday_row),
-                Box::new(month_grid),
-                Box::new(new_event_button),
-            ],
+            vec![Box::new(placeholder)],
         );
 
         Ok(Self(
-            Row::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
+            Column::new(1.0, Offset::Start, Size::Fit, Padding(1.0, 1.0, 1.0, 1.0)),
             Page::new(header, content, None),
         ))
     }
