@@ -59,21 +59,12 @@ impl MonthScreen {
             ctx.state().set(event_registry);
         }
 
-        let header = Header::home(ctx, "Calendar", None);
-
         let now = Local::now();
         // let current_month = now.format("%B").to_string();
         // let current_year = now.year().to_string();
         // let month_and_year = format!("{current_month} {current_year}");
 
-        let placeholder = Text::new(
-            ctx,
-            "placeholder",
-            TextSize::H2,
-            TextStyle::Secondary,
-            Align::Left,
-            None,
-        );
+        let header = Header::home(ctx, "Calendar", None);
 
         let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx, now));
 
@@ -82,7 +73,7 @@ impl MonthScreen {
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(placeholder), Box::new(listitemgroup)],
+            vec![Box::new(listitemgroup)],
         );
 
         Ok(Self(
@@ -92,27 +83,8 @@ impl MonthScreen {
     }
     // iterate over a month range (1-31), create a ListItem, then collect into a vec.
     fn listitem_builder(ctx: &mut Context, now: chrono::DateTime<chrono::Local>) -> Vec<ListItem> {
-        // determine current month of User for use in `range`.
-        let month = now.month();
-        // HACK: Refactor nested if statement into match.
         // create range for use in vec_of_listitem.
-        let range = {
-            // only Feb changes the amt of days in event of leap year (28 -> 29).
-            if month != 2 {
-                println!(
-                    "DEBUG num_of_days_in_month(): `{}`",
-                    Self::num_of_days_in_month(month)
-                );
-                Self::num_of_days_in_month(month)
-            } else {
-                // check if `now` is leap year.
-                if Self::is_leap_year(now.year()) {
-                    29
-                } else {
-                    28
-                }
-            }
-        };
+        let range = Self::num_of_days_in_month(now);
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
@@ -137,9 +109,16 @@ impl MonthScreen {
 
     /* WARNING! This method intentionally does not cover Month 2 (Feb), as num of days can vary if leap
     year.*/
-    fn num_of_days_in_month(month: u32) -> i32 {
-        match month {
+    pub fn num_of_days_in_month(now: chrono::DateTime<chrono::Local>) -> i32 {
+        match now.month() {
             1 => 31,
+            2 => {
+                if Self::is_leap_year(now.year()) {
+                    29
+                } else {
+                    28
+                }
+            }
             3 => 31,
             4 => 30,
             5 => 31,
