@@ -3,12 +3,11 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use std::collections::HashSet;
-
 use chrono::{Datelike, Local, Weekday};
 use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
+use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
 use pelican_ui::components::{Circle, Rectangle, Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Align, Color, Shape};
 use pelican_ui::events::{Event, MouseEvent, MouseState, OnEvent};
@@ -78,18 +77,44 @@ impl MonthScreen {
             None,
         );
 
+        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx));
+
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(placeholder)],
+            vec![Box::new(placeholder), Box::new(listitemgroup)],
         );
 
         Ok(Self(
             Column::new(1.0, Offset::Start, Size::Fit, Padding(1.0, 1.0, 1.0, 1.0)),
             Page::new(header, content, None),
         ))
+    }
+
+    fn listitem_builder(ctx: &mut Context) -> Vec<ListItem> {
+        let list_item = ListItem::new(
+            ctx,
+            None,
+            ListItemInfoLeft::new(
+                "LIIL Title",
+                "LIIL Subtitle",
+                Some("LIIL Description"),
+                None,
+            ),
+            None,
+            None,
+            None,
+            |_| {},
+        );
+        vec![list_item]
+    }
+
+    // TODO: create listitem_builder() and pass in here. Delete this function when implemeneting in
+    // new().
+    fn listitemgroup_builder(ctx: &mut Context, list_item: Vec<ListItem>) -> ListItemGroup {
+        ListItemGroup::new(list_item)
     }
 
     fn is_leap_year() -> bool {
