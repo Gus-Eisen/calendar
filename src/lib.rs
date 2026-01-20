@@ -19,9 +19,7 @@ use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::day_view_screen::DayViewScreen;
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::{
-    CustomHeaderForMonthScreen, CustomPageForMonthScreen, EventForEES, EventRegistry,
-};
+use crate::objects::{EventForEES, EventRegistry};
 
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
@@ -63,7 +61,7 @@ impl MonthScreen {
 
         let header = Header::home(ctx, "Calendar", None);
 
-        // let now = Local::now();
+        let now = Local::now();
         // let current_month = now.format("%B").to_string();
         // let current_year = now.year().to_string();
         // let month_and_year = format!("{current_month} {current_year}");
@@ -77,7 +75,7 @@ impl MonthScreen {
             None,
         );
 
-        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx));
+        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx, now));
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
@@ -92,33 +90,64 @@ impl MonthScreen {
             Page::new(header, content, None),
         ))
     }
+    // iterate over a month range (1-31), create a ListItem, then collect into a vec.
+    fn listitem_builder(ctx: &mut Context, now: chrono::DateTime<chrono::Local>) -> Vec<ListItem> {
+        // determine current month of User for use in `range`.
+        let month = now.month();
+        // HACK: Refactor nested if statement into match.
+        // create range for use in vec_of_listitem.
+        let range = {
+            // only Feb changes the amt of days in event of leap year (28 -> 29).
+            if month != 2 {
+                println!("DEBUG range: `{}`", month);
+                Self::num_of_days_in_month(month)
+            } else {
+                // check if `now` is leap year.
+                if Self::is_leap_year(now.year()) {
+                    29
+                } else {
+                    28
+                }
+            }
+        };
 
-    fn listitem_builder(ctx: &mut Context) -> Vec<ListItem> {
-        let list_item = ListItem::new(
-            ctx,
-            None,
-            ListItemInfoLeft::new(
-                "LIIL Title",
-                "LIIL Subtitle",
-                Some("LIIL Description"),
-                None,
-            ),
-            None,
-            None,
-            None,
-            |_| {},
-        );
-        vec![list_item]
+        let vec_of_listitem: Vec<ListItem> = (1..=range)
+            .map(|d| {
+                ListItem::new(
+                    ctx,
+                    None,
+                    ListItemInfoLeft::new(&d.to_string(), "", None, None),
+                    None,
+                    None,
+                    None,
+                    |_| {},
+                )
+            })
+            .collect();
+
+        vec_of_listitem
     }
 
-    // TODO: create listitem_builder() and pass in here. Delete this function when implemeneting in
-    // new().
-    fn listitemgroup_builder(ctx: &mut Context, list_item: Vec<ListItem>) -> ListItemGroup {
-        ListItemGroup::new(list_item)
+    fn is_leap_year(year: i32) -> bool {
+        (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
     }
 
-    fn is_leap_year() -> bool {
-        let current_year = Local::now().year();
-        (current_year % 4 == 0) && (current_year % 100 != 0 || current_year % 400 == 0)
+    /* WARNING! This method intentionally does not cover Month 2 (Feb), as num of days can vary if leap
+    year.*/
+    fn num_of_days_in_month(month: u32) -> i32 {
+        match month {
+            1 => 31,
+            3 => 31,
+            4 => 30,
+            5 => 31,
+            6 => 30,
+            7 => 31,
+            8 => 31,
+            9 => 30,
+            10 => 31,
+            11 => 30,
+            12 => 31,
+            _ => panic!("Something went wrong with num_of_days_in_month()."),
+        }
     }
 }
