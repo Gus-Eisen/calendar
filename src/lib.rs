@@ -81,6 +81,7 @@ impl MonthScreen {
             Page::new(header, content, None),
         ))
     }
+
     // iterate over a month range (1-31), create a ListItem, then collect into a vec.
     fn listitem_builder(ctx: &mut Context, now: chrono::DateTime<chrono::Local>) -> Vec<ListItem> {
         // create range for use in vec_of_listitem.
@@ -88,10 +89,12 @@ impl MonthScreen {
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
+                let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                println!("DEBUG day_of_week: `{}`", day_of_week);
                 ListItem::new(
                     ctx,
                     None,
-                    ListItemInfoLeft::new(&d.to_string(), "", None, None),
+                    ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
                     None,
                     None,
                     None,
@@ -107,8 +110,6 @@ impl MonthScreen {
         (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
     }
 
-    /* WARNING! This method intentionally does not cover Month 2 (Feb), as num of days can vary if leap
-    year.*/
     pub fn num_of_days_in_month(now: chrono::DateTime<chrono::Local>) -> i32 {
         match now.month() {
             1 => 31,
