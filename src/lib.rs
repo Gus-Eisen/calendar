@@ -99,7 +99,10 @@ impl MonthScreen {
         let range = {
             // only Feb changes the amt of days in event of leap year (28 -> 29).
             if month != 2 {
-                println!("DEBUG range: `{}`", month);
+                println!(
+                    "DEBUG num_of_days_in_month(): `{}`",
+                    Self::num_of_days_in_month(month)
+                );
                 Self::num_of_days_in_month(month)
             } else {
                 // check if `now` is leap year.
