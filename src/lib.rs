@@ -77,7 +77,7 @@ impl MonthScreen {
         );
 
         Ok(Self(
-            Column::new(1.0, Offset::Start, Size::Fit, Padding(1.0, 1.0, 1.0, 1.0)),
+            Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
             Page::new(header, content, None),
         ))
     }
@@ -89,7 +89,12 @@ impl MonthScreen {
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
+                /* I need to figure out how to pass in year (i32), month(u32) and day(u32) info for use in
+                 * DayViewScreen::new() */
                 let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                let day_of_month = d as u32;
+                let month = now.month();
+                let year = now.year();
                 println!("DEBUG day_of_week: `{}`", day_of_week);
                 ListItem::new(
                     ctx,
@@ -98,7 +103,11 @@ impl MonthScreen {
                     None,
                     None,
                     None,
-                    |_| {},
+                    move |ctx: &mut Context| {
+                        let page =
+                            Box::new(DayViewScreen::new(ctx, year, month, day_of_month).unwrap());
+                        ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    },
                 )
             })
             .collect();
