@@ -1,7 +1,7 @@
 use chrono::{DateTime, Local, Timelike, Utc};
 use pelican_ui::components::Text;
 use pelican_ui::components::button::PrimaryButton;
-use pelican_ui::components::interface::general::{Content, Header, Page};
+use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
 use pelican_ui::drawable::Drawable;
 use pelican_ui::events::OnEvent;
@@ -41,29 +41,32 @@ impl DayViewScreen {
         let month_for_header = Self::month_name(month).unwrap();
         let title = format!("{} {}, {}", month_for_header, day, year);
         println!("DEBUG HEADER: '{}'", title);
-        let header = Header::home(ctx, &title, None);
+        let header = Header::stack(ctx, &title);
         let mut content_items: Vec<Box<dyn Drawable>> = Self::vec_of_text(ctx, events)
             .into_iter()
             .map(|t| Box::new(t) as Box<dyn Drawable>)
             .collect();
 
-        let ret_to_cal_button = PrimaryButton::new(
-            ctx,
-            "Return to Calendar",
-            |ctx: &mut Context| {
-                ctx.trigger_event(NavigationEvent::Pop);
-                println!("Return to Calendar button clicked.")
-            },
-            false,
-        );
+        // let new_event_button = PrimaryButton::new(
+        //     ctx,
+        //     "Create New Event",
+        //     |ctx: &mut Context| {
+        //         ctx.trigger_event(NavigationEvent::Pop);
+        //         println!("Create New Event button clicked.")
+        //     },
+        //     false,
+        // );
 
-        content_items.push(Box::new(ret_to_cal_button));
+        let bumper = Bumper::new(ctx, new_event_button);
+
+        content_items.push(Box::new(new_event_button));
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(ctx, Offset::Start, content_items);
 
         Ok(Self(
             Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
+            //TODO: put bumper in None here.
             Page::new(header, content, None),
         ))
     }

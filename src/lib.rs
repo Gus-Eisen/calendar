@@ -95,7 +95,6 @@ impl MonthScreen {
                 let day_of_month = d as u32;
                 let month = now.month();
                 let year = now.year();
-                println!("DEBUG day_of_week: `{}`", day_of_week);
                 ListItem::new(
                     ctx,
                     None,
