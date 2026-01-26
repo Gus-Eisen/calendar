@@ -9,6 +9,7 @@ use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::{Component, Context};
 
+use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::EventRegistry;
 
 #[derive(Debug, Component)]
@@ -47,27 +48,17 @@ impl DayViewScreen {
             .map(|t| Box::new(t) as Box<dyn Drawable>)
             .collect();
 
-        // let new_event_button = PrimaryButton::new(
-        //     ctx,
-        //     "Create New Event",
-        //     |ctx: &mut Context| {
-        //         ctx.trigger_event(NavigationEvent::Pop);
-        //         println!("Create New Event button clicked.")
-        //     },
-        //     false,
-        // );
-
-        let bumper = Bumper::new(ctx, new_event_button);
-
-        content_items.push(Box::new(new_event_button));
+        let bumper = Bumper::stack(ctx, Some("Create New Event"), false, |ctx: &mut Context| {
+            let page = Box::new(EventEditorScreen::new(ctx));
+            ctx.trigger_event(NavigationEvent::Push(Some(page)));
+        });
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(ctx, Offset::Start, content_items);
 
         Ok(Self(
             Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
-            //TODO: put bumper in None here.
-            Page::new(header, content, None),
+            Page::new(header, content, Some(bumper)),
         ))
     }
 
