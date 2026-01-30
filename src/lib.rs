@@ -15,6 +15,7 @@ use pelican_ui::layouts::{Column, Offset, Row, Stack};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
+use pelican_ui::utils::TitleSubtitle;
 use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::day_view_screen::DayViewScreen;
@@ -59,6 +60,8 @@ impl MonthScreen {
             ctx.state().set(event_registry);
         }
 
+        let event_registry: EventRegistry = ctx.state().get::<EventRegistry>().unwrap().clone();
+
         let now = Local::now();
         // let current_month = now.format("%B").to_string();
         // let current_year = now.year().to_string();
@@ -66,7 +69,7 @@ impl MonthScreen {
 
         let header = Header::home(ctx, "Calendar", None);
 
-        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx, now));
+        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx, now, event_registry));
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
@@ -83,23 +86,32 @@ impl MonthScreen {
     }
 
     // iterate over a month range (1-31), create a ListItem, then collect into a vec.
-    fn listitem_builder(ctx: &mut Context, now: chrono::DateTime<chrono::Local>) -> Vec<ListItem> {
+    fn listitem_builder(
+        ctx: &mut Context,
+        now: chrono::DateTime<chrono::Local>,
+        event_registry: EventRegistry,
+    ) -> Vec<ListItem> {
         // create range for use in vec_of_listitem.
         let range = Self::num_of_days_in_month(now);
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
-                /* I need to figure out how to pass in year (i32), month(u32) and day(u32) info for use in
-                 * DayViewScreen::new() */
+                // TODO: figure out how to insert User's event.
                 let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 let day_of_month = d as u32;
                 let month = now.month();
                 let year = now.year();
+                let events_with_days = event_registry.days_with_events(year, month);
                 ListItem::new(
                     ctx,
                     None,
                     ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
-                    None,
+                    //TODO: Enter event here as TitleSubtitle, which takes two Strings. Only use
+                    //first one.
+                    Some(TitleSubtitle::new(
+                        "Function returns event here",
+                        "keep blank",
+                    )),
                     None,
                     None,
                     move |ctx: &mut Context| {
@@ -141,4 +153,6 @@ impl MonthScreen {
             _ => panic!("Something went wrong with num_of_days_in_month()."),
         }
     }
+
+    //     fn get_event_registry(ctx: &mut Context)
 }

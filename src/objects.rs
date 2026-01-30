@@ -96,7 +96,7 @@ impl Year {
 }
 
 //Event(s) are stored in UTC, then converted to display appropriate TZ for User.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EventForER {
     title: String,
     datetime: DateTime<Utc>,
@@ -116,7 +116,7 @@ impl EventForER {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EventRegistry {
     vec_of_events: Vec<Option<EventForER>>,
 }
