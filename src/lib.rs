@@ -20,7 +20,7 @@ use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::day_view_screen::DayViewScreen;
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::{EventForEES, EventRegistry};
+use crate::objects::{EventForEES, EventForER, EventRegistry};
 
 // Define the main application struct. This is our entry point type.
 pub struct Calendar;
@@ -101,17 +101,21 @@ impl MonthScreen {
                 let day_of_month = d as u32;
                 let month = now.month();
                 let year = now.year();
+                // TODO: why does .days_with_events work here? (not a ref).
                 let events_with_days = event_registry.days_with_events(year, month);
+                let day_events: Option<&Vec<&EventForER>> =
+                    if events_with_days.contains(&(d as u32)) {
+                        Some(&event_registry.events_for_day(year, month, d as u32))
+                    } else {
+                        None
+                    };
                 ListItem::new(
                     ctx,
                     None,
                     ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
-                    //TODO: Enter event here as TitleSubtitle, which takes two Strings. Only use
-                    //first one.
-                    Some(TitleSubtitle::new(
-                        "Function returns event here",
-                        "keep blank",
-                    )),
+                    day_events
+                        .and_then(|events| events.first())
+                        .map(|e| TitleSubtitle::new(e.title(), "")),
                     None,
                     None,
                     move |ctx: &mut Context| {
