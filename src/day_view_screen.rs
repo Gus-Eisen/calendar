@@ -1,6 +1,5 @@
-use chrono::{DateTime, Local, Timelike, Utc};
+use chrono::{DateTime, Local, Utc};
 use pelican_ui::components::Text;
-use pelican_ui::components::button::PrimaryButton;
 use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
 use pelican_ui::drawable::Drawable;
@@ -48,11 +47,20 @@ impl DayViewScreen {
             .map(|t| Box::new(t) as Box<dyn Drawable>)
             .collect();
 
-        let bumper = Bumper::stack(ctx, Some("Create New Event"), false, |ctx: &mut Context| {
-            // TODO: pass in Year, Month and Day to EES::new().
-            let page = Box::new(EventEditorScreen::new(ctx));
-            ctx.trigger_event(NavigationEvent::Push(Some(page)));
-        });
+        let bumper = Bumper::stack(
+            ctx,
+            Some("Create New Event"),
+            false,
+            move |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(
+                    ctx,
+                    Some(year as u16),
+                    Some(month as u8),
+                    Some(day as u8),
+                ));
+                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+            },
+        );
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(ctx, Offset::Start, content_items);
