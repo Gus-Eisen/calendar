@@ -96,12 +96,10 @@ impl MonthScreen {
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
-                // TODO: figure out how to insert User's event.
                 let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 let day_of_month = d as u32;
                 let month = now.month();
                 let year = now.year();
-                // TODO: why does .days_with_events work here? (not a ref).
                 let events_with_days = event_registry.days_with_events(year, month);
                 let day_events: Option<&Vec<&EventForER>> =
                     if events_with_days.contains(&(d as u32)) {

@@ -49,6 +49,7 @@ impl DayViewScreen {
             .collect();
 
         let bumper = Bumper::stack(ctx, Some("Create New Event"), false, |ctx: &mut Context| {
+            // TODO: pass in Year, Month and Day to EES::new().
             let page = Box::new(EventEditorScreen::new(ctx));
             ctx.trigger_event(NavigationEvent::Push(Some(page)));
         });

@@ -47,7 +47,7 @@ pub mod year_selector_screen_block {
 
             let content = Content::new(ctx, Offset::Start, vec![Box::new(year_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
+                let page = Box::new(EventEditorScreen::new(ctx, None, None, None));
                 ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Year bumper clicked.")
             });
@@ -219,7 +219,7 @@ pub mod month_selector_screen_block {
 
             let content = Content::new(ctx, Offset::Start, vec![Box::new(month_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Month"), false, |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
+                let page = Box::new(EventEditorScreen::new(ctx, None, None, None));
                 ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Month button clicked.")
             });
@@ -254,7 +254,7 @@ pub mod day_selector_screen_block {
             let day_radioselector = Self::day_radioselector_builder(ctx);
             let content = Content::new(ctx, Offset::Start, vec![Box::new(day_radioselector)]);
             let bumper = Bumper::stack(ctx, Some("Save Day"), false, |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
+                let page = Box::new(EventEditorScreen::new(ctx, None, None, None));
                 ctx.trigger_event(NavigationEvent::Push(Some(page)));
                 println!("Save Day button clicked.")
             });
@@ -501,10 +501,10 @@ pub mod time_selector_screen_block {
             let time_builder = vec_for_timeselector_builder(ctx);
             let time_radioselector = RadioSelector::new(ctx, usize::MAX, time_builder);
             let content = Content::new(ctx, Offset::Start, vec![Box::new(time_radioselector)]);
-            let bumper = Bumper::stack(ctx, Some("Save Year"), false, |ctx: &mut Context| {
-                let page = Box::new(EventEditorScreen::new(ctx));
+            let bumper = Bumper::stack(ctx, Some("Save Time"), false, |ctx: &mut Context| {
+                let page = Box::new(EventEditorScreen::new(ctx, None, None, None));
                 ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("Save Year bumper clicked.")
+                println!("Save Time bumper clicked.")
             });
 
             TimeSelectorScreen(
