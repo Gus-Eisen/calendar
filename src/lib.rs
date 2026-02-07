@@ -3,15 +3,13 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use chrono::{Datelike, Local, Weekday};
-use pelican_ui::components::button::PrimaryButton;
+use chrono::{Datelike, Local};
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
-use pelican_ui::components::{Circle, Rectangle, Text, TextSize, TextStyle};
-use pelican_ui::drawable::{Align, Color, Shape};
-use pelican_ui::events::{Event, MouseEvent, MouseState, OnEvent};
-use pelican_ui::layouts::{Column, Offset, Row, Stack};
+use pelican_ui::drawable::Color;
+use pelican_ui::events::OnEvent;
+use pelican_ui::layouts::{Column, Offset};
 use pelican_ui::layouts::{Padding, Size};
 use pelican_ui::start;
 use pelican_ui::theme::Theme;
@@ -19,7 +17,6 @@ use pelican_ui::utils::TitleSubtitle;
 use pelican_ui::{Application, Assets, Component, Context};
 
 use crate::day_view_screen::DayViewScreen;
-use crate::event_editor_screen::EventEditorScreen;
 use crate::objects::{EventForEES, EventForER, EventRegistry};
 
 // Define the main application struct. This is our entry point type.
