@@ -1,16 +1,6 @@
 use std::collections::HashSet;
 
-use chrono::{DateTime, Datelike, NaiveDateTime, TimeZone, Utc};
-use pelican_ui::{
-    Component, Context,
-    components::{
-        Text, TextSize, TextStyle,
-        interface::general::{Content, HeaderIcon},
-    },
-    drawable::Align,
-    events::OnEvent,
-    layouts::{Column, Offset, Padding, Row, Size},
-};
+use chrono::{DateTime, Datelike, Utc};
 
 pub enum DayOfWeek {
     Monday,
