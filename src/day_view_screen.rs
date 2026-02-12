@@ -42,7 +42,7 @@ impl DayViewScreen {
         let title = format!("{} {}, {}", month_for_header, day, year);
         println!("DEBUG HEADER: '{}'", title);
         let header = Header::stack(ctx, &title);
-        let mut content_items: Vec<Box<dyn Drawable>> = Self::vec_of_text(ctx, events)
+        let content_items: Vec<Box<dyn Drawable>> = Self::vec_of_text(ctx, events)
             .into_iter()
             .map(|t| Box::new(t) as Box<dyn Drawable>)
             .collect();

@@ -2,16 +2,6 @@ use std::collections::HashSet;
 
 use chrono::{DateTime, Datelike, Utc};
 
-pub enum DayOfWeek {
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-    Sunday,
-}
-
 #[derive(Debug, Clone)]
 pub enum Month {
     January,

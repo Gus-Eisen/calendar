@@ -3,11 +3,14 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
+use chrono::DateTime;
 use chrono::{Datelike, Local};
+use pelican_ui::components::TextSize;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
 use pelican_ui::components::{Text, TextStyle};
+use pelican_ui::drawable::Align;
 use pelican_ui::drawable::Color;
 use pelican_ui::events::OnEvent;
 use pelican_ui::layouts::{Column, Offset};
@@ -67,15 +70,11 @@ impl MonthScreen {
         let current_month = Text::new(
             ctx,
             &current_month_str,
-            pelican_ui::components::TextSize::Md,
-            TextStyle::Secondary,
-            pelican_ui::drawable::Align::Left,
+            TextSize::Md,
+            TextStyle::Primary,
+            Align::Left,
             None,
         );
-
-        // let current_month = now.format("%B").to_string();
-        // let current_year = now.year().to_string();
-        // let month_and_year = format!("{current_month} {current_year}");
 
         let header = Header::home(ctx, "Calendar", None);
 
@@ -98,7 +97,7 @@ impl MonthScreen {
     // iterate over a month range (1-31), create a ListItem, then collect into a vec.
     fn listitem_builder(
         ctx: &mut Context,
-        now: chrono::DateTime<chrono::Local>,
+        now: DateTime<chrono::Local>,
         event_registry: EventRegistry,
     ) -> Vec<ListItem> {
         // create range for use in vec_of_listitem.
@@ -165,6 +164,4 @@ impl MonthScreen {
             _ => panic!("Something went wrong with num_of_days_in_month()."),
         }
     }
-
-    //     fn get_event_registry(ctx: &mut Context)
 }
