@@ -65,11 +65,15 @@ impl MonthScreen {
 
         let now = Local::now();
 
-        let current_month_str = now.format("%b").to_string();
+        let current_month_str = now.format("%B").to_string();
 
-        let current_month = Text::new(
+        let current_year = now.format("%Y").to_string();
+
+        let current_month_and_year = format!("{} {}", current_month_str, current_year);
+
+        let current_month_and_year_for_text = Text::new(
             ctx,
-            &current_month_str,
+            &current_month_and_year,
             TextSize::Md,
             TextStyle::Primary,
             Align::Left,
@@ -85,7 +89,10 @@ impl MonthScreen {
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(current_month), Box::new(listitemgroup)],
+            vec![
+                Box::new(current_month_and_year_for_text),
+                Box::new(listitemgroup),
+            ],
         );
 
         Ok(Self(
