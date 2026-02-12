@@ -7,6 +7,7 @@ use chrono::{Datelike, Local};
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
+use pelican_ui::components::{Text, TextStyle};
 use pelican_ui::drawable::Color;
 use pelican_ui::events::OnEvent;
 use pelican_ui::layouts::{Column, Offset};
@@ -60,6 +61,18 @@ impl MonthScreen {
         let event_registry: EventRegistry = ctx.state().get::<EventRegistry>().unwrap().clone();
 
         let now = Local::now();
+
+        let current_month_str = now.format("%b").to_string();
+
+        let current_month = Text::new(
+            ctx,
+            &current_month_str,
+            pelican_ui::components::TextSize::Md,
+            TextStyle::Secondary,
+            pelican_ui::drawable::Align::Left,
+            None,
+        );
+
         // let current_month = now.format("%B").to_string();
         // let current_year = now.year().to_string();
         // let month_and_year = format!("{current_month} {current_year}");
@@ -73,7 +86,7 @@ impl MonthScreen {
             ctx,
             Offset::Start,
             // All items must be boxed as Box<dyn Drawable>
-            vec![Box::new(listitemgroup)],
+            vec![Box::new(current_month), Box::new(listitemgroup)],
         );
 
         Ok(Self(
