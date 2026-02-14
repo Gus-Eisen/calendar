@@ -82,16 +82,17 @@ impl MonthScreen {
 
         let header = Header::home(ctx, "Calendar", None);
 
-        let listitemgroup = ListItemGroup::new(Self::listitem_builder(ctx, now, event_registry));
+        let listitemgroup_for_cmayft =
+            ListItemGroup::new(Self::listitem_builder(ctx, now, event_registry));
 
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
             Offset::Start,
-            // All items must be boxed as Box<dyn Drawable>
+            // TODO: Put additional 11 (c_m_a_y_f_t) and (LIG) here.
             vec![
                 Box::new(current_month_and_year_for_text),
-                Box::new(listitemgroup),
+                Box::new(listitemgroup_for_cmayft),
             ],
         );
 
@@ -143,6 +144,14 @@ impl MonthScreen {
 
         vec_of_listitem
     }
+
+    // fn listitem_builder_plus_n(
+    //     ctx: &mut Context,
+    //     now: DateTime<chrono::Local>,
+    //     event_registry: EventRegistry,
+    // ) -> Vec<ListItem> {
+    //     // TODO: build out logic.
+    // }
 
     fn is_leap_year(year: i32) -> bool {
         (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
