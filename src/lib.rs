@@ -80,6 +80,9 @@ impl MonthScreen {
             None,
         );
 
+        let next_11_month_vec_test = Self::next_11_months_determiner(&now);
+        println!("{:?}", next_11_month_vec_test);
+
         let header = Header::home(ctx, "Calendar", None);
 
         let listitemgroup_for_cmayft =
@@ -91,7 +94,6 @@ impl MonthScreen {
             Offset::Start,
             // TODO: Put additional 11 (c_m_a_y_f_t) and (LIG) here.
             vec![
-                Box::new(next_11_months_test_text),
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
             ],
