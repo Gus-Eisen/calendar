@@ -3,7 +3,7 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
-use chrono::DateTime;
+use chrono::{DateTime, Months};
 use chrono::{Datelike, Local};
 use pelican_ui::components::TextSize;
 use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
@@ -91,6 +91,7 @@ impl MonthScreen {
             Offset::Start,
             // TODO: Put additional 11 (c_m_a_y_f_t) and (LIG) here.
             vec![
+                Box::new(next_11_months_test_text),
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
             ],
@@ -143,6 +144,16 @@ impl MonthScreen {
             .collect();
 
         vec_of_listitem
+    }
+
+    fn next_11_months_determiner(now: &DateTime<Local>) -> Vec<String> {
+        let month_names: Vec<String> = (1..=11)
+            .map(|i| {
+                let future = *now + Months::new(i);
+                future.format("%B %Y").to_string()
+            })
+            .collect();
+        month_names
     }
 
     // fn listitem_builder_plus_n(
