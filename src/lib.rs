@@ -80,8 +80,16 @@ impl MonthScreen {
             None,
         );
 
-        let next_11_months_vec = Self::next_11_months_determiner(&now);
-        println!("{:?}", next_11_months_vec);
+        let next_11_months = Self::next_11_months_determiner(&now);
+        println!("{:?}", next_11_months);
+        let next_11_months_1 = Text::new(
+            ctx,
+            next_11_months.first().unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
 
         let header = Header::home(ctx, "Calendar", None);
 
@@ -96,6 +104,7 @@ impl MonthScreen {
             vec![
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
+                Box::new(next_11_months_1),
             ],
         );
 
