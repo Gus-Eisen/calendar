@@ -65,11 +65,11 @@ impl MonthScreen {
 
         let now = Local::now();
 
-        let current_month_str = now.format("%B").to_string();
+        let current_month = now.format("%B").to_string();
 
         let current_year = now.format("%Y").to_string();
 
-        let current_month_and_year = format!("{} {}", current_month_str, current_year);
+        let current_month_and_year = format!("{} {}", current_month, current_year);
 
         let current_month_and_year_for_text = Text::new(
             ctx,
@@ -80,8 +80,8 @@ impl MonthScreen {
             None,
         );
 
-        let next_11_month_vec_test = Self::next_11_months_determiner(&now);
-        println!("{:?}", next_11_month_vec_test);
+        let next_11_months_vec = Self::next_11_months_determiner(&now);
+        println!("{:?}", next_11_months_vec);
 
         let header = Header::home(ctx, "Calendar", None);
 
