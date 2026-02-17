@@ -96,6 +96,8 @@ impl MonthScreen {
         let listitemgroup_for_cmayft =
             ListItemGroup::new(Self::listitem_builder(ctx, now, event_registry));
 
+        // let lig_for_next_11_months_1 =
+
         // Combine icon, heading, and subtext into page content
         let content = Content::new(
             ctx,
@@ -105,6 +107,7 @@ impl MonthScreen {
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
                 Box::new(next_11_months_1),
+                // Box::new(lig_for_next_11_months_1),
             ],
         );
 
@@ -166,14 +169,49 @@ impl MonthScreen {
             .collect();
         month_names
     }
+    //TODO: get correct month by taking now and adding desired_month.
+    fn listitem_builder_plus_n(
+        ctx: &mut Context,
+        now: DateTime<chrono::Local>,
+        desired_month: i32,
+        event_registry: EventRegistry,
+    ) -> Vec<ListItem> {
+        // create range for use in vec_of_listitem.
+        let range = Self::num_of_days_in_month(now);
 
-    // fn listitem_builder_plus_n(
-    //     ctx: &mut Context,
-    //     now: DateTime<chrono::Local>,
-    //     event_registry: EventRegistry,
-    // ) -> Vec<ListItem> {
-    //     // TODO: build out logic.
-    // }
+        let vec_of_listitem: Vec<ListItem> = (1..=range)
+            .map(|d| {
+                let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                let day_of_month = d as u32;
+                let month = now.month();
+                let year = now.year();
+                let events_with_days = event_registry.days_with_events(year, month);
+                let day_events: Option<&Vec<&EventForER>> =
+                    if events_with_days.contains(&(d as u32)) {
+                        Some(&event_registry.events_for_day(year, month, d as u32))
+                    } else {
+                        None
+                    };
+                ListItem::new(
+                    ctx,
+                    None,
+                    ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
+                    day_events
+                        .and_then(|events| events.first())
+                        .map(|e| TitleSubtitle::new(e.title(), "")),
+                    None,
+                    None,
+                    move |ctx: &mut Context| {
+                        let page =
+                            Box::new(DayViewScreen::new(ctx, year, month, day_of_month).unwrap());
+                        ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    },
+                )
+            })
+            .collect();
+
+        vec_of_listitem
+    }
 
     fn is_leap_year(year: i32) -> bool {
         (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
