@@ -169,15 +169,17 @@ impl MonthScreen {
             .collect();
         month_names
     }
-    //TODO: get correct month by taking now and adding desired_month.
+
     fn listitem_builder_plus_n(
         ctx: &mut Context,
-        now: DateTime<chrono::Local>,
-        desired_month: i32,
+        chosen_month_and_year: &str,
         event_registry: EventRegistry,
     ) -> Vec<ListItem> {
-        // create range for use in vec_of_listitem.
-        let range = Self::num_of_days_in_month(now);
+        // // create range for use in vec_of_listitem.
+        // let range = Self::num_of_days_in_month(now);
+        // TODO: Get number of days in month with `January 2026` as arg.
+        // TODO: split `January 2026` into month and year.
+        let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
@@ -238,6 +240,37 @@ impl MonthScreen {
             11 => 30,
             12 => 31,
             _ => panic!("Something went wrong with num_of_days_in_month()."),
+        }
+    }
+    //HACK: Having two functions that do the same thing (fn num_of_days_in_month) is stupid.
+    //Combine / Refactor.
+    fn num_of_days_in_month_for_vec_str(month_and_year: Vec<&str>) -> i32 {
+        match *month_and_year.first().unwrap() {
+            "January" => 31,
+            "February" => {
+                if Self::is_leap_year(
+                    month_and_year
+                        .get(1 as usize)
+                        .unwrap()
+                        .parse::<i32>()
+                        .unwrap(),
+                ) {
+                    29
+                } else {
+                    28
+                }
+            }
+            "March" => 31,
+            "April" => 30,
+            "May" => 31,
+            "June" => 30,
+            "July" => 31,
+            "August" => 31,
+            "September" => 30,
+            "October" => 31,
+            "November" => 30,
+            "December" => 31,
+            _ => panic!("Something went wrong with month_and_year."),
         }
     }
 }
