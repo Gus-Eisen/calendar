@@ -180,13 +180,17 @@ impl MonthScreen {
         // TODO: Get number of days in month with `January 2026` as arg.
         // TODO: split `January 2026` into month and year.
         let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
+        //get num of days in month. I will iterate through this.
+        let range = Self::num_of_days_in_month_for_vec_str(month_and_year);
 
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
-                let day_of_week = now.with_day(d as u32).unwrap().weekday();
-                let day_of_month = d as u32;
-                let month = now.month();
-                let year = now.year();
+                // let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                // let day_of_month = d as u32;
+                // let month = now.month();
+                // let year = now.year();
+                let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
+                let month = month_and_year.first().unwrap().parse::<u32>().unwrap();
                 let events_with_days = event_registry.days_with_events(year, month);
                 let day_events: Option<&Vec<&EventForER>> =
                     if events_with_days.contains(&(d as u32)) {
@@ -197,6 +201,7 @@ impl MonthScreen {
                 ListItem::new(
                     ctx,
                     None,
+                    //TODO: I need to create a DateTime so I can create a Weekday for &day_of_week.
                     ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
                     day_events
                         .and_then(|events| events.first())
