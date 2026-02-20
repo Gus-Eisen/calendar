@@ -5,20 +5,18 @@ mod various_date_selector_screens;
 
 use chrono::{DateTime, Months};
 use chrono::{Datelike, Local};
-use pelican_ui::components::TextSize;
-use pelican_ui::components::interface::general::{Content, Header, Interface, Page};
-use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent, RootInfo};
+use pelican_ui::canvas::{Align, Color};
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
-use pelican_ui::components::{Text, TextStyle};
-use pelican_ui::drawable::Align;
-use pelican_ui::drawable::Color;
-use pelican_ui::events::OnEvent;
-use pelican_ui::layouts::{Column, Offset};
-use pelican_ui::layouts::{Padding, Size};
-use pelican_ui::start;
+use pelican_ui::components::text::{Text, TextSize, TextStyle};
+use pelican_ui::drawable::{Component, Offset, Size};
+use pelican_ui::event::OnEvent;
+use pelican_ui::interface::general::{Content, Header, Interface, Page};
+use pelican_ui::interface::navigation::RootInfo;
+use pelican_ui::layout::{Column, Padding};
+use pelican_ui::navigation::{AppPage, NavigationEvent};
 use pelican_ui::theme::Theme;
 use pelican_ui::utils::TitleSubtitle;
-use pelican_ui::{Application, Assets, Component, Context};
+use pelican_ui::{Assets, Context};
 
 use crate::day_view_screen::DayViewScreen;
 use crate::objects::{EventForEES, EventForER, EventRegistry};
@@ -175,9 +173,6 @@ impl MonthScreen {
         chosen_month_and_year: &str,
         event_registry: EventRegistry,
     ) -> Vec<ListItem> {
-        // // create range for use in vec_of_listitem.
-        // let range = Self::num_of_days_in_month(now);
-        // TODO: Get number of days in month with `January 2026` as arg.
         // TODO: split `January 2026` into month and year.
         let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
         //get num of days in month. I will iterate through this.
@@ -186,7 +181,7 @@ impl MonthScreen {
         let vec_of_listitem: Vec<ListItem> = (1..=range)
             .map(|d| {
                 // let day_of_week = now.with_day(d as u32).unwrap().weekday();
-                // let day_of_month = d as u32;
+                let day_of_month = d as u32;
                 // let month = now.month();
                 // let year = now.year();
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
