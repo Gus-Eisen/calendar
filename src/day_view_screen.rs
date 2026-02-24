@@ -1,39 +1,45 @@
+use std::sync::{Arc, Mutex};
+
 use chrono::{DateTime, Local, Utc};
-use pelican_ui::components::Text;
-use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
-use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
-use pelican_ui::drawable::Drawable;
-use pelican_ui::events::OnEvent;
-use pelican_ui::layouts::{Column, Offset};
-use pelican_ui::layouts::{Padding, Size};
-use pelican_ui::{Component, Context};
+use pelican_ui::canvas::Align;
+use pelican_ui::components::text::{Text, TextSize, TextStyle};
+use pelican_ui::drawable::Component;
+use pelican_ui::event::OnEvent;
+use pelican_ui::interface::general::{Bumper, Content, Header, Page};
+use pelican_ui::interface::navigation::{AppPage, NavigationEvent};
+use pelican_ui::layout::{Offset, Stack};
+use pelican_ui::theme::Theme;
+use pelican_ui::{Context, Request};
 
+use crate::PageFlow;
 use crate::event_editor_screen::EventEditorScreen;
-use crate::objects::EventRegistry;
+use crate::objects::{EventForEES, EventRegistry};
 
-#[derive(Debug, Component)]
-pub struct DayViewScreen(Column, Page);
+#[derive(Debug, Component, Clone)]
+pub struct DayViewScreen(Stack, Page);
 
 impl OnEvent for DayViewScreen {}
 
 impl AppPage for DayViewScreen {}
 
 impl DayViewScreen {
-    pub fn new(ctx: &mut Context, year: i32, month: u32, day: u32) -> Result<Self, String> {
-        // Query EventRegistry for events on this day (clone data to defeat borrow checker)
-        let events: Vec<(String, DateTime<Utc>)> = ctx
-            .state()
-            .get::<EventRegistry>()
-            .map(|registry| {
-                registry
-                    .events_for_day(year, month, day)
-                    .iter()
-                    .map(|e| (e.title().to_string(), e.datetime()))
-                    .collect()
-            })
-            .unwrap_or_default();
+    pub fn new(
+        theme: &Theme,
+        year: i32,
+        month: u32,
+        day: u32,
+        event_registry: Arc<Mutex<EventRegistry>>,
+        event_for_ees: Arc<Mutex<EventForEES>>,
+    ) -> Result<Self, String> {
+        let events: Vec<(String, DateTime<Utc>)> = {
+            let registry = event_registry.lock().unwrap();
+            registry
+                .events_for_day(year, month, day)
+                .iter()
+                .map(|e| (e.title().to_string(), e.datetime()))
+                .collect()
+        };
 
-        // Debug: print events found
         for (title, datetime) in &events {
             println!("Event: '{}' on {}", title, datetime);
         }
@@ -41,34 +47,36 @@ impl DayViewScreen {
         let month_for_header = Self::month_name(month).unwrap();
         let title = format!("{} {}, {}", month_for_header, day, year);
         println!("DEBUG HEADER: '{}'", title);
-        let header = Header::stack(ctx, &title);
-        let content_items: Vec<Box<dyn Drawable>> = Self::vec_of_text(ctx, events)
-            .into_iter()
-            .map(|t| Box::new(t) as Box<dyn Drawable>)
-            .collect();
+        let header = Header::stack(theme, &title, None);
 
+        let content_items: Vec<Box<dyn pelican_ui::drawable::Drawable>> =
+            Self::vec_of_text(theme, events)
+                .into_iter()
+                .map(|t| Box::new(t) as Box<dyn pelican_ui::drawable::Drawable>)
+                .collect();
+
+        let ees_for_bumper = event_for_ees.clone();
+        let reg_for_bumper = event_registry.clone();
         let bumper = Bumper::stack(
-            ctx,
+            theme,
             Some("Create New Event"),
-            false,
-            move |ctx: &mut Context| {
+            move |ctx: &mut Context, theme: &Theme| {
                 let page = Box::new(EventEditorScreen::new(
-                    ctx,
+                    theme,
                     Some(year as u16),
                     Some(month as u8),
                     Some(day as u8),
+                    ees_for_bumper.clone(),
+                    reg_for_bumper.clone(),
                 ));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
             },
+            None,
         );
 
-        // Combine icon, heading, and subtext into page content
-        let content = Content::new(ctx, Offset::Start, content_items);
+        let content = Content::new(Offset::Start, content_items, Box::new(|_| true));
 
-        Ok(Self(
-            Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
-            Page::new(header, content, Some(bumper)),
-        ))
+        Ok(Self(Stack::default(), Page::new(header, content, Some(bumper))))
     }
 
     pub fn month_name(month: u32) -> Option<&'static str> {
@@ -86,25 +94,17 @@ impl DayViewScreen {
             "November",
             "December",
         ];
-
         MONTHS.get((month - 1) as usize).copied()
     }
 
-    pub fn vec_of_text(ctx: &mut Context, events: Vec<(String, DateTime<Utc>)>) -> Vec<Text> {
-        let mut texts = Vec::new();
-        for (title, datetime) in events {
-            let local_datetime = datetime.with_timezone(&Local);
-            let label = format!("{} - {}", local_datetime.format("%I:%M %p"), title);
-            let text = Text::new(
-                ctx,
-                &label,
-                pelican_ui::components::TextSize::Md,
-                pelican_ui::components::TextStyle::Primary,
-                pelican_ui::drawable::Align::Left,
-                None,
-            );
-            texts.push(text);
-        }
-        texts
+    pub fn vec_of_text(theme: &Theme, events: Vec<(String, DateTime<Utc>)>) -> Vec<Text> {
+        events
+            .into_iter()
+            .map(|(title, datetime)| {
+                let local_datetime = datetime.with_timezone(&Local);
+                let label = format!("{} - {}", local_datetime.format("%I:%M %p"), title);
+                Text::new(theme, &label, TextSize::Md, TextStyle::Primary, Align::Left, None)
+            })
+            .collect()
     }
 }

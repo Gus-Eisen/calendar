@@ -1,35 +1,45 @@
+use std::sync::{Arc, Mutex};
+
 use chrono::{DateTime, Local, Utc};
 use pelican_ui::components::TextInput;
 use pelican_ui::components::button::SecondaryButton;
-use pelican_ui::components::interface::general::{Bumper, Content, Header, Page};
-use pelican_ui::components::interface::navigation::{AppPage, NavigationEvent};
-use pelican_ui::events::{Event, KeyboardEvent, OnEvent};
-use pelican_ui::layouts::Offset;
-use pelican_ui::layouts::Stack;
-use pelican_ui::{Component, Context};
+use pelican_ui::drawable::{Component, SizedTree};
+use pelican_ui::event::{Event, OnEvent, TickEvent};
+use pelican_ui::interface::general::{Bumper, Content, Header, Page};
+use pelican_ui::interface::navigation::{AppPage, NavigationEvent};
+use pelican_ui::layout::{Offset, Stack};
+use pelican_ui::theme::Theme;
+use pelican_ui::{Context, Request};
 
-use crate::MonthScreen;
+use crate::PageFlow;
 use crate::objects::{EventForEES, EventForER, EventRegistry};
 use crate::various_date_selector_screens::day_selector_screen_block::DaySelectorScreen;
 use crate::various_date_selector_screens::month_selector_screen_block::MonthSelectorScreen;
 use crate::various_date_selector_screens::time_selector_screen_block::TimeSelectorScreen;
 use crate::various_date_selector_screens::year_selector_screen_block::YearSelectorScreen;
 
-#[derive(Debug, Component)]
-pub struct EventEditorScreen(Stack, Page);
+#[derive(Debug, Component, Clone)]
+pub struct EventEditorScreen(
+    Stack,
+    Page,
+    #[skip] Arc<Mutex<EventForEES>>,
+    #[skip] Arc<Mutex<EventRegistry>>,
+);
 
 impl OnEvent for EventEditorScreen {
-    fn on_event(&mut self, ctx: &mut Context, event: Box<dyn Event>) -> Vec<Box<dyn Event>> {
-        if event.downcast_ref::<KeyboardEvent>().is_some()
-            && let Some(input) = self.1.content().find::<TextInput>()
-        {
-            let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
-
-            event_for_ees.event_title = Some(input.value().clone());
-            println!(
-                "Event Title: {:?}",
-                event_for_ees.event_title.clone().unwrap()
-            );
+    fn on_event(
+        &mut self,
+        _ctx: &mut Context,
+        _sized: &SizedTree,
+        event: Box<dyn Event>,
+    ) -> Vec<Box<dyn Event>> {
+        if event.downcast_ref::<TickEvent>().is_some() {
+            if let Some(input) = self.1.content.find::<TextInput>() {
+                let val = input.value();
+                if !val.is_empty() {
+                    self.2.lock().unwrap().event_title = Some(val);
+                }
+            }
         }
         vec![event]
     }
@@ -38,30 +48,39 @@ impl OnEvent for EventEditorScreen {
 impl AppPage for EventEditorScreen {}
 
 impl EventEditorScreen {
-    pub fn new(ctx: &mut Context, year: Option<u16>, month: Option<u8>, day: Option<u8>) -> Self {
-        // Pre-populate the form with the given date if provided
-        if let (Some(y), Some(m), Some(d)) = (year, month, day) {
-            let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
-            event_for_ees.set_year((y - 2025) as u8);
-            event_for_ees.set_month(m);
-            event_for_ees.set_day(d.to_string());
+    pub fn new(
+        theme: &Theme,
+        year: Option<u16>,
+        month: Option<u8>,
+        day: Option<u8>,
+        event_for_ees: Arc<Mutex<EventForEES>>,
+        event_registry: Arc<Mutex<EventRegistry>>,
+    ) -> Self {
+        {
+            let mut efees = event_for_ees.lock().unwrap();
+            if let (Some(y), Some(m), Some(d)) = (year, month, day) {
+                efees.set_year((y - 2025) as u8);
+                efees.set_month(m);
+                efees.set_day(d.to_string());
+            }
         }
 
-        let event_for_ees = ctx.state().get::<EventForEES>().unwrap().to_owned();
-
-        let event_title = if event_for_ees.event_title.is_some() {
-            let event_title = event_for_ees.event_title.clone().unwrap();
-            TextInput::new(
-                ctx,
-                None,
-                Some("Event Title"),
-                Some(&event_title),
-                None,
-                None,
+        let (title_val, year_label, month_label, day_label, time_label) = {
+            let efees = event_for_ees.lock().unwrap();
+            (
+                efees.event_title.clone(),
+                efees.year.as_ref().map(|y| y.as_str().to_string()),
+                efees.month.as_ref().map(|m| m.as_str().to_string()),
+                efees.day.clone(),
+                efees.time.clone(),
             )
+        };
+
+        let event_title = if let Some(ref t) = title_val {
+            TextInput::new(theme, None, Some("Event Title"), Some(t.as_str()), None, None)
         } else {
             TextInput::new(
-                ctx,
+                theme,
                 None,
                 Some("Event Title"),
                 Some("Enter Event Title here"),
@@ -70,140 +89,133 @@ impl EventEditorScreen {
             )
         };
 
-        let year = if event_for_ees.year.is_some() {
-            let year = event_for_ees.year.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", year.as_str(), None, |ctx: &mut Context| {
-                let page = Box::new(YearSelectorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("year = event_for_ees.year.is_some clicked.")
-            })
-        } else {
-            SecondaryButton::medium(
-                ctx,
-                "right",
-                "Select year here",
-                None,
-                |ctx: &mut Context| {
-                    let page = Box::new(YearSelectorScreen::new(ctx));
-                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                    println!("year = !event_for_ees.year.is_some clicked.")
-                },
-            )
-        };
+        let efees_for_year = event_for_ees.clone();
+        let event_reg_for_year = event_registry.clone();
+        let year_str = year_label.as_deref().unwrap_or("Select year here").to_string();
+        let year_btn = SecondaryButton::medium(
+            theme,
+            "right",
+            &year_str,
+            None,
+            move |ctx: &mut Context, theme: &Theme| {
+                let page = Box::new(YearSelectorScreen::new(
+                    theme,
+                    efees_for_year.clone(),
+                    event_reg_for_year.clone(),
+                ));
+                ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
+                println!("year clicked.");
+            },
+        );
 
-        let month = if event_for_ees.month.is_some() {
-            let month = event_for_ees.month.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", month.as_str(), None, |ctx: &mut Context| {
-                let page = Box::new(MonthSelectorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("month = event_for_ees.month.is_some clicked.");
-            })
-        } else {
-            SecondaryButton::medium(
-                ctx,
-                "right",
-                "Select month here",
-                None,
-                |ctx: &mut Context| {
-                    let page = Box::new(MonthSelectorScreen::new(ctx));
-                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                    println!("month = !event_for_ees.month.is_some clicked.")
-                },
-            )
-        };
+        let efees_for_month = event_for_ees.clone();
+        let event_reg_for_month = event_registry.clone();
+        let month_str = month_label.as_deref().unwrap_or("Select month here").to_string();
+        let month_btn = SecondaryButton::medium(
+            theme,
+            "right",
+            &month_str,
+            None,
+            move |ctx: &mut Context, theme: &Theme| {
+                let page = Box::new(MonthSelectorScreen::new(
+                    theme,
+                    efees_for_month.clone(),
+                    event_reg_for_month.clone(),
+                ));
+                ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
+                println!("month clicked.");
+            },
+        );
 
-        let day = if event_for_ees.day.is_some() {
-            let day = event_for_ees.day.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", &day, None, |ctx: &mut Context| {
-                let page = Box::new(DaySelectorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("day = event_for_ees.day.is_some clicked.")
-            })
-        } else {
-            SecondaryButton::medium(
-                ctx,
-                "right",
-                "Select day here",
-                None,
-                |ctx: &mut Context| {
-                    let page = Box::new(DaySelectorScreen::new(ctx));
-                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                    println!("day = !event_for_ees.day.is_some clicked.")
-                },
-            )
-        };
+        let efees_for_day = event_for_ees.clone();
+        let event_reg_for_day = event_registry.clone();
+        let day_str = day_label.as_deref().unwrap_or("Select day here").to_string();
+        let day_btn = SecondaryButton::medium(
+            theme,
+            "right",
+            &day_str,
+            None,
+            move |ctx: &mut Context, theme: &Theme| {
+                let page = Box::new(DaySelectorScreen::new(
+                    theme,
+                    efees_for_day.clone(),
+                    event_reg_for_day.clone(),
+                ));
+                ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
+                println!("day clicked.");
+            },
+        );
 
-        let time = if event_for_ees.time.is_some() {
-            let time = event_for_ees.time.clone().unwrap();
-            SecondaryButton::medium(ctx, "right", &time, None, |ctx: &mut Context| {
-                let page = Box::new(TimeSelectorScreen::new(ctx));
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("time = event_for_ees.time.is_some clicked.")
-            })
-        } else {
-            SecondaryButton::medium(
-                ctx,
-                "right",
-                "Select time here",
-                None,
-                |ctx: &mut Context| {
-                    let page = Box::new(TimeSelectorScreen::new(ctx));
-                    ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                    println!("time = !event_for_ees.time.is_some clicked.")
-                },
-            )
-        };
+        let efees_for_time = event_for_ees.clone();
+        let event_reg_for_time = event_registry.clone();
+        let time_str = time_label.as_deref().unwrap_or("Select time here").to_string();
+        let time_btn = SecondaryButton::medium(
+            theme,
+            "right",
+            &time_str,
+            None,
+            move |ctx: &mut Context, theme: &Theme| {
+                let page = Box::new(TimeSelectorScreen::new(
+                    theme,
+                    efees_for_time.clone(),
+                    event_reg_for_time.clone(),
+                ));
+                ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
+                println!("time clicked.");
+            },
+        );
 
         let content = Content::new(
-            ctx,
             Offset::Start,
             vec![
                 Box::new(event_title),
-                Box::new(year),
-                Box::new(month),
-                Box::new(day),
-                Box::new(time),
+                Box::new(year_btn),
+                Box::new(month_btn),
+                Box::new(day_btn),
+                Box::new(time_btn),
             ],
+            Box::new(|_| true),
         );
 
-        let bumper = Bumper::stack(ctx, Some("Save Event"), false, |ctx: &mut Context| {
-            let event_for_ees = ctx.state().get_mut::<EventForEES>().unwrap();
-
-            if event_for_ees.all_some() {
-                // Creates and pushes an EventForER from a EventForEES to EventRegistry.
-                let title = event_for_ees.get_title().unwrap();
-                let year = event_for_ees.get_year_as_i32().to_string();
-                let month = event_for_ees.get_month_as_u32().to_string();
-                let day = event_for_ees.get_day_as_u32().to_string();
-                let time = event_for_ees.get_time().unwrap();
-                let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
-                println!("{:?}", &fmt_for_datetime);
-                // reset EventForEES to all None types for future use.
-                event_for_ees.set_all_none();
-                let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
-                    .expect("Failed to parse into DateTime")
-                    // converts to UTC for storage as EventForER.
-                    .with_timezone(&Utc);
-                println!("{:?}", &datetime);
-                let event = EventForER::new(title, datetime);
-                let event_registry = ctx.state().get_mut::<EventRegistry>().unwrap();
-                event_registry.push(Some(event));
-                let page = Box::new(MonthScreen::new(ctx).unwrap());
-                ctx.trigger_event(NavigationEvent::Reset);
-                ctx.trigger_event(NavigationEvent::Push(Some(page)));
-                println!("Save Event button clicked.")
-            } else {
-                //TODO: figure out how to create error popup message.
-            }
-        });
+        let efees_arc = event_for_ees.clone();
+        let event_reg_arc = event_registry.clone();
+        let bumper = Bumper::stack(
+            theme,
+            Some("Save Event"),
+            move |ctx: &mut Context, _: &Theme| {
+                let mut efees = efees_arc.lock().unwrap();
+                if efees.all_some() {
+                    let title = efees.get_title().unwrap();
+                    let year = efees.get_year_as_i32().to_string();
+                    let month = efees.get_month_as_u32().to_string();
+                    let day = efees.get_day_as_u32().to_string();
+                    let time = efees.get_time().unwrap();
+                    let fmt_for_datetime = Self::formatter(&year, &month, &day, &time);
+                    println!("{:?}", &fmt_for_datetime);
+                    efees.set_all_none();
+                    drop(efees);
+                    let datetime = DateTime::parse_from_str(&fmt_for_datetime, "%Y %m %d %H%M %z")
+                        .expect("Failed to parse into DateTime")
+                        .with_timezone(&Utc);
+                    println!("{:?}", &datetime);
+                    let event = EventForER::new(title, datetime);
+                    event_reg_arc.lock().unwrap().push(Some(event));
+                    ctx.send(Request::event(NavigationEvent::Reset));
+                    println!("Save Event button clicked.");
+                }
+            },
+            None,
+        );
 
         EventEditorScreen(
             Stack::default(),
-            Page::new(Header::stack(ctx, "New Event"), content, Some(bumper)),
+            Page::new(Header::stack(theme, "New Event", None), content, Some(bumper)),
+            event_for_ees,
+            event_registry,
         )
     }
+
     pub fn formatter(year: &str, month: &str, day: &str, time: &str) -> String {
-        // sets selected time value to TZ of User's machine.
         let local_time = Local::now();
         let tz_string = local_time.format("%z").to_string();
         format!("{year} {month} {day} {time} {tz_string}")

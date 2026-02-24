@@ -3,74 +3,91 @@ mod event_editor_screen;
 mod objects;
 mod various_date_selector_screens;
 
+use std::sync::{Arc, Mutex};
+
 use chrono::{DateTime, Months};
 use chrono::{Datelike, Local};
-use pelican_ui::canvas::{Align, Color};
+use maverick_os::window::{
+    ElementState, Event as WinEvent, Input, Lifetime, MouseScrollDelta, Window,
+};
+use pelican_ui::canvas::Align;
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
 use pelican_ui::components::text::{Text, TextSize, TextStyle};
-use pelican_ui::drawable::{Component, Offset, Size};
-use pelican_ui::event::OnEvent;
+use pelican_ui::drawable::{Component, Drawable, SizedTree};
+use pelican_ui::event::{MouseEvent, MouseState, OnEvent, TickEvent};
 use pelican_ui::interface::general::{Content, Header, Interface, Page};
-use pelican_ui::interface::navigation::RootInfo;
-use pelican_ui::layout::{Column, Padding};
-use pelican_ui::navigation::{AppPage, NavigationEvent};
+use pelican_ui::interface::navigation::{AppPage, Flow, FlowContainer, NavigationEvent, RootInfo};
+use pelican_ui::layout::{Column, Offset, Padding, Size, Stack};
 use pelican_ui::theme::Theme;
 use pelican_ui::utils::TitleSubtitle;
-use pelican_ui::{Assets, Context};
+use pelican_ui::{Context, Instance, PelicanUI, Request};
+use wgpu_canvas::{Atlas, Canvas};
 
 use crate::day_view_screen::DayViewScreen;
-use crate::objects::{EventForEES, EventForER, EventRegistry};
+use crate::objects::{EventForEES, EventRegistry};
 
-// Define the main application struct. This is our entry point type.
-pub struct Calendar;
+// Wrapper that lets a single AppPage be pushed via NavigationEvent::push.
+#[derive(Debug, Component, Clone)]
+pub struct PageFlow(Stack, Flow);
 
-impl Application for Calendar {
-    fn interface(ctx: &mut Context) -> Interface {
-        let home = RootInfo::icon("home", "My Calendar", MonthScreen::new(ctx).ok().unwrap());
+impl OnEvent for PageFlow {}
 
-        Interface::new(ctx, vec![home])
-    }
-
-    fn theme(assets: &mut Assets) -> Theme {
-        Theme::light(assets, Color::from_hex("#BF360C", 255))
+impl FlowContainer for PageFlow {
+    fn flow(&mut self) -> &mut Flow {
+        &mut self.1
     }
 }
 
-// Macro to start the application
-start!(Calendar);
+impl PageFlow {
+    pub fn new(page: Box<dyn AppPage>) -> Self {
+        PageFlow(Stack::default(), Flow::new(vec![page]))
+    }
+}
+
+// App entry point called by the platform runner.
+pub fn app() -> Interface {
+    let event_for_ees = Arc::new(Mutex::new(EventForEES::new(None, None, None, None, None)));
+    let event_registry = Arc::new(Mutex::new(EventRegistry::new(vec![None])));
+
+    PelicanUI::new(move |theme| {
+        let home = RootInfo::icon(
+            "home",
+            "My Calendar",
+            Box::new(MonthScreen::new(
+                theme,
+                event_registry.clone(),
+                event_for_ees.clone(),
+            )),
+        );
+        Interface::new(theme, vec![home], Box::new(|_, _, e| vec![e]))
+    })
+}
 
 // Define the first screen of the app
-#[derive(Debug, Component)]
+#[derive(Debug, Component, Clone)]
 pub struct MonthScreen(Column, Page);
+// AppPage requires DynClone, which is satisfied by #[derive(Clone)] above.
 
 impl OnEvent for MonthScreen {}
 
 impl AppPage for MonthScreen {}
 
 impl MonthScreen {
-    pub fn new(ctx: &mut Context) -> Result<Self, String> {
-        if ctx.state().get::<EventForEES>().is_none() {
-            let event_for_ees = EventForEES::new(None, None, None, None, None);
-            ctx.state().set(event_for_ees);
-        }
-
-        if ctx.state().get::<EventRegistry>().is_none() {
-            let event_registry = EventRegistry::new(vec![None]);
-            ctx.state().set(event_registry);
-        }
-
-        let event_registry: EventRegistry = ctx.state().get::<EventRegistry>().unwrap().clone();
+    pub fn new(
+        theme: &Theme,
+        event_registry: Arc<Mutex<EventRegistry>>,
+        event_for_ees: Arc<Mutex<EventForEES>>,
+    ) -> Self {
+        let registry_snapshot = event_registry.lock().unwrap().clone();
 
         let now = Local::now();
 
         let current_month = now.format("%B").to_string();
-
         let current_year = now.format("%Y").to_string();
-
         let current_month_and_year = format!("{} {}", current_month, current_year);
 
         let current_month_and_year_for_text = Text::new(
-            ctx,
+            theme,
             &current_month_and_year,
             TextSize::Md,
             TextStyle::Primary,
@@ -81,7 +98,7 @@ impl MonthScreen {
         let next_11_months = Self::next_11_months_determiner(&now);
         println!("{:?}", next_11_months);
         let next_11_months_1 = Text::new(
-            ctx,
+            theme,
             next_11_months.first().unwrap(),
             TextSize::Md,
             TextStyle::Secondary,
@@ -89,130 +106,158 @@ impl MonthScreen {
             None,
         );
 
-        let header = Header::home(ctx, "Calendar", None);
+        let header = Header::home(theme, "Calendar", None);
 
-        let listitemgroup_for_cmayft =
-            ListItemGroup::new(Self::listitem_builder(ctx, now, event_registry));
+        let listitemgroup_for_cmayft = ListItemGroup::new(Self::listitem_builder(
+            theme,
+            now,
+            registry_snapshot,
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
 
-        // let lig_for_next_11_months_1 =
-
-        // Combine icon, heading, and subtext into page content
         let content = Content::new(
-            ctx,
             Offset::Start,
-            // TODO: Put additional 11 (c_m_a_y_f_t) and (LIG) here.
             vec![
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
                 Box::new(next_11_months_1),
-                // Box::new(lig_for_next_11_months_1),
             ],
+            Box::new(|_| true),
         );
 
-        Ok(Self(
-            Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0)),
+        Self(
+            Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0), None),
             Page::new(header, content, None),
-        ))
+        )
     }
 
-    // iterate over a month range (1-31), create a ListItem, then collect into a vec.
     fn listitem_builder(
-        ctx: &mut Context,
+        theme: &Theme,
         now: DateTime<chrono::Local>,
-        event_registry: EventRegistry,
+        registry_snapshot: EventRegistry,
+        event_registry: Arc<Mutex<EventRegistry>>,
+        event_for_ees: Arc<Mutex<EventForEES>>,
     ) -> Vec<ListItem> {
-        // create range for use in vec_of_listitem.
         let range = Self::num_of_days_in_month(now);
 
-        let vec_of_listitem: Vec<ListItem> = (1..=range)
+        (1..=range)
             .map(|d| {
                 let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 let day_of_month = d as u32;
                 let month = now.month();
                 let year = now.year();
-                let events_with_days = event_registry.days_with_events(year, month);
-                let day_events: Option<&Vec<&EventForER>> =
-                    if events_with_days.contains(&(d as u32)) {
-                        Some(&event_registry.events_for_day(year, month, d as u32))
-                    } else {
-                        None
-                    };
+                let events_with_days = registry_snapshot.days_with_events(year, month);
+                let has_event = events_with_days.contains(&(d as u32));
+                let first_event_title = has_event
+                    .then(|| {
+                        registry_snapshot
+                            .events_for_day(year, month, d as u32)
+                            .into_iter()
+                            .next()
+                            .map(|e| TitleSubtitle::new(e.title(), None))
+                    })
+                    .flatten();
+
+                let reg_clone = event_registry.clone();
+                let ees_clone = event_for_ees.clone();
+
                 ListItem::new(
-                    ctx,
+                    theme,
                     None,
-                    ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
-                    day_events
-                        .and_then(|events| events.first())
-                        .map(|e| TitleSubtitle::new(e.title(), "")),
+                    ListItemInfoLeft::new(
+                        &d.to_string(),
+                        Some(&day_of_week.to_string()),
+                        None,
+                        None,
+                    ),
+                    first_event_title,
                     None,
                     None,
-                    move |ctx: &mut Context| {
-                        let page =
-                            Box::new(DayViewScreen::new(ctx, year, month, day_of_month).unwrap());
-                        ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    move |ctx: &mut Context, theme: &Theme| {
+                        let page = Box::new(
+                            DayViewScreen::new(
+                                theme,
+                                year,
+                                month,
+                                day_of_month,
+                                reg_clone.clone(),
+                                ees_clone.clone(),
+                            )
+                            .unwrap(),
+                        );
+                        ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
                     },
                 )
             })
-            .collect();
-
-        vec_of_listitem
+            .collect()
     }
 
     fn next_11_months_determiner(now: &DateTime<Local>) -> Vec<String> {
-        let month_names: Vec<String> = (1..=11)
+        (1..=11)
             .map(|i| {
                 let future = *now + Months::new(i);
                 future.format("%B %Y").to_string()
             })
-            .collect();
-        month_names
+            .collect()
     }
 
     fn listitem_builder_plus_n(
-        ctx: &mut Context,
+        theme: &Theme,
         chosen_month_and_year: &str,
-        event_registry: EventRegistry,
+        registry_snapshot: EventRegistry,
+        event_registry: Arc<Mutex<EventRegistry>>,
+        event_for_ees: Arc<Mutex<EventForEES>>,
     ) -> Vec<ListItem> {
-        // TODO: split `January 2026` into month and year.
         let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
-        //get num of days in month. I will iterate through this.
-        let range = Self::num_of_days_in_month_for_vec_str(month_and_year);
+        let range = Self::num_of_days_in_month_for_vec_str(&month_and_year);
 
-        let vec_of_listitem: Vec<ListItem> = (1..=range)
+        (1..=range)
             .map(|d| {
-                // let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 let day_of_month = d as u32;
-                // let month = now.month();
-                // let year = now.year();
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
                 let month = month_and_year.first().unwrap().parse::<u32>().unwrap();
-                let events_with_days = event_registry.days_with_events(year, month);
-                let day_events: Option<&Vec<&EventForER>> =
-                    if events_with_days.contains(&(d as u32)) {
-                        Some(&event_registry.events_for_day(year, month, d as u32))
-                    } else {
-                        None
-                    };
+                let events_with_days = registry_snapshot.days_with_events(year, month);
+                let has_event = events_with_days.contains(&(d as u32));
+                let first_event_title = has_event
+                    .then(|| {
+                        registry_snapshot
+                            .events_for_day(year, month, d as u32)
+                            .into_iter()
+                            .next()
+                            .map(|e| TitleSubtitle::new(e.title(), None))
+                    })
+                    .flatten();
+
+                // TODO: compute day_of_week from a NaiveDate for this month/year/day.
+                let reg_clone = event_registry.clone();
+                let ees_clone = event_for_ees.clone();
+
                 ListItem::new(
-                    ctx,
+                    theme,
                     None,
                     //TODO: I need to create a DateTime so I can create a Weekday for &day_of_week.
-                    ListItemInfoLeft::new(&d.to_string(), &day_of_week.to_string(), None, None),
-                    day_events
-                        .and_then(|events| events.first())
-                        .map(|e| TitleSubtitle::new(e.title(), "")),
+                    ListItemInfoLeft::new(&d.to_string(), None, None, None),
+                    first_event_title,
                     None,
                     None,
-                    move |ctx: &mut Context| {
-                        let page =
-                            Box::new(DayViewScreen::new(ctx, year, month, day_of_month).unwrap());
-                        ctx.trigger_event(NavigationEvent::Push(Some(page)));
+                    move |ctx: &mut Context, theme: &Theme| {
+                        let page = Box::new(
+                            DayViewScreen::new(
+                                theme,
+                                year,
+                                month,
+                                day_of_month,
+                                reg_clone.clone(),
+                                ees_clone.clone(),
+                            )
+                            .unwrap(),
+                        );
+                        ctx.send(Request::event(NavigationEvent::push(PageFlow::new(page))));
                     },
                 )
             })
-            .collect();
-
-        vec_of_listitem
+            .collect()
     }
 
     fn is_leap_year(year: i32) -> bool {
@@ -242,19 +287,14 @@ impl MonthScreen {
             _ => panic!("Something went wrong with num_of_days_in_month()."),
         }
     }
+
     //HACK: Having two functions that do the same thing (fn num_of_days_in_month) is stupid.
     //Combine / Refactor.
-    fn num_of_days_in_month_for_vec_str(month_and_year: Vec<&str>) -> i32 {
+    fn num_of_days_in_month_for_vec_str(month_and_year: &[&str]) -> i32 {
         match *month_and_year.first().unwrap() {
             "January" => 31,
             "February" => {
-                if Self::is_leap_year(
-                    month_and_year
-                        .get(1 as usize)
-                        .unwrap()
-                        .parse::<i32>()
-                        .unwrap(),
-                ) {
+                if Self::is_leap_year(month_and_year.get(1).unwrap().parse::<i32>().unwrap()) {
                     29
                 } else {
                     28
@@ -274,3 +314,110 @@ impl MonthScreen {
         }
     }
 }
+
+// Desktop/mobile/wasm runner — bridges pelican_ui's Interface drawable tree
+// to the wgpu surface via maverick_os's window lifecycle.
+struct CalendarApp {
+    canvas: Canvas,
+    atlas: Atlas,
+    ui: Interface,
+    sized: SizedTree,
+    prism_ctx: Context,
+    instance: Instance,
+    cursor: (f32, f32),
+}
+
+impl maverick_os::Services for CalendarApp {}
+
+impl maverick_os::Application for CalendarApp {
+    async fn new(ctx: &mut maverick_os::Context) -> Self {
+        let (w, h) = ctx.window.size;
+        let canvas = Canvas::new(ctx.window.handle.clone(), w, h).await;
+        let atlas = Atlas::default();
+        let (prism_ctx, receiver) = Context::new();
+        let instance = Instance::new(receiver);
+        let ui = crate::app();
+        let req = ui.request_size();
+        let sized = ui.build((w as f32, h as f32), req);
+        CalendarApp {
+            canvas,
+            atlas,
+            ui,
+            sized,
+            prism_ctx,
+            instance,
+            cursor: (0.0, 0.0),
+        }
+    }
+
+    async fn on_event(&mut self, ctx: &mut maverick_os::Context, event: WinEvent) {
+        let (w, h) = ctx.window.size;
+        let sf = ctx.window.scale_factor as f32;
+        let size = (w as f32, h as f32);
+
+        match event {
+            WinEvent::Input(Input::CursorMoved { position, .. }) => {
+                self.cursor = (position.0 as f32 / sf, position.1 as f32 / sf);
+                let e = Box::new(MouseEvent {
+                    position: Some(self.cursor),
+                    state: MouseState::Moved,
+                });
+                self.ui.event(&mut self.prism_ctx, &self.sized, e);
+            }
+            WinEvent::Input(Input::Mouse {
+                state: ElementState::Pressed,
+                ..
+            }) => {
+                let e = Box::new(MouseEvent {
+                    position: Some(self.cursor),
+                    state: MouseState::Pressed,
+                });
+                self.ui.event(&mut self.prism_ctx, &self.sized, e);
+            }
+            WinEvent::Input(Input::Mouse {
+                state: ElementState::Released,
+                ..
+            }) => {
+                let e = Box::new(MouseEvent {
+                    position: Some(self.cursor),
+                    state: MouseState::Released,
+                });
+                self.ui.event(&mut self.prism_ctx, &self.sized, e);
+            }
+            WinEvent::Input(Input::MouseWheel { delta, .. }) => {
+                let (dx, dy) = match delta {
+                    MouseScrollDelta::LineDelta(x, y) => (x * 20.0, y * 20.0),
+                    MouseScrollDelta::PixelDelta(p) => (p.x as f32, p.y as f32),
+                };
+                let e = Box::new(MouseEvent {
+                    position: Some(self.cursor),
+                    state: MouseState::Scroll(dx, dy),
+                });
+                self.ui.event(&mut self.prism_ctx, &self.sized, e);
+            }
+            WinEvent::Lifetime(Lifetime::Resized) => {
+                self.canvas.resize(Option::<Arc<Window>>::None, w, h);
+                let req = self.ui.request_size();
+                self.sized = self.ui.build(size, req);
+            }
+            WinEvent::Lifetime(Lifetime::Draw) => {
+                self.instance.handle_requests();
+                self.instance.tick(&mut self.prism_ctx);
+                while let Some(e) = self.instance.events.pop_front() {
+                    self.ui.event(&mut self.prism_ctx, &self.sized, e);
+                }
+                self.ui
+                    .event(&mut self.prism_ctx, &self.sized, Box::new(TickEvent));
+                let req = self.ui.request_size();
+                self.sized = self.ui.build(size, req);
+                let items = self
+                    .ui
+                    .draw(&self.sized, (0.0, 0.0), (0.0, 0.0, size.0, size.1));
+                self.canvas.draw(&mut self.atlas, items);
+            }
+            _ => {}
+        }
+    }
+}
+
+maverick_os::start!(CalendarApp);
