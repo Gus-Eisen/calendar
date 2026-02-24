@@ -8,13 +8,16 @@ use std::sync::{Arc, Mutex};
 use chrono::{DateTime, Months};
 use chrono::{Datelike, Local};
 use maverick_os::window::{
-    ElementState, Event as WinEvent, Input, Lifetime, MouseScrollDelta, Window,
+    ElementState, Event as WinEvent, Input, KeyEvent, Lifetime, MouseScrollDelta,
+    NamedKey as WinitNamedKey, Window,
 };
 use pelican_ui::canvas::Align;
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
 use pelican_ui::components::text::{Text, TextSize, TextStyle};
 use pelican_ui::drawable::{Component, Drawable, SizedTree};
-use pelican_ui::event::{MouseEvent, MouseState, OnEvent, TickEvent};
+use pelican_ui::event::{
+    Key, KeyboardEvent, KeyboardState, MouseEvent, MouseState, NamedKey, OnEvent, TickEvent,
+};
 use pelican_ui::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::interface::navigation::{AppPage, Flow, FlowContainer, NavigationEvent, RootInfo};
 use pelican_ui::layout::{Column, Offset, Padding, Size, Stack};
@@ -394,6 +397,61 @@ impl maverick_os::Application for CalendarApp {
                     state: MouseState::Scroll(dx, dy),
                 });
                 self.ui.event(&mut self.prism_ctx, &self.sized, e);
+            }
+            WinEvent::Input(Input::Keyboard {
+                event:
+                    KeyEvent {
+                        logical_key,
+                        state,
+                        repeat,
+                        ..
+                    },
+                ..
+            }) => {
+                let key = match &logical_key {
+                    maverick_os::window::Key::Named(WinitNamedKey::Enter) => {
+                        Key::Named(NamedKey::Enter)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::Tab) => {
+                        Key::Named(NamedKey::Tab)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::Space) => {
+                        Key::Named(NamedKey::Space)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::ArrowUp) => {
+                        Key::Named(NamedKey::ArrowUp)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::ArrowDown) => {
+                        Key::Named(NamedKey::ArrowDown)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::ArrowLeft) => {
+                        Key::Named(NamedKey::ArrowLeft)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::ArrowRight) => {
+                        Key::Named(NamedKey::ArrowRight)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::Backspace) => {
+                        Key::Named(NamedKey::Delete)
+                    }
+                    maverick_os::window::Key::Named(WinitNamedKey::Delete) => {
+                        Key::Named(NamedKey::Delete)
+                    }
+                    maverick_os::window::Key::Character(s) => Key::Character(s.to_string()),
+                    _ => return,
+                };
+                let kb_state = match (state, repeat) {
+                    (ElementState::Released, _) => KeyboardState::Released,
+                    (ElementState::Pressed, true) => KeyboardState::Repeated,
+                    (ElementState::Pressed, false) => KeyboardState::Pressed,
+                };
+                self.ui.event(
+                    &mut self.prism_ctx,
+                    &self.sized,
+                    Box::new(KeyboardEvent {
+                        key,
+                        state: kb_state,
+                    }),
+                );
             }
             WinEvent::Lifetime(Lifetime::Resized) => {
                 self.canvas.resize(Option::<Arc<Window>>::None, w, h);

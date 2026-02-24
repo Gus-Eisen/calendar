@@ -77,7 +77,14 @@ impl EventEditorScreen {
         };
 
         let event_title = if let Some(ref t) = title_val {
-            TextInput::new(theme, None, Some("Event Title"), Some(t.as_str()), None, None)
+            TextInput::new(
+                theme,
+                None,
+                Some("Event Title"),
+                Some(t.as_str()),
+                None,
+                None,
+            )
         } else {
             TextInput::new(
                 theme,
@@ -91,7 +98,10 @@ impl EventEditorScreen {
 
         let efees_for_year = event_for_ees.clone();
         let event_reg_for_year = event_registry.clone();
-        let year_str = year_label.as_deref().unwrap_or("Select year here").to_string();
+        let year_str = year_label
+            .as_deref()
+            .unwrap_or("Select year here")
+            .to_string();
         let year_btn = SecondaryButton::medium(
             theme,
             "right",
@@ -110,7 +120,10 @@ impl EventEditorScreen {
 
         let efees_for_month = event_for_ees.clone();
         let event_reg_for_month = event_registry.clone();
-        let month_str = month_label.as_deref().unwrap_or("Select month here").to_string();
+        let month_str = month_label
+            .as_deref()
+            .unwrap_or("Select month here")
+            .to_string();
         let month_btn = SecondaryButton::medium(
             theme,
             "right",
@@ -129,7 +142,10 @@ impl EventEditorScreen {
 
         let efees_for_day = event_for_ees.clone();
         let event_reg_for_day = event_registry.clone();
-        let day_str = day_label.as_deref().unwrap_or("Select day here").to_string();
+        let day_str = day_label
+            .as_deref()
+            .unwrap_or("Select day here")
+            .to_string();
         let day_btn = SecondaryButton::medium(
             theme,
             "right",
@@ -148,7 +164,10 @@ impl EventEditorScreen {
 
         let efees_for_time = event_for_ees.clone();
         let event_reg_for_time = event_registry.clone();
-        let time_str = time_label.as_deref().unwrap_or("Select time here").to_string();
+        let time_str = time_label
+            .as_deref()
+            .unwrap_or("Select time here")
+            .to_string();
         let time_btn = SecondaryButton::medium(
             theme,
             "right",
@@ -209,7 +228,11 @@ impl EventEditorScreen {
 
         EventEditorScreen(
             Stack::default(),
-            Page::new(Header::stack(theme, "New Event", None), content, Some(bumper)),
+            Page::new(
+                Header::stack(theme, "New Event", None),
+                content,
+                Some(bumper),
+            ),
             event_for_ees,
             event_registry,
         )
