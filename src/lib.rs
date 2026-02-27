@@ -49,6 +49,7 @@ impl PageFlow {
 
 // App entry point called by the platform runner.
 pub fn app() -> Interface {
+    //HACK: I don't need to create an arc/mutex here. Create in new().
     let event_for_ees = Arc::new(Mutex::new(EventForEES::new(None, None, None, None, None)));
     let event_registry = Arc::new(Mutex::new(EventRegistry::new(vec![None])));
 
@@ -100,6 +101,7 @@ impl MonthScreen {
 
         let next_11_months = Self::next_11_months_determiner(&now);
         println!("{:?}", next_11_months);
+
         let next_11_months_1 = Text::new(
             theme,
             next_11_months.first().unwrap(),
@@ -108,6 +110,14 @@ impl MonthScreen {
             Align::Left,
             None,
         );
+
+        let lig_for_1 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.first().unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
 
         let header = Header::home(theme, "Calendar", None);
 
@@ -205,7 +215,7 @@ impl MonthScreen {
             .collect()
     }
 
-    fn listitem_builder_plus_n(
+    pub fn listitem_builder_plus_n(
         theme: &Theme,
         chosen_month_and_year: &str,
         registry_snapshot: EventRegistry,
@@ -219,6 +229,7 @@ impl MonthScreen {
             .map(|d| {
                 let day_of_month = d as u32;
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
+                //FIX: Panic here. I need month as a u32, but have string like "Jan" I think.
                 let month = month_and_year.first().unwrap().parse::<u32>().unwrap();
                 let events_with_days = registry_snapshot.days_with_events(year, month);
                 let has_event = events_with_days.contains(&(d as u32));
