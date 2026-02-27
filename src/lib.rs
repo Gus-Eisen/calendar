@@ -230,7 +230,21 @@ impl MonthScreen {
                 let day_of_month = d as u32;
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
                 //FIX: Panic here. I need month as a u32, but have string like "Jan" I think.
-                let month = month_and_year.first().unwrap().parse::<u32>().unwrap();
+                let month = match *month_and_year.first().unwrap() {
+                    "January" => 1,
+                    "February" => 2,
+                    "March" => 3,
+                    "April" => 4,
+                    "May" => 5,
+                    "June" => 6,
+                    "July" => 7,
+                    "August" => 8,
+                    "September" => 9,
+                    "October" => 10,
+                    "November" => 11,
+                    "December" => 12,
+                    _ => panic!("month in listitem_builder_plus_n."),
+                };
                 let events_with_days = registry_snapshot.days_with_events(year, month);
                 let has_event = events_with_days.contains(&(d as u32));
                 let first_event_title = has_event
