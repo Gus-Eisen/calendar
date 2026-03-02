@@ -209,6 +209,86 @@ impl MonthScreen {
             event_for_ees.clone(),
         ));
 
+        let lig_for_2 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(1).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_3 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(2).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_4 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(3).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_5 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(4).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_6 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(5).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_7 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(6).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_8 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(7).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_9 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(8).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_10 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(9).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
+        let lig_for_11 = ListItemGroup::new(Self::listitem_builder_plus_n(
+            theme,
+            next_11_months.get(10).unwrap(),
+            registry_snapshot.clone(),
+            event_registry.clone(),
+            event_for_ees.clone(),
+        ));
+
         let header = Header::home(theme, "Calendar", None);
 
         let listitemgroup_for_cmayft = ListItemGroup::new(Self::listitem_builder(
