@@ -111,6 +111,96 @@ impl MonthScreen {
             None,
         );
 
+        let next_11_months_2 = Text::new(
+            theme,
+            next_11_months.get(1).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_3 = Text::new(
+            theme,
+            next_11_months.get(2).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_4 = Text::new(
+            theme,
+            next_11_months.get(3).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_5 = Text::new(
+            theme,
+            next_11_months.get(4).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_6 = Text::new(
+            theme,
+            next_11_months.get(5).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_7 = Text::new(
+            theme,
+            next_11_months.get(6).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_8 = Text::new(
+            theme,
+            next_11_months.get(7).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_9 = Text::new(
+            theme,
+            next_11_months.get(8).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_10 = Text::new(
+            theme,
+            next_11_months.get(9).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
+        let next_11_months_11 = Text::new(
+            theme,
+            next_11_months.get(10).unwrap(),
+            TextSize::Md,
+            TextStyle::Secondary,
+            Align::Left,
+            None,
+        );
+
         let lig_for_1 = ListItemGroup::new(Self::listitem_builder_plus_n(
             theme,
             next_11_months.first().unwrap(),
@@ -135,6 +225,7 @@ impl MonthScreen {
                 Box::new(current_month_and_year_for_text),
                 Box::new(listitemgroup_for_cmayft),
                 Box::new(next_11_months_1),
+                Box::new(lig_for_1),
             ],
             Box::new(|_| true),
         );
@@ -229,7 +320,7 @@ impl MonthScreen {
             .map(|d| {
                 let day_of_month = d as u32;
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
-                //FIX: Panic here. I need month as a u32, but have string like "Jan" I think.
+                // NOTE: If month num is borked, start with 0 in match statement.
                 let month = match *month_and_year.first().unwrap() {
                     "January" => 1,
                     "February" => 2,
