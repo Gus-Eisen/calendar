@@ -420,7 +420,6 @@ impl MonthScreen {
             .map(|d| {
                 let day_of_month = d as u32;
                 let year = month_and_year.get(1).unwrap().parse::<i32>().unwrap();
-                // NOTE: If month num is borked, start with 0 in match statement.
                 let month = match *month_and_year.first().unwrap() {
                     "January" => 1,
                     "February" => 2,
@@ -434,7 +433,7 @@ impl MonthScreen {
                     "October" => 10,
                     "November" => 11,
                     "December" => 12,
-                    _ => panic!("month in listitem_builder_plus_n."),
+                    _ => panic!("month in listitem_builder_plus_n is borked."),
                 };
                 let events_with_days = registry_snapshot.days_with_events(year, month);
                 let has_event = events_with_days.contains(&(d as u32));
@@ -448,14 +447,13 @@ impl MonthScreen {
                     })
                     .flatten();
 
-                // TODO: compute day_of_week from a NaiveDate for this month/year/day.
                 let reg_clone = event_registry.clone();
                 let ees_clone = event_for_ees.clone();
-
+                let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 ListItem::new(
                     theme,
                     None,
-                    //TODO: I need to create a DateTime so I can create a Weekday for &day_of_week.
+                    //TODO: put day of week in subtitle.
                     ListItemInfoLeft::new(&d.to_string(), None, None, None),
                     first_event_title,
                     None,
