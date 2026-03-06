@@ -5,7 +5,7 @@ mod various_date_selector_screens;
 
 use std::sync::{Arc, Mutex};
 
-use chrono::{DateTime, Months};
+use chrono::{DateTime, Months, NaiveDate};
 use chrono::{Datelike, Local};
 use maverick_os::window::{
     ElementState, Event as WinEvent, Input, KeyEvent, Lifetime, MouseScrollDelta,
@@ -415,6 +415,7 @@ impl MonthScreen {
     ) -> Vec<ListItem> {
         let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
         let range = Self::num_of_days_in_month_for_vec_str(&month_and_year);
+        eprintln!("{:?}", month_and_year);
 
         (1..=range)
             .map(|d| {
@@ -449,12 +450,21 @@ impl MonthScreen {
 
                 let reg_clone = event_registry.clone();
                 let ees_clone = event_for_ees.clone();
-                let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                //use this as example.
+                // let day_of_week = now.with_day(d as u32).unwrap().weekday();
+                let day_of_week = NaiveDate::from_ymd_opt(year, month, d as u32)
+                    .unwrap()
+                    .weekday();
                 ListItem::new(
                     theme,
                     None,
                     //TODO: put day of week in subtitle.
-                    ListItemInfoLeft::new(&d.to_string(), None, None, None),
+                    ListItemInfoLeft::new(
+                        &d.to_string(),
+                        Some(&day_of_week.to_string()),
+                        None,
+                        None,
+                    ),
                     first_event_title,
                     None,
                     None,
