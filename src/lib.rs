@@ -100,7 +100,6 @@ impl MonthScreen {
         );
 
         let next_11_months = Self::next_11_months_determiner(&now);
-        println!("{:?}", next_11_months);
 
         let next_11_months_1 = Text::new(
             theme,
@@ -406,6 +405,7 @@ impl MonthScreen {
             .collect()
     }
 
+    // Creates next 11 months after current month.
     pub fn listitem_builder_plus_n(
         theme: &Theme,
         chosen_month_and_year: &str,
@@ -415,7 +415,6 @@ impl MonthScreen {
     ) -> Vec<ListItem> {
         let month_and_year: Vec<&str> = chosen_month_and_year.split_whitespace().collect();
         let range = Self::num_of_days_in_month_for_vec_str(&month_and_year);
-        eprintln!("{:?}", month_and_year);
 
         (1..=range)
             .map(|d| {
@@ -450,15 +449,12 @@ impl MonthScreen {
 
                 let reg_clone = event_registry.clone();
                 let ees_clone = event_for_ees.clone();
-                //use this as example.
-                // let day_of_week = now.with_day(d as u32).unwrap().weekday();
                 let day_of_week = NaiveDate::from_ymd_opt(year, month, d as u32)
                     .unwrap()
                     .weekday();
                 ListItem::new(
                     theme,
                     None,
-                    //TODO: put day of week in subtitle.
                     ListItemInfoLeft::new(
                         &d.to_string(),
                         Some(&day_of_week.to_string()),
