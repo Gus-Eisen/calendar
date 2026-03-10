@@ -21,7 +21,7 @@ use pelican_ui::event::{
 use pelican_ui::interface::general::{Content, Header, Interface, Page};
 use pelican_ui::interface::navigation::{AppPage, Flow, FlowContainer, NavigationEvent, RootInfo};
 use pelican_ui::layout::{Column, Offset, Padding, Size, Stack};
-use pelican_ui::theme::Theme;
+use pelican_ui::theme::{Color, Theme};
 use pelican_ui::utils::TitleSubtitle;
 use pelican_ui::{Context, Instance, PelicanUI, Request};
 use wgpu_canvas::{Atlas, Canvas};
@@ -335,6 +335,7 @@ impl MonthScreen {
         )
     }
 
+    // Creates User's current month.
     fn listitem_builder(
         theme: &Theme,
         now: DateTime<chrono::Local>,
@@ -343,6 +344,7 @@ impl MonthScreen {
         event_for_ees: Arc<Mutex<EventForEES>>,
     ) -> Vec<ListItem> {
         let range = Self::num_of_days_in_month(now);
+        eprintln!("{:?}", now);
 
         (1..=range)
             .map(|d| {
@@ -364,15 +366,21 @@ impl MonthScreen {
 
                 let reg_clone = event_registry.clone();
                 let ees_clone = event_for_ees.clone();
+                let flair = if d == now.day() as i32 {
+                    Some(("notification", Color::from_hex("#FF0000", 255)))
+                } else {
+                    None
+                };
 
                 ListItem::new(
                     theme,
                     None,
                     ListItemInfoLeft::new(
+                        //TODO: create colored current day here.
                         &d.to_string(),
                         Some(&day_of_week.to_string()),
                         None,
-                        None,
+                        flair,
                     ),
                     first_event_title,
                     None,
