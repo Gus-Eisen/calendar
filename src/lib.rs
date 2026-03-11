@@ -23,7 +23,7 @@ use pelican_ui::interface::navigation::{AppPage, Flow, FlowContainer, Navigation
 use pelican_ui::layout::{Column, Offset, Padding, Size, Stack};
 use pelican_ui::theme::{Color, Theme};
 use pelican_ui::utils::TitleSubtitle;
-use pelican_ui::{Context, Instance, PelicanUI, Request};
+use pelican_ui::{Context, Instance, Request};
 use wgpu_canvas::{Atlas, Canvas};
 
 use crate::day_view_screen::DayViewScreen;
