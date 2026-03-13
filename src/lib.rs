@@ -11,6 +11,8 @@ use maverick_os::window::{
     ElementState, Event as WinEvent, Input, KeyEvent, Lifetime, MouseScrollDelta,
     NamedKey as WinitNamedKey, Window,
 };
+
+use maverick_os::{Application, Services};
 use pelican_ui::canvas::Align;
 use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
 use pelican_ui::components::text::{Text, TextSize, TextStyle};
@@ -558,10 +560,10 @@ struct CalendarApp {
     cursor: (f32, f32),
 }
 
-impl maverick_os::Services for CalendarApp {}
+impl Services for CalendarApp {}
 
-impl maverick_os::Application for CalendarApp {
-    async fn new(ctx: &mut maverick_os::Context) -> Self {
+impl Application for CalendarApp {
+    async fn new(ctx: &mut Context) -> Self {
         let (w, h) = ctx.window.size;
         let canvas = Canvas::new(ctx.window.handle.clone(), w, h).await;
         let atlas = Atlas::default();
