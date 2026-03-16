@@ -7,26 +7,20 @@ use std::sync::{Arc, Mutex};
 
 use chrono::{DateTime, Months, NaiveDate};
 use chrono::{Datelike, Local};
-use maverick_os::window::{
-    ElementState, Event as WinEvent, Input, KeyEvent, Lifetime, MouseScrollDelta,
-    NamedKey as WinitNamedKey, Window,
+
+
+#![allow(clippy::new_ret_no_self)]
+use ramp::prism;
+
+
+use chk::{
+    Bumper, ChkTheme, Color, Context, Display, Flow, Form, FormItem, FormSubmit, Icons, Message,
+    NumberVariant, Offset, PageBuilder, PageType, Profile, Review, Root, RootInfo, Screen, State,
+    Success, Theme,
 };
 
-use maverick_os::{Application, Services};
-use pelican_ui::canvas::Align;
-use pelican_ui::components::list_item::{ListItem, ListItemGroup, ListItemInfoLeft};
-use pelican_ui::components::text::{Text, TextSize, TextStyle};
-use pelican_ui::drawable::{Component, Drawable, SizedTree};
-use pelican_ui::event::{
-    Key, KeyboardEvent, KeyboardState, MouseEvent, MouseState, NamedKey, OnEvent, TickEvent,
-};
-use pelican_ui::interface::general::{Content, Header, Interface, Page};
-use pelican_ui::interface::navigation::{AppPage, Flow, FlowContainer, NavigationEvent, RootInfo};
-use pelican_ui::layout::{Column, Offset, Padding, Size, Stack};
-use pelican_ui::theme::{Color, Theme};
-use pelican_ui::utils::TitleSubtitle;
-use pelican_ui::{Context, Instance, Request};
-use wgpu_canvas::{Atlas, Canvas};
+use chk::items::{Action, ListItem, TableItem};
+
 
 use crate::day_view_screen::DayViewScreen;
 use crate::objects::{EventForEES, EventRegistry};
