@@ -8,10 +8,8 @@ use std::sync::{Arc, Mutex};
 use chrono::{DateTime, Months, NaiveDate};
 use chrono::{Datelike, Local};
 
-
 #![allow(clippy::new_ret_no_self)]
 use ramp::prism;
-
 
 use chk::{
     Bumper, ChkTheme, Color, Context, Display, Flow, Form, FormItem, FormSubmit, Icons, Message,
@@ -21,11 +19,29 @@ use chk::{
 
 use chk::items::{Action, ListItem, TableItem};
 
-
 use crate::day_view_screen::DayViewScreen;
 use crate::objects::{EventForEES, EventRegistry};
 
-// Wrapper that lets a single AppPage be pushed via NavigationEvent::push.
+chk::run! { |_ctx: &mut Context| Calendar }
+
+pub struct Calendar;
+
+impl chk::App for Calendar {
+    fn roots(&self, ctx: &mut Context, theme: &Theme) -> Vec<RootInfo> {
+        vec![RootInfo::icon(
+            ctx,
+            theme,
+            Icons::Home,
+            "Home",
+            MonthScreen::new(theme),
+        )]
+    }
+
+    fn theme(&self) -> ChkTheme {
+        ChkTheme::Dark(Color::from_hex("#eb343a", 255))
+    }
+}
+
 #[derive(Debug, Component, Clone)]
 pub struct PageFlow(Stack, Flow);
 
@@ -75,8 +91,8 @@ impl AppPage for MonthScreen {}
 impl MonthScreen {
     pub fn new(
         theme: &Theme,
-        event_registry: Arc<Mutex<EventRegistry>>,
-        event_for_ees: Arc<Mutex<EventForEES>>,
+        // event_registry: Arc<Mutex<EventRegistry>>,
+        // event_for_ees: Arc<Mutex<EventForEES>>,
     ) -> Self {
         let registry_snapshot = event_registry.lock().unwrap().clone();
 
@@ -542,9 +558,7 @@ impl MonthScreen {
     }
 }
 
-// Desktop/mobile/wasm runner — bridges pelican_ui's Interface drawable tree
-// to the wgpu surface via maverick_os's window lifecycle.
-struct CalendarApp {
+struct Calendar {
     canvas: Canvas,
     atlas: Atlas,
     ui: Interface,
@@ -554,9 +568,9 @@ struct CalendarApp {
     cursor: (f32, f32),
 }
 
-impl Services for CalendarApp {}
+impl Services for Calendar {}
 
-impl Application for CalendarApp {
+impl Application for Calendar {
     async fn new(ctx: &mut Context) -> Self {
         let (w, h) = ctx.window.size;
         let canvas = Canvas::new(ctx.window.handle.clone(), w, h).await;
