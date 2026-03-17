@@ -42,23 +42,6 @@ impl chk::App for Calendar {
     }
 }
 
-#[derive(Debug, Component, Clone)]
-pub struct PageFlow(Stack, Flow);
-
-impl OnEvent for PageFlow {}
-
-impl FlowContainer for PageFlow {
-    fn flow(&mut self) -> &mut Flow {
-        &mut self.1
-    }
-}
-
-impl PageFlow {
-    pub fn new(page: Box<dyn AppPage>) -> Self {
-        PageFlow(Stack::default(), Flow::new(vec![page]))
-    }
-}
-
 // App entry point called by the platform runner.
 pub fn app() -> Interface {
     //HACK: I don't need to create an arc/mutex here. Create in new().
