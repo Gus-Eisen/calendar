@@ -12,12 +12,12 @@ use chrono::{Datelike, Local};
 use ramp::prism;
 
 use chk::{
-    Bumper, ChkTheme, Color, Context, Display, Flow, Form, FormItem, FormSubmit, Icons, Message,
-    NumberVariant, Offset, PageBuilder, PageType, Profile, Review, Root, RootInfo, Screen, State,
-    Success, Theme,
+    Bumper, ChkTheme, Color, Context, Display, Flow, Form, FormItem, FormSubmit, Icons, Message, NumberVariant, Offset, OnEvent, PageBuilder, PageType, Profile, Review, Root, RootInfo, Screen, State, Success, Theme
 };
 
 use chk::items::{Action, ListItem, TableItem};
+use ramp::prism::drawable::Component;
+use ramp::prism::layout::Column;
 
 use crate::day_view_screen::DayViewScreen;
 use crate::objects::{EventForEES, EventRegistry};
@@ -41,42 +41,40 @@ impl chk::App for Calendar {
         ChkTheme::Dark(Color::from_hex("#eb343a", 255))
     }
 }
-
-// App entry point called by the platform runner.
-pub fn app() -> Interface {
-    //HACK: I don't need to create an arc/mutex here. Create in new().
-    let event_for_ees = Arc::new(Mutex::new(EventForEES::new(None, None, None, None, None)));
-    let event_registry = Arc::new(Mutex::new(EventRegistry::new(vec![None])));
-
-    PelicanUI::new(move |theme| {
-        let home = RootInfo::icon(
-            "home",
-            "My Calendar",
-            Box::new(MonthScreen::new(
-                theme,
-                event_registry.clone(),
-                event_for_ees.clone(),
-            )),
-        );
-        Interface::new(theme, vec![home], Box::new(|_, _, e| vec![e]))
-    })
-}
+//TODO: Think that app is no longer required.
+// // App entry point called by the platform runner.
+// pub fn app() -> Interface {
+//     //HACK: I don't need to create an arc/mutex here. Create in new().
+//     let event_for_ees = Arc::new(Mutex::new(EventForEES::new(None, None, None, None, None)));
+//     let event_registry = Arc::new(Mutex::new(EventRegistry::new(vec![None])));
+//
+//     PelicanUI::new(move |theme| {
+//         let home = RootInfo::icon(
+//             "home",
+//             "My Calendar",
+//             Box::new(MonthScreen::new(
+//                 theme,
+//                 event_registry.clone(),
+//                 event_for_ees.clone(),
+//             )),
+//         );
+//         Interface::new(theme, vec![home], Box::new(|_, _, e| vec![e]))
+//     })
+// }
 
 // Define the first screen of the app
 #[derive(Debug, Component, Clone)]
+//FIX: not sure which Page to use. 
 pub struct MonthScreen(Column, Page);
-// AppPage requires DynClone, which is satisfied by #[derive(Clone)] above.
 
 impl OnEvent for MonthScreen {}
-
-impl AppPage for MonthScreen {}
 
 impl MonthScreen {
     pub fn new(
         theme: &Theme,
         // event_registry: Arc<Mutex<EventRegistry>>,
         // event_for_ees: Arc<Mutex<EventForEES>>,
-    ) -> Self {
+    ) -> PageType {
         let registry_snapshot = event_registry.lock().unwrap().clone();
 
         let now = Local::now();
