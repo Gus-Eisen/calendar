@@ -16,8 +16,9 @@ use chk::{
 };
 
 use chk::items::{Action, ListItem, TableItem};
+use ramp::prism::canvas::Text;
 use ramp::prism::drawable::Component;
-use ramp::prism::layout::Column;
+use ramp::prism::layout::{Column, Padding};
 
 use crate::day_view_screen::DayViewScreen;
 use crate::objects::{EventForEES, EventRegistry};
@@ -72,8 +73,6 @@ impl OnEvent for MonthScreen {}
 impl MonthScreen {
     pub fn new(
         theme: &Theme,
-        // event_registry: Arc<Mutex<EventRegistry>>,
-        // event_for_ees: Arc<Mutex<EventForEES>>,
     ) -> PageType {
         let registry_snapshot = event_registry.lock().unwrap().clone();
 
@@ -313,8 +312,6 @@ impl MonthScreen {
                 Box::new(next_11_months_8),
                 Box::new(lig_for_8),
                 Box::new(next_11_months_9),
-                Box::new(lig_for_9),
-                Box::new(next_11_months_10),
                 Box::new(lig_for_10),
                 Box::new(next_11_months_11),
                 Box::new(lig_for_11),
@@ -323,7 +320,7 @@ impl MonthScreen {
         );
 
         Self(
-            Column::new(1.0, Offset::Start, Size::Fit, Padding::new(1.0), None),
+            Column::new(1.0, Offset::Start, prism::layout::Size::Fit, Padding::new(1.0), None),
             Page::new(header, content, None),
         )
     }
