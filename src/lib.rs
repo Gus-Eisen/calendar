@@ -42,26 +42,6 @@ impl chk::App for Calendar {
         ChkTheme::Dark(Color::from_hex("#eb343a", 255))
     }
 }
-//TODO: Think that app is no longer required.
-// // App entry point called by the platform runner.
-// pub fn app() -> Interface {
-//     //HACK: I don't need to create an arc/mutex here. Create in new().
-//     let event_for_ees = Arc::new(Mutex::new(EventForEES::new(None, None, None, None, None)));
-//     let event_registry = Arc::new(Mutex::new(EventRegistry::new(vec![None])));
-//
-//     PelicanUI::new(move |theme| {
-//         let home = RootInfo::icon(
-//             "home",
-//             "My Calendar",
-//             Box::new(MonthScreen::new(
-//                 theme,
-//                 event_registry.clone(),
-//                 event_for_ees.clone(),
-//             )),
-//         );
-//         Interface::new(theme, vec![home], Box::new(|_, _, e| vec![e]))
-//     })
-// }
 
 // Define the first screen of the app
 #[derive(Debug, Component, Clone)]
@@ -72,9 +52,18 @@ impl OnEvent for MonthScreen {}
 
 impl MonthScreen {
     pub fn new(
+        ctx: &mut Context,
         theme: &Theme,
     ) -> PageType {
-        let registry_snapshot = event_registry.lock().unwrap().clone();
+        if ctx.state().get::<EventForEES>().is_none() {
+            let event_for_ees = EventForEES::new(None, None, None, None, None);
+            ctx.state().set(event_for_ees);
+        }
+
+        if ctx.state().get::<EventRegistry>().is_none() {
+            let event_registry = EventRegistry::new(vec![None]);
+            ctx.state().set(event_registry);
+        }
 
         let now = Local::now();
 
